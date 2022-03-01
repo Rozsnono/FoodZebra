@@ -50,6 +50,8 @@
 </template>
 <style scoped>
   .img{
+    width: 90%;
     height: 10rem;
+    margin: auto;
   }
 </style>
