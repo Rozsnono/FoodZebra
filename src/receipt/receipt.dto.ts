@@ -28,9 +28,12 @@ export default class CreatePostDto {
     @IsString()
     public author: string;
 
-    @IsString()
+    @IsNumber()
     public rate: number;
 
     @IsObject()
     public ingredients: Object;
+
+    @IsString()
+    public pic: string;
 }
