@@ -40,8 +40,7 @@ export default class App {
         // Enabled CORS:
         this.app.use(
             cors({
-                origin: ["https://foodzebra.netlify.app", "http://localhost:8080"],
-                credentials: true,
+                origin: "http://localhost:8080",
                 exposedHeaders: ["set-cookie"],
             }),
         );
