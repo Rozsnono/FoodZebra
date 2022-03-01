@@ -109,14 +109,14 @@ export default class PostController implements Controller {
 
     private createReceipt = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const postData: Receipt = req.body;
-            const createdPost = new this.receipt({
-                ...postData,
+            const receiptData: Receipt = req.body;
+            const createdreceipt = new this.receipt({
+                ...receiptData,
                 author: req.user._id,
             });
-            const savedPost = await createdPost.save();
-            await savedPost.populate("author", "-password");
-            res.send(savedPost);
+            const savedreceipt = await createdreceipt.save();
+            await savedreceipt.populate("author", "-password");
+            res.send(savedreceipt);
         } catch (error) {
             next(new HttpException(400, error.message));
         }
