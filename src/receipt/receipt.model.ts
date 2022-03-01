@@ -14,6 +14,7 @@ const receiptSchema = new Schema<Receipt>(
         ingredients: Object,
         author: String,
         rate: Number,
+        pic: String,
     },
     { versionKey: false },
 );
