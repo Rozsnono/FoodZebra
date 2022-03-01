@@ -98,7 +98,9 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         })
         .catch((error) => {
+          console.log(params);
           console.error("hiba: " + error);
+          
           // context.commit("setLoading", false);
           this.loading = false;
         });

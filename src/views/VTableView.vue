@@ -13,6 +13,10 @@
   onMounted(() => {
     receiptStore.fetchPosts();
   });
+
+  function picToBase64(code){
+    return "data:image/png;base64,"+code;
+  }
 </script>
 
 <template>
@@ -20,7 +24,7 @@
     <v-row>
       <v-col v-for="(item, i) in allReceipt" :key="i" cols="12" lg="3" md="4" sm="6">
         <v-card class="mx-auto" max-width="344">
-          <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"></v-img>
+          <v-img class="img" :src="picToBase64(item.pic)"></v-img>
 
           <v-card-title>{{ item.name }}</v-card-title>
 
@@ -44,3 +48,8 @@
     </v-row>
   </v-container>
 </template>
+<style scoped>
+  .img{
+    height: 10rem;
+  }
+</style>
