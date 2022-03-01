@@ -49,7 +49,9 @@ export interface INewReceiptParams {
   price: number;
   serving: number;
   difficulty: number;
+  rate: number,
   image: string;
+  ingredients: object;
 }
 
 export const useReceiptStore = defineStore({
@@ -72,6 +74,7 @@ export const useReceiptStore = defineStore({
   },
   actions: {
     async createNewReceipt(params: INewReceiptParams): Promise<void> {
+      console.log(params);
       this.loading = true;
       $axios
         .post("receipt", {
@@ -84,7 +87,8 @@ export const useReceiptStore = defineStore({
           price: params.price,
           serving: params.serving,
           difficulty: params.difficulty,
-          author: "asd",
+          ingredients: {},
+          rate: 0,
         })
         .then((res) => {
           if (res && res.data) {

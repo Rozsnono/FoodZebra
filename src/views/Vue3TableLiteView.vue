@@ -11,6 +11,7 @@
   const price = ref(0);
   const serving = ref(0);
   const difficulty = ref(0);
+  const rate = ref(0);
   const image = ref("");
 
   const setImage = (img) => {
@@ -36,6 +37,8 @@
         serving: serving.value,
         difficulty: difficulty.value,
         image: image.value,
+        rate: rate.value,
+        ingredients: {},
         _id: "",
       });
     } else {
