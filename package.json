@@ -9,7 +9,7 @@
     "repository": {
         "private": false,
         "type": "git",
-        "url": "https://github.com/adam-mgshgy/FoodZebra.git"
+        "url": "https://github.com/Rozsnono/FoodZebra.git"
     },
     "scripts": {
         "start": "node ./dist/server.js",
@@ -22,7 +22,7 @@
         "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
         "test": "jest || ECHO."
     },
-    "author": "Magashegyi Ádám",
+    "author": "Magashegyi Ádám, Rozs Norbert",
     "license": "MIT",
     "dependencies": {
         "bcrypt": "^5.0.1",
