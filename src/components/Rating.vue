@@ -1,5 +1,11 @@
 <script setup lang="ts">
   import { ref } from "vue";
+  defineProps({
+    rate: {
+      type: Number,
+      required: true,
+    },
+  });
 
   const maxStars = 5;
   const stars = ref(0);
@@ -16,14 +22,14 @@
         v-for="(star, i) in maxStars"
         :key="i"
         class="star"
-        :class="{ active: star <= stars }"
+        :class="{ active: star <= rate }"
         @click="staring(i)"
       >
         <i :class="star <= stars ? 'fas fa-star' : 'far fa-star'"></i>
       </li>
     </ul>
     <div v-if="hasCounter" class="info counter">
-      <span class="score-rating">{{ stars }}</span>
+      <span class="score-rating">{{ rate }}</span>
       <span class="divider">/</span>
       <span class="score-max">{{ maxStars }}</span>
     </div>
@@ -36,7 +42,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50px;
+    padding: 20px;
     color: #b7b7b7;
     background: #fff;
     border-radius: 8px;
@@ -51,7 +57,7 @@
       }
       .star {
         display: inline-block;
-        font-size: 42px;
+        font-size: 30px;
         transition: all 0.2s ease-in-out;
         cursor: pointer;
         &:hover {
@@ -69,15 +75,15 @@
     }
     .info {
       margin-top: 15px;
-      font-size: 40px;
+      font-size: 20px;
       text-align: center;
       display: table;
       .divider {
         margin: 0 5px;
-        font-size: 30px;
+        font-size: 20px;
       }
       .score-max {
-        font-size: 30px;
+        font-size: 20px;
         vertical-align: sub;
       }
     }
