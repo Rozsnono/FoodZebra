@@ -3,6 +3,10 @@
   const props = defineProps({
     rating: {
       type: Number,
+      required: false,
+    },
+    title: {
+      type: String,
       required: true,
     },
   });
@@ -20,6 +24,7 @@
 </script>
 <template>
   <div class="rating">
+    <h1>{{ props.title }}</h1>
     <ul class="list">
       <li
         v-for="(star, i) in maxStars"
