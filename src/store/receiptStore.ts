@@ -5,13 +5,14 @@ export interface IPost {
   _id: string;
   author: string;
   content: string;
-  title: string;
+  name: string;
+  description: string;
 }
 
 interface IState {
   loading: boolean;
-  numberOfPosts: number;
-  posts: Array<IPost>;
+  numberOfReceipt: number;
+  receipt: Array<IPost>;
 }
 
 interface IPaginatedParams {
@@ -37,36 +38,36 @@ export interface INewPostParams {
   title: string;
 }
 
-export const usePostsStore = defineStore({
-  id: "postsStore",
+export const useReceiptStore = defineStore({
+  id: "receiptStore",
   state: (): IState => ({
     loading: false,
-    numberOfPosts: 0,
-    posts: [],
+    numberOfReceipt: 0,
+    receipt: [],
   }),
   getters: {
     getLoading(): boolean {
       return this.loading;
     },
-    getPosts(): Array<IPost> {
-      return this.posts;
+    getReceipt(): Array<IPost> {
+      return this.receipt;
     },
-    getNumberOfPosts(): number {
-      return this.numberOfPosts;
+    getNumberOfReceipt(): number {
+      return this.numberOfReceipt;
     },
   },
   actions: {
-    async createNewPost(params: INewPostParams): Promise<void> {
+    async createNewReceipt(params: INewPostParams): Promise<void> {
       this.loading = true;
       $axios
-        .post("posts", {
+        .post("receipt", {
           title: params.title,
           content: params.content,
         })
         .then((res) => {
           if (res && res.data) {
             console.log(res.data.post);
-            this.numberOfPosts = res.data.count;
+            this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
         })
@@ -79,7 +80,7 @@ export const usePostsStore = defineStore({
     async editPostById(params: IEditParams): Promise<void> {
       this.loading = true;
       $axios
-        .patch(`posts/${params._id}`, {
+        .patch(`receipt/${params._id}`, {
           title: params.title,
           content: params.content,
         })
@@ -97,11 +98,11 @@ export const usePostsStore = defineStore({
     async deletePostById(params: IIdParams): Promise<void> {
       this.loading = true;
       $axios
-        .delete(`posts/${params._id}`)
+        .delete(`receipt/${params._id}`)
         .then((res) => {
           if (res && res.data) {
             console.log(res.data.status);
-            this.numberOfPosts = res.data.count;
+            this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
         })
@@ -113,11 +114,11 @@ export const usePostsStore = defineStore({
     async fetchPosts(): Promise<void> {
       this.loading = true;
       $axios
-        .get("posts")
+        .get("receipt")
         .then((res) => {
           if (res && res.data) {
-            this.posts = res.data.posts;
-            this.numberOfPosts = res.data.count;
+            this.receipt = res.data.receipt;
+            this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
         })
@@ -130,12 +131,12 @@ export const usePostsStore = defineStore({
       this.loading = true;
       $axios
         .get(
-          `posts/${params.offset}/${params.limit}/${params.order}/${params.sort}/${params.keyword}`
+          `receipt/${params.offset}/${params.limit}/${params.order}/${params.sort}/${params.keyword}`
         )
         .then((res) => {
           if (res && res.data) {
-            this.posts = res.data.posts;
-            this.numberOfPosts = res.data.count;
+            this.receipt = res.data.posts;
+            this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
         })

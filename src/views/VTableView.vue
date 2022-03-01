@@ -1,36 +1,46 @@
 <script setup lang="ts">
-  import { computed, onMounted } from "vue";
-  import { VContainer, VTable } from "vuetify/components";
-  import { usePostsStore } from "../store/postsStore";
+  import { computed, onMounted, ref } from "vue";
+  import { VContainer } from "vuetify/components";
+  import { useReceiptStore } from "../store/receiptStore";
+  import rating from "../components/Rating.vue";
 
-  const postsStore = usePostsStore();
+  const receiptStore = useReceiptStore();
 
-  const allPosts = computed(() => postsStore.getPosts);
+  const allReceipt = computed(() => receiptStore.getReceipt);
+
+  const show = ref(true);
 
   onMounted(() => {
-    postsStore.fetchPosts();
+    receiptStore.fetchPosts();
   });
 </script>
 
 <template>
   <v-container class="page">
-    <v-table fixed-header>
-      <template #default>
-        <thead>
-          <tr>
-            <th class="text-left">id</th>
-            <th class="text-left">Author</th>
-            <th class="text-left">Title</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, i) in allPosts" :key="i">
-            <td>{{ item._id }}</td>
-            <td>{{ item.author }}</td>
-            <td>{{ item.title }}</td>
-          </tr>
-        </tbody>
-      </template>
-    </v-table>
+    <v-row>
+      <v-col v-for="(item, i) in allReceipt" :key="i" cols="12" lg="3" md="4" sm="6">
+        <v-card class="mx-auto" max-width="344">
+          <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"></v-img>
+
+          <v-card-title>{{ item.name }}</v-card-title>
+
+          <v-card-subtitle>????</v-card-subtitle>
+
+          <v-card-actions class="mx-auto">
+            <rating />
+          </v-card-actions>
+
+          <v-expand-transition>
+            <div v-show="show">
+              <v-divider></v-divider>
+
+              <v-card-text>
+                {{ item.description }}
+              </v-card-text>
+            </div>
+          </v-expand-transition>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>

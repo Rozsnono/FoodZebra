@@ -31,8 +31,8 @@
   }
 
   const r = reactive<IReactiveData>({
-    email: "student001@jedlik.eu",
-    password: "student001",
+    email: "user@user.com",
+    password: "user",
   });
 </script>
 

@@ -12,10 +12,10 @@
     VTextarea,
     VTextField,
   } from "vuetify/components";
-  import { IPost, usePostsStore } from "../store/postsStore";
+  import { IPost, useReceiptStore } from "../store/receiptStore";
   import ConfirmDialog from "./ConfirmDialog.vue";
 
-  const postsStore = usePostsStore();
+  const ReceiptStore = useReceiptStore();
 
   const props = defineProps({
     modelValue: {
@@ -38,9 +38,9 @@
       return emit("update:modelValue", value);
     },
   });
-  const post = computed(() => props.post);
-  const origTitle = post.value.title;
-  const origContent = post.value.content;
+  const recepit = computed(() => props.post);
+  const origTitle = recepit.value.name;
+  const origContent = recepit.value.content;
   const showConfirmEdit = ref(false);
   const showConfirmDelete = ref(false);
   const showConfirmClose = ref(false);
@@ -48,10 +48,10 @@
 
   function confirmEditPost() {
     if (resultConfirm.value) {
-      postsStore.editPostById({
-        _id: post.value._id,
-        title: post.value.title,
-        content: post.value.content,
+      ReceiptStore.editPostById({
+        _id: recepit.value._id,
+        title: recepit.value.name,
+        content: recepit.value.content,
       });
       show.value = false;
       emit("close");
@@ -62,8 +62,8 @@
 
   function confirmDeletePost() {
     if (resultConfirm.value) {
-      postsStore.deletePostById({
-        _id: post.value._id,
+      ReceiptStore.deletePostById({
+        _id: recepit.value._id,
       });
       show.value = false;
       emit("close");
@@ -74,8 +74,8 @@
 
   function confirmCloseDialog() {
     if (resultConfirm.value) {
-      post.value.title = origTitle;
-      post.value.content = origContent;
+      recepit.value.name = origTitle;
+      recepit.value.content = origContent;
       show.value = false;
       emit("close");
     } else {
@@ -93,12 +93,12 @@
   }
 
   const isChanged = computed(
-    () => post.value.title != origTitle || post.value.content != origContent
+    () => recepit.value.name != origTitle || recepit.value.content != origContent
   );
 
   function revertChanges() {
-    post.value.title = origTitle;
-    post.value.content = origContent;
+    recepit.value.name = origTitle;
+    recepit.value.content = origContent;
   }
 </script>
 
@@ -106,10 +106,10 @@
   <v-row justify="center">
     <v-dialog v-model="show" persistent :retain-focus="false" transition="scale-transition">
       <v-card>
-        <v-card-title class="text-h5">Post: {{ post._id }}</v-card-title>
+        <v-card-title class="text-h5">Post: {{ recepit._id }}</v-card-title>
         <!-- <v-card-text>Post: {{ props.post }}</v-card-text> -->
-        <v-text-field v-model="post.title" class="mb-1" label="Title"></v-text-field>
-        <v-textarea v-model="post.content" filled label="Content" rows="6" shaped></v-textarea>
+        <v-text-field v-model="recepit.name" class="mb-1" label="Title"></v-text-field>
+        <v-textarea v-model="recepit.content" filled label="Content" rows="6" shaped></v-textarea>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn

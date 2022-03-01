@@ -12,9 +12,9 @@
     VTextField,
   } from "vuetify/components";
   import ConfirmDialog from "./ConfirmDialog.vue";
-  import { usePostsStore } from "../store/postsStore";
+  import { useReceiptStore } from "../store/receiptStore";
 
-  const postsStore = usePostsStore();
+  const ReceiptStore = useReceiptStore();
 
   const props = defineProps({
     modelValue: {
@@ -43,7 +43,7 @@
 
   function confirmSavePost() {
     if (resultConfirm.value) {
-      postsStore.createNewPost({
+      ReceiptStore.createNewPost({
         title: title.value,
         content: content.value,
       });
