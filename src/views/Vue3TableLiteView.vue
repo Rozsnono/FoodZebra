@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed, onMounted, reactive, ref, watch } from "vue";
-  import { IPost, usePostsStore } from "../store/postsStore";
+  import { IPost, useReceiptStore } from "../store/receiptStore";
   import { VBtn, VCol, VContainer, VRow, VTextField } from "vuetify/components";
   import EditPost from "../components/EditPost.vue";
   import NewPost from "../components/NewPost.vue";
@@ -9,12 +9,12 @@
 
   import VueTableLite from "vue3-table-lite/ts";
 
-  const postsStore = usePostsStore();
+  const ReceiptStore = useReceiptStore();
   const usersStore = useUsersStore();
 
-  const allPosts = computed(() => postsStore.getPosts);
-  const numberOfPosts = computed(() => postsStore.getNumberOfPosts);
-  const isLoading = computed(() => postsStore.getLoading);
+  const allPosts = computed(() => ReceiptStore.getPosts);
+  const numberOfPosts = computed(() => ReceiptStore.getNumberOfPosts);
+  const isLoading = computed(() => ReceiptStore.getLoading);
   const loggedUser = computed(() => usersStore.getLoggedUser);
   let refreshNeeding = false;
 
@@ -120,7 +120,7 @@
     ],
   });
   const doSearch = (offset: number, limit: string, order: string, sort: string) => {
-    postsStore.fetchPaginatedPosts({
+    ReceiptStore.fetchPaginatedPosts({
       offset: offset,
       limit: limit,
       order: order,
@@ -187,7 +187,7 @@
     <EditPost
       v-if="showEditDialog && selectedPost"
       v-model="showEditDialog"
-      :post="selectedPost"
+      :recepit="selectedPost"
       @close="closeDialogs"
     ></EditPost>
     <NewPost v-if="showNewPostDialog" v-model="showNewPostDialog" @close="closeDialogs"></NewPost>
