@@ -1,12 +1,13 @@
 {
-    "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "donjayamanne.githistory",
-        "eamodio.gitlens",
-        "coenraads.bracket-pair-colorizer-2",
-        "pkief.material-icon-theme",
-        "eg2.vscode-npm-script",
-        "christian-kohler.npm-intellisense"
-    ]
+  "recommendations": [
+    "johnsoncodehk.volar",
+    "esbenp.prettier-vscode",
+    "pkief.material-icon-theme",
+    "dbaeumer.vscode-eslint",
+    "christian-kohler.path-intellisense",
+    "antfu.iconify",
+    "ms-edgedevtools.vscode-edge-devtools",
+    "vuetifyjs.vuetify-vscode",
+    "johnsoncodehk.vscode-typescript-vue-plugin"
+  ]
 }
