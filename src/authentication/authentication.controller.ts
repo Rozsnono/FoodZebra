@@ -11,7 +11,7 @@ import validationMiddleware from "../middleware/validation.middleware";
 import User from "../user/user.interface";
 import userModel from "./../user/user.model";
 import CreateUserDto from "../user/user.dto";
-import LogInDto from "./logIn.dto";
+import LogInDto from "./login.dto";
 
 export default class AuthenticationController implements Controller {
     public path = "/auth";
