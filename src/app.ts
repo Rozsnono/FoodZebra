@@ -38,13 +38,13 @@ export default class App {
         this.app.use(express.json());
         this.app.use(cookieParser());
         // Enabled CORS:
-        // this.app.use(
-        //     cors({
-        //         origin: ["https://foodzebra.netlify.app", "http://localhost:8080"],
-        //         credentials: true,
-        //         exposedHeaders: ["set-cookie"],
-        //     }),
-        // );
+        this.app.use(
+            cors({
+                origin: ["https://foodzebra.netlify.app", "http://localhost:8080"],
+                credentials: true,
+                exposedHeaders: ["set-cookie"],
+            }),
+        );
         this.app.use(loggerMiddleware);
     }
 
