@@ -8,6 +8,8 @@
   "template": "Sablon",
   "noUser": "nincs bejelentkezve",
   "startPage": "Kezdőlap",
-  "gridDemo": "Rács demó",
+  "addFood": "Étel hozzáadás",
+  "food": "Ételek",
+  "admin": "Admin",
   "links": "Hivatkozások"
 }

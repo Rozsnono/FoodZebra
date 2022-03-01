@@ -1,18 +1,21 @@
 <script setup lang="ts">
   import { ref } from "vue";
-  defineProps({
-    rate: {
+  const props = defineProps({
+    rating: {
       type: Number,
       required: true,
     },
   });
 
   const maxStars = 5;
-  const stars = ref(0);
+  const stars = ref(props.rating);
+  const rateable = ref(props.rating != null ? false : true);
   const hasCounter = ref(true);
 
   const staring = (i) => {
-    stars.value = i + 1;
+    if (rateable.value) {
+      stars.value = i + 1;
+    }
   };
 </script>
 <template>
@@ -21,15 +24,14 @@
       <li
         v-for="(star, i) in maxStars"
         :key="i"
-        class="star"
-        :class="{ active: star <= rate }"
+        :class="{ star: true, hoverable: rateable, active: star <= stars }"
         @click="staring(i)"
       >
         <i :class="star <= stars ? 'fas fa-star' : 'far fa-star'"></i>
       </li>
     </ul>
     <div v-if="hasCounter" class="info counter">
-      <span class="score-rating">{{ rate }}</span>
+      <span class="score-rating">{{ stars }}</span>
       <span class="divider">/</span>
       <span class="score-max">{{ maxStars }}</span>
     </div>
@@ -51,15 +53,15 @@
       padding: 0;
       margin: 0 20px 0 0;
       &:hover {
-        .star {
+        .hoverable {
           color: #ffe100;
+          cursor: pointer;
         }
       }
       .star {
         display: inline-block;
         font-size: 30px;
         transition: all 0.2s ease-in-out;
-        cursor: pointer;
         &:hover {
           ~ .star:not(.active) {
             color: inherit;

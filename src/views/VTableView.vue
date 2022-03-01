@@ -27,7 +27,7 @@
           <v-card-subtitle>????</v-card-subtitle>
 
           <v-card-actions class="mx-auto">
-            <rating rate="2" />
+            <rating :rating="item.rate" />
           </v-card-actions>
 
           <v-expand-transition>
