@@ -50,7 +50,7 @@ export interface INewReceiptParams {
   serving: number;
   difficulty: number;
   rate: number,
-  image: string;
+  pic: string;
   ingredients: object;
 }
 
@@ -83,11 +83,12 @@ export const useReceiptStore = defineStore({
           description: params.description,
           energy: params.energy,
           time: params.time,
-          image: params.image,
+          pic: params.pic,
           price: params.price,
           serving: params.serving,
           difficulty: params.difficulty,
           ingredients: {},
+          author:"",
           rate: 0,
         })
         .then((res) => {
@@ -98,7 +99,9 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         })
         .catch((error) => {
+          console.log(params);
           console.error("hiba: " + error);
+          
           // context.commit("setLoading", false);
           this.loading = false;
         });

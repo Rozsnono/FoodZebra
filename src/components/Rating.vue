@@ -1,5 +1,7 @@
 <script setup lang="ts">
+
   import { ref } from "vue";
+import func from "vue-temp/vue-editor-bridge";
   const props = defineProps({
     rating: {
       type: Number,
@@ -15,12 +17,21 @@
   const stars = ref(props.rating);
   const rateable = ref(props.rating != null ? false : true);
   const hasCounter = ref(true);
+  const emit = defineEmits(["rating"])
 
   const staring = (i) => {
     if (rateable.value) {
       stars.value = i + 1;
+      
     }
   };
+
+  function Rating(i){
+    staring(i);
+    emit("rating",stars.value);
+  }
+
+  
 </script>
 <template>
   <div class="rating">
@@ -30,7 +41,7 @@
         v-for="(star, i) in maxStars"
         :key="i"
         :class="{ star: true, hoverable: rateable, active: star <= stars }"
-        @click="staring(i)"
+        @click="Rating(i)"
       >
         <i :class="star <= stars ? 'fas fa-star' : 'far fa-star'"></i>
       </li>

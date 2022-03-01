@@ -18,6 +18,18 @@
     image.value = img;
   };
 
+  const setPrice = (getprice) => {
+    price.value = getprice;
+  };
+
+  const setServing = (getserving) => {
+    serving.value = getserving;
+  };
+
+  const setDifficulty = (getdifficulty) => {
+    difficulty.value = getdifficulty;
+  };
+
   const receiptStore = useReceiptStore();
 
   const showConfirmSave = ref(false);
@@ -31,12 +43,12 @@
         name: name.value,
         type: type.value,
         description: description.value,
-        energy: energy.value,
-        time: time.value,
+        energy: parseInt(energy.value.toString()),
+        time: parseInt(time.value.toString()),
         price: price.value,
         serving: serving.value,
         difficulty: difficulty.value,
-        image: image.value,
+        pic: image.value,
         rate: rate.value,
         ingredients: {},
         _id: "",
@@ -56,6 +68,22 @@
     };
     reader.readAsDataURL(selected);
 
+    
+
+  }
+
+  function ChoosePriceRate(value)
+  {
+    console.log(value);
+    setPrice(value);
+  }
+  function ChooseServingRate(value)
+  {
+    setServing(value);
+  }
+  function ChooseDifficultyRate(value)
+  {
+    setDifficulty(value);
   }
 </script>
 
@@ -75,9 +103,9 @@
     ></v-textarea>
     <v-text-field v-model="energy" class="inputs" label="Energy"></v-text-field>
     <v-text-field v-model="time" class="inputs" label="Time"></v-text-field>
-    <rating title="Price"></rating>
-    <rating title="Serving"></rating>
-    <rating title="Difficulty"></rating>
+    <rating title="Price" v-on:rating="ChoosePriceRate"></rating>
+    <rating title="Serving" v-on:rating="ChooseServingRate"></rating>
+    <rating title="Difficulty" v-on:rating="ChooseDifficultyRate"></rating>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="green-lighten-3" elevation="5" @click="confirmSaveReceipt()">Save</v-btn>

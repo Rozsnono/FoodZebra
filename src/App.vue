@@ -52,7 +52,7 @@
       text: t("food"),
       name: "food",
       route: "/food",
-      disabled: notLoggedIn,
+      disabled: false,
     },
     {
       icon: "mdi-food-fork-drink",
@@ -62,11 +62,18 @@
       disabled: notLoggedIn,
     },
     {
+      icon: "mdi-food-fork-drink",
+      text: t("modifyFood"),
+      name: "modifyFood",
+      route: "/modifyFood",
+      disabled: notLoggedIn,
+    },
+    {
       icon: "mdi-shield-crown",
       text: t("admin"),
       name: "admin",
       route: "/admin",
-      disabled: false,
+      disabled: notLoggedIn,
     },
 
     {
