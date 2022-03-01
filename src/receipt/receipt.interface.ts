@@ -11,4 +11,5 @@ export default interface Receipt {
     serving: number;
     ingredients: object;
     author: string;
+    rate: number;
 }

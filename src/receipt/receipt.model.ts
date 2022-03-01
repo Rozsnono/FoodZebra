@@ -13,6 +13,7 @@ const receiptSchema = new Schema<Receipt>(
         serving: Number,
         ingredients: Object,
         author: String,
+        rate: Number,
     },
     { versionKey: false },
 );
