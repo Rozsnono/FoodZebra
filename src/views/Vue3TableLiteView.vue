@@ -1,222 +1,107 @@
 <script setup lang="ts">
-  import { computed, onMounted, reactive, ref, watch } from "vue";
-  import { IPost, useReceiptStore } from "../store/receiptStore";
-  import { VBtn, VCol, VContainer, VRow, VTextField } from "vuetify/components";
-  import EditPost from "../components/EditPost.vue";
-  import NewPost from "../components/NewPost.vue";
+  import { ref } from "@vue/reactivity";
+  import { useReceiptStore } from "../store/receiptStore";
+  import rating from "../components/Rating.vue";
 
-  import { useUsersStore } from "../store/usersStore";
+  const name = ref("");
+  const type = ref("");
+  const description = ref("");
+  const energy = ref(0);
+  const time = ref(0);
+  const price = ref(0);
+  const serving = ref(0);
+  const difficulty = ref(0);
+  const rate = ref(0);
+  const image = ref("");
 
-  import VueTableLite from "vue3-table-lite/ts";
+  const setImage = (img) => {
+    image.value = img;
+  };
 
-  const ReceiptStore = useReceiptStore();
-  const usersStore = useUsersStore();
+  const receiptStore = useReceiptStore();
 
-  const allPosts = computed(() => ReceiptStore.getPosts);
-  const numberOfPosts = computed(() => ReceiptStore.getNumberOfPosts);
-  const isLoading = computed(() => ReceiptStore.getLoading);
-  const loggedUser = computed(() => usersStore.getLoggedUser);
-  let refreshNeeding = false;
+  const showConfirmSave = ref(false);
+  const showConfirmClose = ref(false);
+  const resultConfirm = ref(true);
 
-  let checkedRowsIds = [];
+  function confirmSaveReceipt() {
 
-  const searchTerm = ref(""); // Search text
-  const showNewPostDialog = ref(false); // True if show new post
-  const showEditDialog = ref(false); // True if show edit post
-  const selectedPost = ref<IPost>();
-
-  watch(searchTerm, () => {
-    doSearch(0, table.pageSize.toString(), table.sortable.order, table.sortable.sort);
-  });
-
-  watch(isLoading, () => {
-    if (refreshNeeding && !isLoading.value) {
-      while (table.offset >= numberOfPosts.value) {
-        table.offset -= table.pageSize;
-      }
-      doSearch(table.offset, table.pageSize.toString(), table.sortable.order, table.sortable.sort);
-      refreshNeeding = false;
+    if (resultConfirm.value) {
+      receiptStore.createNewReceipt({
+        name: name.value,
+        type: type.value,
+        description: description.value,
+        energy: energy.value,
+        time: time.value,
+        price: price.value,
+        serving: serving.value,
+        difficulty: difficulty.value,
+        image: image.value,
+        rate: rate.value,
+        ingredients: {},
+        _id: "",
+      });
+    } else {
+      showConfirmSave.value = false;
     }
-  });
-
-  onMounted(() => {
-    doSearch(0, "5", "title", "asc");
-  });
-
-  function closeDialogs() {
-    refreshNeeding = true;
   }
 
-  const table = reactive({
-    hasCheckbox: true,
-    isLoading: isLoading,
-    columns: [
-      {
-        label: "ID",
-        field: "_id",
-        width: "5%",
-        sortable: false,
-        isKey: true,
-        display: function (row) {
-          return row._id.slice(5, 9);
-        },
-      },
-      {
-        label: "Aut",
-        field: "author",
-        width: "5%",
-        sortable: false,
-        display: function (row) {
-          return row.author.slice(5, 9);
-        },
-      },
-      {
-        label: "Title",
-        field: "title",
-        width: "30%",
-        sortable: true,
-      },
-      {
-        label: "Content",
-        field: "content",
-        width: "55%",
-        sortable: true,
-        display: function (row) {
-          return row.content.slice(0, 71) + "...";
-        },
-      },
-      {
-        label: "E/D",
-        field: "quick",
-        width: "5%",
-        display: function (row) {
-          if (row.author == loggedUser.value?._id) {
-            return `<button type="button" data-id="${row._id}" class="is-rows-el quick-btn">E/D</button>`;
-          } else {
-            return "";
-          }
-        },
-      },
-    ],
-    rows: allPosts,
-    totalRecordCount: numberOfPosts,
-    sortable: {
-      order: "title",
-      sort: "asc",
-    },
-    messages: {
-      pagingInfo: "Documents {0}-{1} (total:{2})",
-      pageSizeChangeLabel: "Rows/Page: ",
-      gotoPageLabel: " Go to: ",
-      noDataAvailable: "No data available",
-    },
-    pageSize: 5,
-    offset: 0,
-    pageOptions: [
-      { value: 5, text: 5 },
-      { value: 10, text: 10 },
-      { value: 25, text: 25 },
-      { value: 50, text: 50 },
-    ],
-  });
-  const doSearch = (offset: number, limit: string, order: string, sort: string) => {
-    ReceiptStore.fetchPaginatedPosts({
-      offset: offset,
-      limit: limit,
-      order: order,
-      sort: sort == "asc" ? "1" : "-1",
-      keyword: searchTerm.value,
-    });
-    table.pageSize = parseInt(limit);
-    table.sortable.order = order;
-    table.sortable.sort = sort;
-    table.offset = offset;
-  };
+  function Tobase64(event) {
+    const selected = event.target?.files[0];
+    const reader = new FileReader();
+    let rawFile = "";
+    reader.onloadend = () => {
+      rawFile = reader.result;
+      setImage(rawFile.split(",")[1]);
+    };
+    reader.readAsDataURL(selected);
 
-  const tableLoadingFinish = (elements) => {
-    // table.isLoading = false;
-    Array.prototype.forEach.call(elements, function (element) {
-      if (element.classList.contains("quick-btn")) {
-        element.addEventListener("click", function () {
-          const selPost = allPosts.value.find((x) => x._id == element.dataset.id);
-          if (selPost) {
-            selectedPost.value = selPost;
-            showEditDialog.value = true;
-          }
-        });
-      }
-    });
-  };
-
-  const updateCheckedRows = (rowsKey) => {
-    checkedRowsIds = rowsKey;
-    const number = checkedRowsIds.length;
-    console.log("Checked: " + checkedRowsIds.length + (number == 1 ? "row" : "rows"));
-  };
-
-  function createNewDocument() {
-    showNewPostDialog.value = true;
   }
 </script>
 
 <template>
-  <v-container class="page">
-    <v-row>
-      <v-col cols="12" sm="4"><h3>vue3-table-light</h3></v-col>
-      <v-col cols="12" sm="4">
-        <v-text-field v-model="searchTerm" label="Search"></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="4">
-        <v-btn color="blue darken-1" @click="createNewDocument">New document</v-btn>
-      </v-col>
-    </v-row>
-    <VueTableLite
-      :columns="table.columns"
-      :has-checkbox="table.hasCheckbox"
-      :is-loading="table.isLoading"
-      :messages="table.messages"
-      :page-options="table.pageOptions"
-      :page-size="table.pageSize"
-      :rows="table.rows"
-      :sortable="table.sortable"
-      :total="table.totalRecordCount"
-      @do-search="doSearch"
-      @is-finished="tableLoadingFinish"
-      @return-checked-rows="updateCheckedRows"
-    ></VueTableLite>
-    <EditPost
-      v-if="showEditDialog && selectedPost"
-      v-model="showEditDialog"
-      :recepit="selectedPost"
-      @close="closeDialogs"
-    ></EditPost>
-    <NewPost v-if="showNewPostDialog" v-model="showNewPostDialog" @close="closeDialogs"></NewPost>
-  </v-container>
+  <v-card class="mx-auto card">
+    <v-card-title class="title">Add new Food</v-card-title>
+    <v-text-field v-model="name" class="inputs" label="Name"></v-text-field>
+    <v-file-input accept="image/*" truncate-length="15" @change="Tobase64($event)"></v-file-input>
+    <v-text-field v-model="type" class="inputs" label="Type"></v-text-field>
+    <v-textarea
+      v-model="description"
+      class="inputs"
+      filled
+      label="Description"
+      rows="6"
+      shaped
+    ></v-textarea>
+    <v-text-field v-model="energy" class="inputs" label="Energy"></v-text-field>
+    <v-text-field v-model="time" class="inputs" label="Time"></v-text-field>
+    <rating title="Price"></rating>
+    <rating title="Serving"></rating>
+    <rating title="Difficulty"></rating>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="green-lighten-3" elevation="5" @click="confirmSaveReceipt()">Save</v-btn>
+      <v-btn color="blue-lighten-3" elevation="5" @click="closeDialog">Close</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <style scoped>
-  .card ::v-deep(.table .thead-dark th) {
-    color: #fff;
-    background-color: #42b983;
-    border-color: #42b983;
-  }
-  .card ::v-deep(.table td),
-  .card ::v-deep(.table tr) {
-    border: 1px solid #42b983;
-  }
-  .card ::v-deep(.quick-btn) {
-    background-color: lightgray;
-    border-style: solid;
+  .card {
+    width: 40rem !important;
   }
 
-  .card ::v-deep(.table tr:nth-child(even)) {
-    background-color: #f2f2f2;
+  #file-input {
+    text-align: center !important;
+  }
+  .title {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 4rem;
+    text-align: center;
+    margin: 2.5rem;
   }
 
-  .card ::v-deep(.table tr:hover) {
-    background-color: #ddd;
-  }
-  .edit-btn {
-    background-color: green;
+  .inputs {
+    margin: 0.5rem;
   }
 </style>

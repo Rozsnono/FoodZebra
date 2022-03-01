@@ -29,13 +29,29 @@ interface IIdParams {
 
 export interface IEditParams {
   _id: string;
-  content: string;
-  title: string;
+  name: string;
+  type: string;
+  description: string;
+  energy: number;
+  time: number;
+  price: number;
+  serving: number;
+  difficulty: number;
 }
 
-export interface INewPostParams {
-  content: string;
-  title: string;
+export interface INewReceiptParams {
+  _id: string;
+  name: string;
+  type: string;
+  description: string;
+  energy: number;
+  time: number;
+  price: number;
+  serving: number;
+  difficulty: number;
+  rate: number,
+  image: string;
+  ingredients: object;
 }
 
 export const useReceiptStore = defineStore({
@@ -57,12 +73,22 @@ export const useReceiptStore = defineStore({
     },
   },
   actions: {
-    async createNewReceipt(params: INewPostParams): Promise<void> {
+    async createNewReceipt(params: INewReceiptParams): Promise<void> {
+      console.log(params);
       this.loading = true;
       $axios
         .post("receipt", {
-          title: params.title,
-          content: params.content,
+          name: params.name,
+          type: params.type,
+          description: params.description,
+          energy: params.energy,
+          time: params.time,
+          image: params.image,
+          price: params.price,
+          serving: params.serving,
+          difficulty: params.difficulty,
+          ingredients: {},
+          rate: 0,
         })
         .then((res) => {
           if (res && res.data) {

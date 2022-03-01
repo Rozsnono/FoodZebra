@@ -30,24 +30,19 @@ const routes: Array<RouteRecordRaw> = [
     component: AccountView,
   },
   {
-    path: "/vtable",
-    name: "VTable",
+    path: "/food",
+    name: "Food",
     component: VTableView,
     beforeEnter: protectedRoute,
   },
   {
-    path: "/v3table",
-    name: "V3TableLite",
+    path: "/addfood",
+    name: "Add Food",
     component: Vue3TableLiteView,
   },
   {
-    path: "/socks",
-    name: "Socks",
-    component: VueMasterySocksView,
-  },
-  {
-    path: "/realworldvue3",
-    name: "RealWorldVue3",
+    path: "/admin",
+    name: "Admin",
     component: VueMasteryRealWorldVue3,
     children: [
       {
@@ -67,11 +62,6 @@ const routes: Array<RouteRecordRaw> = [
         component: AboutComp,
       },
     ],
-  },
-  {
-    path: "/grid",
-    name: "Grid",
-    component: GridView,
   },
   {
     path: "/about",
