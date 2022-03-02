@@ -43,9 +43,9 @@ export default class PostController implements Controller {
 
     private getAllReceiptByUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const id = req.params.author;
+            const id = req.author;
             const count = await this.receipt.countDocuments();
-            const receipt = await this.receipt.find( { "author" : id } ).populate("author", "-password");
+            const receipt = await this.receipt.find({ auhtor: id }).populate("author", "-password");
             // const receipt = await this.receipt.find();
             res.send({ teszt: "true", author: id, count: count, receipt: receipt });
         } catch (error) {
