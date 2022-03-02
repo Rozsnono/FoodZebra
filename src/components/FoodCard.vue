@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import rating from "../components/Rating.vue";
-import detail from "./FoodDetails.vue";
 const props = defineProps<{ item: object }>();
 
 const show = ref(true);
@@ -12,8 +11,8 @@ function picToBase64(code) {
 }
 
 function showDetails(id) {
+  return "/food/" + id;
   console.log(id);
-  showDetail.value = true;
 }
 
 function closeDetails(){
@@ -22,7 +21,7 @@ function closeDetails(){
 </script>
 
 <template>
-  <v-card class="mx-auto card" max-width="344" @click="showDetails(item._id)">
+  <v-card class="mx-auto card" max-width="344" :to="showDetails(item._id)">
     <v-img class="img" :src="picToBase64(item.pic)"></v-img>
 
     <v-card-title>{{ item.name }}</v-card-title>
@@ -31,8 +30,6 @@ function closeDetails(){
       <rating :rating="item.rate" :onlyStar="false" />
     </v-card-actions>
   </v-card>
-
-  <detail v-if="showDetail" v-model="showDetail" :item="item" @close="closeDetails"/>
 </template>
 <style scoped>
 .img {

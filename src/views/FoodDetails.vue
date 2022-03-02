@@ -14,8 +14,9 @@ import {
 import ConfirmDialog from "./ConfirmDialog.vue";
 import rating from "../components/Rating.vue";
 import { useReceiptStore } from "../store/receiptStore";
+import { useRoute } from "vue-router";
 
-const ReceiptStore = useReceiptStore();
+const receiptStore = useReceiptStore();
 
 const props = defineProps({
   modelValue: {
@@ -24,10 +25,12 @@ const props = defineProps({
     required: true,
   },
   item: {
-    type: Object,
+    type: String,
     required: true,
   },
 });
+
+const router = useRoute();
 const emit = defineEmits(["close"]);
 
 const show = computed({
@@ -37,38 +40,43 @@ const show = computed({
   set(value: boolean) {},
 });
 
-const title = ref("");
-const content = ref("");
+let receipt;
 
-const receipt = props.item;
-console.log(receipt);
+await receiptStore.getReceiptById(router.params.id.toString());
+receipt = receiptStore.getOneReceipt;
+console.log(receipt._id);
 
-const showConfirmSave = ref(false);
-const showConfirmClose = ref(false);
-const resultConfirm = ref(false);
-
-function closeDialog() {
-  show.value = false;
-  emit("close");
-}
 
 function picToBase64(code) {
   return "data:image/png;base64," + code;
 }
-
-const isChanged = computed(() => title.value != "" && content.value != "");
 </script>
 
 <template>
-  <v-row justify="center ">
+  <v-container class="popup">
+    <v-row>
+      <v-col cols="12" sm="12">
+        <v-img :src="picToBase64(receipt.pic)" alt="Food" class="img"></v-img>
+      </v-col>
+      <v-col cols="12" sm="12">
+        <div>
+          {{ receipt.name }}
+        </div>
+        <div>
+          <v-chip>{{ receipt.type }}</v-chip>
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
+  <!-- <v-row justify="center ">
     <v-dialog v-model="show" persistent :retain-focus="false" transition="scale-transition">
       <v-card :loading="loading" class="card">
-        <v-img height="250" :src="picToBase64(receipt.pic)"></v-img>
+        
 
         <v-card-title>
-          {{ receipt.name }}
+          
           <div class="end">
-            <v-chip>{{ receipt.type }}</v-chip>
+            
           </div>
         </v-card-title>
 
@@ -106,13 +114,22 @@ const isChanged = computed(() => title.value != "" && content.value != "");
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </v-row> -->
 </template>
 <style scoped>
+.popup {
+  background-color: aliceblue;
+  width: 200%;
+}
+
+.img {
+  width: 50%;
+}
 .card {
   position: absolute;
-  top: -20rem;
-  width: 100rem;
+  top: -0rem;
+  left: -30rem;
+  width: 80rem;
   margin: auto;
 }
 .end {
