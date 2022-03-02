@@ -1,18 +1,25 @@
 import $axios from "./axios.instance";
 import { defineStore } from "pinia";
 
-export interface IPost {
+export interface IReceipt {
   _id: string;
-  author: string;
-  content: string;
   name: string;
+  type: string;
   description: string;
+  energy: number;
+  time: number;
+  price: number;
+  serving: number;
+  difficulty: number;
+  rate: number,
+  pic: string;
+  ingredients: object;
 }
 
 interface IState {
   loading: boolean;
   numberOfReceipt: number;
-  receipt: Array<IPost>;
+  receipt: Array<IReceipt>;
 }
 
 interface IPaginatedParams {
@@ -65,7 +72,7 @@ export const useReceiptStore = defineStore({
     getLoading(): boolean {
       return this.loading;
     },
-    getReceipt(): Array<IPost> {
+    getReceipt(): Array<IReceipt> {
       return this.receipt;
     },
     getNumberOfReceipt(): number {
@@ -74,7 +81,6 @@ export const useReceiptStore = defineStore({
   },
   actions: {
     async createNewReceipt(params: INewReceiptParams): Promise<void> {
-      console.log(params);
       this.loading = true;
       $axios
         .post("receipt", {
@@ -156,6 +162,22 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         });
     },
+    async auhtorReceipt(params: string): Promise<void> {
+      this.loading = true;
+      $axios
+        .get(`receipt/author/${params}`)
+        .then((res) => {
+          if (res && res.data) {
+            this.receipt = res.data.receipt;
+            this.numberOfReceipt = res.data.count;
+          }
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error("hiba: " + error);
+          this.loading = false;
+        });
+    },
     async fetchPaginatedPosts(params: IPaginatedParams): Promise<void> {
       this.loading = true;
       $axios
@@ -164,7 +186,7 @@ export const useReceiptStore = defineStore({
         )
         .then((res) => {
           if (res && res.data) {
-            this.receipt = res.data.posts;
+            this.receipt = res.data.receipt;
             this.numberOfReceipt = res.data.count;
           }
           this.loading = false;

@@ -5,7 +5,7 @@ import AccountView from "./views/AccountView.vue";
 import EventDetails from "./VueMastery_RealWorldVue3/components/EventDetails.vue";
 import EventList from "./VueMastery_RealWorldVue3/components/EventList.vue";
 import ExamplesView from "./views/ExamplesView.vue";
-import GridView from "./views/GridView.vue";
+import Modify from "./views/FoodModify.vue";
 import protectedRoute from "./middlewares/protected";
 import StartPageView from "./views/StartPageView.vue";
 import VTableView from "./views/FoodView.vue";
@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/addfood",
     name: "Add Food",
     component: Vue3TableLiteView,
+  },
+  {
+    path: "/modifyfood",
+    name: "Food modify",
+    component: Modify,
   },
   {
     path: "/admin",

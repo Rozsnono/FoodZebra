@@ -5,8 +5,10 @@
   import rating from "../components/Rating.vue";
 
   const receiptStore = useReceiptStore();
-
   const allReceipt = computed(() => receiptStore.getReceipt);
+
+  const search = computed(() => receiptStore.auhtorReceipt("61d400c63aea8d9b36f5f4c9"));
+  console.log(search);
 
   const show = ref(true);
 
@@ -14,8 +16,8 @@
     receiptStore.fetchPosts();
   });
 
-  function picToBase64(code){
-    return "data:image/png;base64,"+code;
+  function picToBase64(code) {
+    return "data:image/png;base64," + code;
   }
 </script>
 
@@ -49,7 +51,7 @@
   </v-container>
 </template>
 <style scoped>
-  .img{
+  .img {
     width: 90%;
     height: 10rem;
     margin: auto;
