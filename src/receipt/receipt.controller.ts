@@ -40,6 +40,17 @@ export default class PostController implements Controller {
         }
     };
 
+    private getAllReceiptByUser = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const count = await this.receipt.countDocuments();
+            const receipt = await this.receipt.find().populate("author", "-password");
+            // const receipt = await this.receipt.find();
+            res.send({ count: count, receipt: receipt });
+        } catch (error) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
     private getPaginatedReceipt = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const offset = parseInt(req.params.offset);
