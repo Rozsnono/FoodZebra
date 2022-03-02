@@ -31,8 +31,7 @@ export default class CreatePostDto {
     @IsNumber()
     public rate: number;
 
-    @IsObject()
-    public ingredients: Object;
+    public ingredients: Array<String>;
 
     @IsString()
     public pic: string;

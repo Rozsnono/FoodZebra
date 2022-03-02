@@ -9,7 +9,7 @@ export default interface Receipt {
     time: number;
     price: number;
     serving: number;
-    ingredients: object;
+    ingredients: Array<String>;
     author: string;
     rate: number;
     pic: string;

@@ -11,7 +11,7 @@ const receiptSchema = new Schema<Receipt>(
         time: Number,
         price: Number,
         serving: Number,
-        ingredients: Object,
+        ingredients: Array,
         author: String,
         rate: Number,
         pic: String,
