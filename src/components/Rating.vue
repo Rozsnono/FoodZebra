@@ -9,12 +9,16 @@
       type: String,
       required: true,
     },
+    onlyStar: {
+      type: String,
+      required: true,
+    }
   });
 
   const maxStars = 5;
   const stars = ref(props.rating);
   const rateable = ref(props.rating != null ? false : true);
-  const hasCounter = ref(true);
+  const hasCounter = props.onlyStar;
   const emit = defineEmits(["rating"]);
 
   const staring = (i) => {
@@ -57,7 +61,7 @@
     align-items: center;
     padding: 20px;
     color: #b7b7b7;
-    background: #fff;
+    background-color: #00000000!important;
     border-radius: 8px;
     box-shadow: 0 6px 33px rgba(19, 18, 18, 0.09);
     .list {
@@ -71,7 +75,7 @@
       }
       .star {
         display: inline-block;
-        font-size: 30px;
+        font-size: 20px;
         transition: all 0.2s ease-in-out;
         &:hover {
           ~ .star:not(.active) {
@@ -88,15 +92,15 @@
     }
     .info {
       margin-top: 15px;
-      font-size: 20px;
+      font-size: 15px;
       text-align: center;
       display: table;
       .divider {
         margin: 0 5px;
-        font-size: 20px;
+        font-size: 15px;
       }
       .score-max {
-        font-size: 20px;
+        font-size: 15px;
         vertical-align: sub;
       }
     }
