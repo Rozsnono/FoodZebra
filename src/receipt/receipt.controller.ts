@@ -47,7 +47,7 @@ export default class PostController implements Controller {
             const count = await this.receipt.countDocuments();
             const receipt = await this.receipt.find( { "author" : id } ).populate("author", "-password");
             // const receipt = await this.receipt.find();
-            res.send({ author: id, count: count, receipt: receipt });
+            res.send({ teszt: "true", author: id, count: count, receipt: receipt });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
