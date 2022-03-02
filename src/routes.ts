@@ -8,8 +8,8 @@ import ExamplesView from "./views/ExamplesView.vue";
 import GridView from "./views/GridView.vue";
 import protectedRoute from "./middlewares/protected";
 import StartPageView from "./views/StartPageView.vue";
-import VTableView from "./views/VTableView.vue";
-import Vue3TableLiteView from "./views/Vue3TableLiteView.vue";
+import VTableView from "./views/FoodView.vue";
+import Vue3TableLiteView from "./views/FoodAdd.vue";
 import VueMasteryRealWorldVue3 from "./views/VueMasteryRealWorldVue3.vue";
 import VueMasterySocksView from "./views/VueMasterySocksView.vue";
 

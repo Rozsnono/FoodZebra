@@ -37,7 +37,6 @@
   const resultConfirm = ref(true);
 
   function confirmSaveReceipt() {
-
     if (resultConfirm.value) {
       receiptStore.createNewReceipt({
         name: name.value,
@@ -67,22 +66,16 @@
       setImage(rawFile.split(",")[1]);
     };
     reader.readAsDataURL(selected);
-
-    
-
   }
 
-  function ChoosePriceRate(value)
-  {
+  function ChoosePriceRate(value) {
     console.log(value);
     setPrice(value);
   }
-  function ChooseServingRate(value)
-  {
+  function ChooseServingRate(value) {
     setServing(value);
   }
-  function ChooseDifficultyRate(value)
-  {
+  function ChooseDifficultyRate(value) {
     setDifficulty(value);
   }
 </script>
@@ -103,9 +96,9 @@
     ></v-textarea>
     <v-text-field v-model="energy" class="inputs" label="Energy"></v-text-field>
     <v-text-field v-model="time" class="inputs" label="Time"></v-text-field>
-    <rating title="Price" v-on:rating="ChoosePriceRate"></rating>
-    <rating title="Serving" v-on:rating="ChooseServingRate"></rating>
-    <rating title="Difficulty" v-on:rating="ChooseDifficultyRate"></rating>
+    <rating title="Price" @rating="ChoosePriceRate"></rating>
+    <rating title="Serving" @rating="ChooseServingRate"></rating>
+    <rating title="Difficulty" @rating="ChooseDifficultyRate"></rating>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="green-lighten-3" elevation="5" @click="confirmSaveReceipt()">Save</v-btn>
