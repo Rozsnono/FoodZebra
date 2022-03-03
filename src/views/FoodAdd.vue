@@ -104,7 +104,6 @@ function ChooseDifficultyRate(value) {
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="green-lighten-3" elevation="5" @click="confirmSaveReceipt()">Save</v-btn>
-      <v-btn color="blue-lighten-3" elevation="5" @click="closeDialog">Close</v-btn>
     </v-card-actions>
   </v-card>
 </template>

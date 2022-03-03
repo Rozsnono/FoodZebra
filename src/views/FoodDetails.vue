@@ -15,6 +15,7 @@ import rating from "../components/Rating.vue";
 import { useReceiptStore } from "../store/receiptStore";
 import { useRoute } from "vue-router";
 
+
 const receiptStore = useReceiptStore();
 
 const props = defineProps({
@@ -135,6 +136,7 @@ function difficult(dif: string): string {
       </v-col>
     </v-row>
   </v-container>
+
 </template>
 <style scoped lang="scss">
 .popup {

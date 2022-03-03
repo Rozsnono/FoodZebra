@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import rating from "../components/Rating.vue";
-const props = defineProps<{ item: object, isModify: boolean }>();
+import ConfirmDialog from "../components/ConfirmDialog.vue";
+import { useReceiptStore } from "@/store/receiptStore";
+const props = defineProps<{ item: object; isModify: boolean }>();
 
 const show = ref(true);
 const showDetail = ref(false);
+const showConfirmDelete = ref(false);
+const resultConfirm = ref(false);
+
+ const emit = defineEmits(["reload"]);
+
+const ReceiptStore = useReceiptStore();
+const receipt = props.item;
 
 function picToBase64(code) {
   return "data:image/png;base64," + code;
@@ -18,6 +27,17 @@ function showDetails(id) {
 function closeDetails() {
   showDetail.value = false;
 }
+function confirmDeletePost() {
+  if (resultConfirm.value) {
+    ReceiptStore.deletePostById({
+      _id: receipt._id,
+    });
+    emit("reload");
+    show.value = false;
+  } else {
+    showConfirmDelete.value = false;
+  }
+}
 </script>
 
 <template>
@@ -30,8 +50,16 @@ function closeDetails() {
       <rating :rating="item.rate" :onlyStar="false" />
     </v-card-actions>
     <v-btn color="green lighten-2" text class="btn" v-if="props.isModify">Modify</v-btn>
-    <v-btn color="red lighten-2" text class="btn" v-if="props.isModify">Delete</v-btn>
+    <v-btn color="red lighten-2" text class="btn" v-if="props.isModify" @click="showConfirmDelete = true">Delete</v-btn>
   </v-card>
+  <ConfirmDialog
+    v-if="showConfirmDelete"
+    v-model="showConfirmDelete"
+    v-model:result="resultConfirm"
+    :retain-focus="false"
+    title="Delete document"
+    @close="confirmDeletePost"
+  />
 </template>
 <style scoped>
 .img {
@@ -40,7 +68,7 @@ function closeDetails() {
   margin: auto;
 }
 
-.btn{
+.btn {
   margin: 1rem;
   justify-content: center;
   display: flex;
