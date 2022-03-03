@@ -37,6 +37,7 @@ export const useUsersStore = defineStore({
       return this.errorMsg;
     },
     getLoggedUser(): null | IUser {
+      console.log(this.loggedUser);
       return this.loggedUser;
     },
   },

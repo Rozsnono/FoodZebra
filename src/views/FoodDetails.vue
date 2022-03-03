@@ -114,7 +114,7 @@ function difficult(dif: string): string {
         <v-icon class="in-icon">mdi-chef-hat</v-icon>
         <div class="in-text">{{ difficult(receipt.difficulty) }}</div>
       </v-col>
-
+      <v-divider></v-divider>
       <v-col cols="12" md="5" sm="12">
         <h2 class="i-title">Description</h2>
         <p class="description">
@@ -132,59 +132,13 @@ function difficult(dif: string): string {
       </v-col>
     </v-row>
   </v-container>
-  <!-- <v-row justify="center ">
-    <v-dialog v-model="show" persistent :retain-focus="false" transition="scale-transition">
-      <v-card :loading="loading" class="card">
-        
-
-        <v-card-title>
-          
-          <div class="end">
-            
-          </div>
-        </v-card-title>
-
-        <v-card-text>
-          <v-row align="center" class="mx-0">
-            <rating :rating="receipt.rate" :onlyStar="false"></rating>
-          </v-row>
-
-          <div>
-            {{ receipt.description }}
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem fuga nemo nam nisi in pariatur est placeat sint, excepturi quas officiis ut, non nulla exercitationem voluptate itaque adipisci architecto? Expedita?
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi consectetur cum qui praesentium reiciendis voluptatem aperiam repellendus dolorem consequuntur pariatur. Vel, sequi commodi. Ipsum exercitationem inventore aperiam nam, deserunt nostrum?
-            Illum deleniti error et corrupti velit a tenetur quaerat dolores doloremque hic animi vel qui deserunt beatae officiis sed aliquid quia, nemo dolor excepturi culpa blanditiis quas nobis porro? Ea?
-            Soluta et ea nobis, adipisci, facere sapiente velit a vero veritatis commodi ipsam magnam, laboriosam minus provident tempora dolor. Quos odit molestiae eos. Corporis ullam accusamus porro commodi nobis sed!
-            Ipsam obcaecati, ab maxime reiciendis cum voluptates repellendus explicabo magni odit eum provident nihil, quidem corporis porro dolores adipisci labore qui assumenda unde soluta accusamus fuga vero alias! Magni, odio!
-            Cupiditate hic fuga placeat exercitationem qui aliquid quasi possimus, laudantium nam vero sit doloribus accusamus recusandae maiores! Ullam sunt est et omnis consequatur reprehenderit, qui quidem sequi vitae ab animi.
-          </div>
-
-          <div class="my-4 text-subtitle-1"></div>
-        </v-card-text>
-
-        <v-divider class="mx-4"></v-divider>
-
-        <v-card-title>Ingredients:</v-card-title>
-
-        <v-card-text>
-          <ul>
-            <li v-for="(item, i) in receipt.ingredients" :key="i">{{ item }}</li>
-          </ul>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn color="deep-purple lighten-2" text @click="closeDialog()">Close</v-btn>
-          <v-btn color="green lighten-2" text @click="closeDialog()">Rating</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row> -->
 </template>
 <style scoped lang="scss">
 .popup {
   background-color: aliceblue;
   width: 100%;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
+    sans-serif;
 }
 
 .name {
@@ -202,8 +156,15 @@ function difficult(dif: string): string {
   margin-top: 3rem;
 }
 .img {
-  width: 40%;
+  width: 30%;
   margin: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  .img {
+    margin: auto;
+    width: 50%;
+  }
 }
 .icon {
   font-size: 3rem;
@@ -215,10 +176,10 @@ function difficult(dif: string): string {
     margin-left: 0.5rem;
   }
 }
-.rating{
+.rating {
   margin-left: 2rem;
 }
-.i-title{
+.i-title {
   text-align: center;
   margin-bottom: 2rem;
 }

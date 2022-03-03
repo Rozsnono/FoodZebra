@@ -1,136 +1,138 @@
 <script setup lang="ts">
-  import { computed, ref } from "vue";
+import { computed, ref } from "vue";
 
-  import {
-    VApp,
-    VAppBar,
-    VAppBarNavIcon,
-    VBadge,
-    VBtn,
-    VContainer,
-    VList,
-    VListItem,
-    VMain,
-    VNavigationDrawer,
-    VSpacer,
-  } from "vuetify/components";
-  import { useDisplay } from "vuetify";
-  import { useI18n } from "vue-i18n";
-  import { useUsersStore } from "./store/usersStore";
+import {
+  VApp,
+  VAppBar,
+  VAppBarNavIcon,
+  VBadge,
+  VBtn,
+  VContainer,
+  VList,
+  VListItem,
+  VMain,
+  VNavigationDrawer,
+  VSpacer,
+} from "vuetify/components";
+import { useDisplay } from "vuetify";
+import { useI18n } from "vue-i18n";
+import { useUsersStore } from "./store/usersStore";
 
-  const isMobileDevice = useDisplay().mobile.value;
-  const drawer = ref(!isMobileDevice);
-  const usersStore = useUsersStore();
-  const theme = ref("light");
+const isMobileDevice = useDisplay().mobile.value;
+const drawer = ref(!isMobileDevice);
+const usersStore = useUsersStore();
+const theme = ref("light");
 
-  const loggedUser = computed(() => usersStore.getLoggedUser);
-  const notLoggedIn = computed(() => usersStore.getLoggedUser == null);
+const loggedUser = computed(() => usersStore.getLoggedUser);
+console.log(loggedUser);
+const notLoggedIn = computed(() => usersStore.getLoggedUser == null);
 
-  let { locale, t } = useI18n({
-    inheritLocale: true,
-    useScope: "global", // Change to "local" if you want to add <i18n></i18n> locally
+let { locale, t } = useI18n({
+  inheritLocale: true,
+  useScope: "global", // Change to "local" if you want to add <i18n></i18n> locally
+});
+
+// Search icons: https://materialdesignicons.com/
+const menuItems = ref([
+  {
+    icon: "mdi-home",
+    text: t("startPage"),
+    name: "startPage",
+    route: "/",
+    disabled: false,
+  },
+  {
+    icon: "mdi-account",
+    text: t("account"),
+    name: "account",
+    route: "/account",
+    disabled: false,
+  },
+  {
+    icon: "mdi-food",
+    text: t("food"),
+    name: "food",
+    route: "/food",
+    disabled: false,
+  },
+  {
+    icon: "mdi-food-fork-drink",
+    text: t("addFood"),
+    name: "addFood",
+    route: "/addFood",
+    disabled: notLoggedIn,
+  },
+  {
+    icon: "mdi-food-fork-drink",
+    text: t("modifyFood"),
+    name: "modifyFood",
+    route: "/modifyFood/" + loggedUser?.value?._id,
+    props: { "asd": "asd" },
+    disabled: notLoggedIn,
+  },
+  {
+    icon: "mdi-shield-crown",
+    text: t("admin"),
+    name: "admin",
+    route: "/admin",
+    disabled: notLoggedIn,
+  },
+
+  {
+    icon: "mdi-information",
+    text: t("about"),
+    name: "about",
+    route: "/about",
+    disabled: false,
+  },
+]);
+const links = ref([
+  {
+    icon: "mdi-github",
+    text: "GitHub",
+    name: "",
+    link: "https://github.com/nitslaszlo/jedlik-vite-ts-template",
+    disabled: false,
+  },
+  {
+    icon: "mdi-vuetify",
+    text: "Vuetify 3",
+    name: "",
+    link: "https://next.vuetifyjs.com/en/getting-started/installation",
+    disabled: false,
+  },
+  {
+    icon: "mdi-fruit-pineapple",
+    text: "Pinia",
+    name: "",
+    link: "https://pinia.vuejs.org/introduction.html",
+    disabled: false,
+  },
+  {
+    icon: "mdi-bootstrap",
+    text: "Bootstrap 5",
+    name: "",
+    link: "https://getbootstrap.com/docs/5.1/forms/overview/",
+    disabled: false,
+  },
+  {
+    icon: "mdi-responsive",
+    text: "MDB & Vue3",
+    name: "",
+    link: "https://mdbootstrap.com/docs/b5/vue/getting-started/installation/",
+    disabled: false,
+  },
+]);
+
+function toggleTheme() {
+  theme.value = theme.value === "light" ? "dark" : "light";
+}
+function toggleLanguage() {
+  locale.value = locale.value == "hu" ? "en" : "hu";
+  menuItems.value.forEach((e) => {
+    if (e.name != "") e.text = t(e.name);
   });
-
-  // Search icons: https://materialdesignicons.com/
-  const menuItems = ref([
-    {
-      icon: "mdi-home",
-      text: t("startPage"),
-      name: "startPage",
-      route: "/",
-      disabled: false,
-    },
-    {
-      icon: "mdi-account",
-      text: t("account"),
-      name: "account",
-      route: "/account",
-      disabled: false,
-    },
-    {
-      icon: "mdi-food",
-      text: t("food"),
-      name: "food",
-      route: "/food",
-      disabled: false,
-    },
-    {
-      icon: "mdi-food-fork-drink",
-      text: t("addFood"),
-      name: "addFood",
-      route: "/addFood",
-      disabled: notLoggedIn,
-    },
-    {
-      icon: "mdi-food-fork-drink",
-      text: t("modifyFood"),
-      name: "modifyFood",
-      route: "/modifyFood",
-      disabled: notLoggedIn,
-    },
-    {
-      icon: "mdi-shield-crown",
-      text: t("admin"),
-      name: "admin",
-      route: "/admin",
-      disabled: notLoggedIn,
-    },
-
-    {
-      icon: "mdi-information",
-      text: t("about"),
-      name: "about",
-      route: "/about",
-      disabled: false,
-    },
-  ]);
-  const links = ref([
-    {
-      icon: "mdi-github",
-      text: "GitHub",
-      name: "",
-      link: "https://github.com/nitslaszlo/jedlik-vite-ts-template",
-      disabled: false,
-    },
-    {
-      icon: "mdi-vuetify",
-      text: "Vuetify 3",
-      name: "",
-      link: "https://next.vuetifyjs.com/en/getting-started/installation",
-      disabled: false,
-    },
-    {
-      icon: "mdi-fruit-pineapple",
-      text: "Pinia",
-      name: "",
-      link: "https://pinia.vuejs.org/introduction.html",
-      disabled: false,
-    },
-    {
-      icon: "mdi-bootstrap",
-      text: "Bootstrap 5",
-      name: "",
-      link: "https://getbootstrap.com/docs/5.1/forms/overview/",
-      disabled: false,
-    },
-    {
-      icon: "mdi-responsive",
-      text: "MDB & Vue3",
-      name: "",
-      link: "https://mdbootstrap.com/docs/b5/vue/getting-started/installation/",
-      disabled: false,
-    },
-  ]);
-
-  function toggleTheme() {
-    theme.value = theme.value === "light" ? "dark" : "light";
-  }
-  function toggleLanguage() {
-    locale.value = locale.value == "hu" ? "en" : "hu";
-    menuItems.value.forEach((e) => {
-      if (e.name != "") e.text = t(e.name);
-    });
-  }
+}
 </script>
 
 <template>
@@ -194,7 +196,7 @@
 </template>
 
 <style>
-  #app {
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-  }
+#app {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
 </style>

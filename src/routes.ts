@@ -46,8 +46,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Vue3TableLiteView,
   },
   {
-    path: "/modifyfood",
-    name: "Food modify",
+    path: "/modifyFood/:id",
+    name: "modifyFood",
     component: Modify,
   },
   {

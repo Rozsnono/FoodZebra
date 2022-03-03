@@ -21,6 +21,7 @@ interface IState {
   numberOfReceipt: number;
   receipt: Array<IReceipt>;
   oneReceipt: Object;
+  authorReceipt: any;
 }
 
 interface IPaginatedParams {
@@ -69,6 +70,7 @@ export const useReceiptStore = defineStore({
     numberOfReceipt: 0,
     receipt: [],
     oneReceipt: {},
+    authorReceipt: [],
   }),
   getters: {
     getLoading(): boolean {
@@ -80,8 +82,11 @@ export const useReceiptStore = defineStore({
     getNumberOfReceipt(): number {
       return this.numberOfReceipt;
     },
-    getOneReceipt(): Object {
+    getOneReceipt(): any {
       return this.oneReceipt;
+    },
+    getAuthorReceipt(): any {
+      return this.authorReceipt;
     },
   },
   actions: {
@@ -167,12 +172,40 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         });
     },
-    async auhtorReceipt(params: string): Promise<void> {
+    async auhtorReceipt(params: string): Promise<any> {
       this.loading = true;
-      $axios
+      let all = [];
+      await $axios
         .get(`receipt/author/${params}`)
         .then((res) => {
           if (res && res.data) {
+            console.log(res.data);
+            all = res.data;
+            this.authorReceipt = res.data;
+            this.numberOfReceipt = res.data.count;
+          }
+          this.loading = false;
+          console.log(all);
+          return all;
+        })
+        .catch((error) => {
+          console.error("hiba: " + error);
+          this.loading = false;
+          return {"hiba":error};
+        })
+        .then((noterror) => {
+          console.log("asd");
+          return [];
+        })
+
+
+
+      this.loading = true;
+      await $axios
+        .get(`receipt/author/${params}`)
+        .then((res) => {
+          if (res && res.data) {
+            console.log(res.data);
             this.receipt = res.data.receipt;
             this.numberOfReceipt = res.data.count;
           }
@@ -183,7 +216,7 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         });
     },
-    async getReceiptById(params: string): Promise<Object> {
+    async getReceiptById(params: string): Promise<Object | any> {
       this.loading = true;
       let one = {};
       await $axios
