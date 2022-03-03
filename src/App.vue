@@ -170,7 +170,7 @@ function toggleLanguage() {
         :color="notLoggedIn ? 'surface' : 'success'"
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
-      Jedlik Vite TS {{ $t("template") }} - {{ notLoggedIn ? $t("noUser") : loggedUser?.name }}
+      FoodZebra
       <v-spacer></v-spacer>
       <v-badge :content="locale" offset-x="6" offset-y="6">
         <v-btn :color="notLoggedIn ? 'surface' : 'success'" icon @click="toggleLanguage">
