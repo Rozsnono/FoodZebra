@@ -5,6 +5,7 @@ import { useReceiptStore } from "../store/receiptStore";
 import rating from "../components/Rating.vue";
 import { useUsersStore } from "@/store/usersStore";
 import { useRoute } from "vue-router";
+ import card from "../components/FoodCard.vue"
 
 const receiptStore = useReceiptStore();
 let allReceipt = ref([]);
@@ -20,7 +21,7 @@ const props = defineProps({
 const router = useRoute();
 
 async function Loading() {
-  // await receiptStore.auhtorReceipt();
+  await receiptStore.auhtorReceipt(sessionStorage.getItem('currentUser'));
   console.log(router.params);
   allReceipt.value = receiptStore.getAuthorReceipt.receipt;
   console.log(allReceipt);
@@ -45,27 +46,7 @@ function picToBase64(code) {
   <v-container class="page" v-if="Loading()">
     <v-row>
       <v-col v-for="(item, i) in allReceipt" :key="i" cols="12" lg="3" md="4" sm="6">
-        <v-card class="mx-auto" max-width="344">
-          <v-img class="img" :src="picToBase64(item.pic)"></v-img>
-
-          <v-card-title>{{ item.name }}</v-card-title>
-
-          <v-card-subtitle>????</v-card-subtitle>
-
-          <v-card-actions class="mx-auto">
-            <rating :rating="item.rate" />
-          </v-card-actions>
-
-          <v-expand-transition>
-            <div v-show="show">
-              <v-divider></v-divider>
-
-              <v-card-text>
-                {{ item.description }}
-              </v-card-text>
-            </div>
-          </v-expand-transition>
-        </v-card>
+         <card :item="item" :isModify="true"/>
       </v-col>
     </v-row>
   </v-container>

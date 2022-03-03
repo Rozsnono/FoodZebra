@@ -14,7 +14,6 @@ import {
 import rating from "../components/Rating.vue";
 import { useReceiptStore } from "../store/receiptStore";
 import { useRoute } from "vue-router";
-import func from "vue-temp/vue-editor-bridge";
 
 const receiptStore = useReceiptStore();
 
@@ -58,22 +57,22 @@ function picToBase64(code) {
 function difficult(dif: string): string {
   switch (dif) {
     case 1:
-      return "Nagyon könnyű";
+      return "Very easy";
       break;
     case 2:
-      return "Könnyű";
+      return "Easy";
       break;
     case 3:
-      return "Közepes";
+      return "Medium";
       break;
     case 4:
-      return "Nehéz";
+      return "Hard";
       break;
     case 5:
-      return "Nagyon nehéz";
+      return "Really hard";
       break;
     default:
-      return "";
+      return "Impossible";
       break;
   }
 }
@@ -93,22 +92,26 @@ function difficult(dif: string): string {
           <v-chip>{{ receipt.type }}</v-chip>
         </div>
       </v-col>
-      <v-rating
-        v-model="receipt.rate"
-        background-color="yellow lighten-3"
-        class="rating"
-        color="yellow"
-        large
-        readonly
-      ></v-rating>
+      <div class="rating">
+        <v-rating
+          v-model="receipt.rate"
+          background-color="yellow lighten-3"
+          class="ratingStars"
+          color="yellow"
+          large
+          readonly
+        ></v-rating>
+        <v-btn color="yellow lighten-2" text>Rating</v-btn>
+      </div>
+
       <v-divider></v-divider>
       <v-col class="icon" cols="12" lg="4" sm="12">
         <v-icon class="in-icon">mdi-clock</v-icon>
-        <div class="in-text">{{ receipt.time }} perc</div>
+        <div class="in-text">{{ receipt.time }} min</div>
       </v-col>
       <v-col class="icon" cols="12" lg="4" sm="12">
         <v-icon class="in-icon">mdi-lightning-bolt-circle</v-icon>
-        <div class="in-text">{{ receipt.energy }} kal</div>
+        <div class="in-text">{{ receipt.energy }} cal</div>
       </v-col>
       <v-col class="icon" cols="12" lg="4" sm="12">
         <v-icon class="in-icon">mdi-chef-hat</v-icon>
@@ -176,13 +179,23 @@ function difficult(dif: string): string {
     margin-left: 0.5rem;
   }
 }
-.rating {
-  margin-left: 2rem;
+.ratingStars {
+  
 }
 .i-title {
   text-align: center;
   margin-bottom: 2rem;
 }
+.rating{
+  display: flex;
+  justify-content: center;
+  margin-left: 2rem;
+
+  .v-btn{
+    margin: 0.3rem;
+  }
+}
+
 
 .card {
   position: absolute;
