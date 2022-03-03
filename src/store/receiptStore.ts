@@ -20,6 +20,7 @@ interface IState {
   loading: boolean;
   numberOfReceipt: number;
   receipt: Array<IReceipt>;
+  oneReceipt: Object;
 }
 
 interface IPaginatedParams {
@@ -67,6 +68,7 @@ export const useReceiptStore = defineStore({
     loading: false,
     numberOfReceipt: 0,
     receipt: [],
+    oneReceipt: {},
   }),
   getters: {
     getLoading(): boolean {
@@ -77,6 +79,9 @@ export const useReceiptStore = defineStore({
     },
     getNumberOfReceipt(): number {
       return this.numberOfReceipt;
+    },
+    getOneReceipt(): Object {
+      return this.oneReceipt;
     },
   },
   actions: {
@@ -93,7 +98,7 @@ export const useReceiptStore = defineStore({
           price: params.price,
           serving: params.serving,
           difficulty: params.difficulty,
-          ingredients: {},
+          ingredients: params.ingredients,
           author:"",
           rate: 0,
         })
@@ -177,6 +182,33 @@ export const useReceiptStore = defineStore({
           console.error("hiba: " + error);
           this.loading = false;
         });
+    },
+    async getReceiptById(params: string): Promise<Object> {
+      this.loading = true;
+      let one = {};
+      await $axios
+        .get(`receipt/${params}`)
+        .then((res) => {
+          if (res && res.data) {
+            one = res.data;
+            this.oneReceipt = one;
+            this.numberOfReceipt = res.data.count;
+          }
+          this.loading = false;
+          console.log(one);
+          return one;
+        })
+        .catch((error) => {
+          console.error("hiba: " + error);
+          this.loading = false;
+          return {"hiba":error};
+        })
+        .then((noterror) => {
+          console.log("asd");
+          return {};
+        })
+        
+      
     },
     async fetchPaginatedPosts(params: IPaginatedParams): Promise<void> {
       this.loading = true;

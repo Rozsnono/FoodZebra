@@ -9,6 +9,7 @@ import Modify from "./views/FoodModify.vue";
 import protectedRoute from "./middlewares/protected";
 import StartPageView from "./views/StartPageView.vue";
 import VTableView from "./views/FoodView.vue";
+import FoodDetails from "./views/FoodDetails.vue";
 import Vue3TableLiteView from "./views/FoodAdd.vue";
 import VueMasteryRealWorldVue3 from "./views/VueMasteryRealWorldVue3.vue";
 import VueMasterySocksView from "./views/VueMasterySocksView.vue";
@@ -33,7 +34,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/food",
     name: "Food",
     component: VTableView,
-    beforeEnter: protectedRoute,
+  },
+  {
+    path: "/food/:id",
+    name: "FoodDetails",
+    component: FoodDetails,
   },
   {
     path: "/addfood",
