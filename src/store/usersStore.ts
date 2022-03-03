@@ -1,19 +1,11 @@
 import $axios from "./axios.instance";
 import { defineStore } from "pinia";
 
-interface IAddress {
-  _id: string;
-  city: string;
-  country: string;
-  street: string;
-}
-
 interface IUser {
   _id?: string;
   email?: string;
   name?: string;
   password?: string;
-  address?: null | IAddress;
 }
 
 interface IState {
@@ -37,7 +29,6 @@ export const useUsersStore = defineStore({
       return this.errorMsg;
     },
     getLoggedUser(): null | IUser {
-      console.log(this.loggedUser);
       return this.loggedUser;
     },
   },
@@ -54,6 +45,7 @@ export const useUsersStore = defineStore({
         })
         .then((res) => {
           this.loggedUser = res.data;
+          sessionStorage.setItem("currentUser",this.loggedUser?._id);
           this.loading = false;
         })
         .catch(() => {
@@ -67,6 +59,7 @@ export const useUsersStore = defineStore({
       $axios
         .post("auth/logout")
         .then(() => {
+          sessionStorage.removeItem("currentUser");
           this.loggedUser = null;
           this.loading = false;
         })
