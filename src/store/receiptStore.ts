@@ -98,7 +98,7 @@ export const useReceiptStore = defineStore({
           price: params.price,
           serving: params.serving,
           difficulty: params.difficulty,
-          ingredients: {},
+          ingredients: params.ingredients,
           author:"",
           rate: 0,
         })
