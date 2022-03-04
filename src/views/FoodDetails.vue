@@ -14,7 +14,7 @@ import {
 import rating from "../components/Rating.vue";
 import { useReceiptStore } from "../store/receiptStore";
 import { useRoute } from "vue-router";
-
+import ConfirmDialog from "../components/ConfirmDialog.vue";
 
 const receiptStore = useReceiptStore();
 
@@ -42,6 +42,12 @@ const show = computed({
 
 const load = ref(false);
 const receipt = ref({});
+
+const showDetail = ref(false);
+const showConfirmRate = ref(false);
+const resultConfirm = ref(false);
+
+const rate = ref(0);
 
 async function Loading() {
   await receiptStore.getReceiptById(router.params.id.toString());
@@ -77,10 +83,50 @@ function difficult(dif: string): string {
       break;
   }
 }
+
+function ShowRate() {
+  showConfirmRate.value = true;
+  console.log("asd");
+}
+
+function getRating(v) {
+  rate.value = v;
+}
+
+function receiptRateCounter(plusRate: number) {
+  return receipt.value == 0
+    ? plusRate
+    : (receipt.value.rate == null ? 0 : receipt.value.rate + plusRate) / 2;
+}
+
+function confirmRate() {
+  if (resultConfirm.value) {
+    receiptStore.ratingReceipt({
+      _id: receipt.value._id,
+      rate: receiptRateCounter(rate.value),
+    });
+    emit("reload");
+    show.value = false;
+  } else {
+    showConfirmRate.value = false;
+  }
+}
 </script>
 
 <template>
   <v-container v-if="Loading()" class="popup">
+    <ConfirmDialog
+      v-if="showConfirmRate"
+      v-model="showConfirmRate"
+      v-model:result="resultConfirm"
+      cancel-btn="Close"
+      message="rating"
+      ok-btn="Rating"
+      :retain-focus="false"
+      title="Rating Receipt"
+      @close="confirmRate"
+      @resultData="getRating"
+    />
     <v-row>
       <v-col cols="12" sm="12">
         <v-img alt="Food" class="img" :src="picToBase64(receipt.pic)"></v-img>
@@ -102,7 +148,7 @@ function difficult(dif: string): string {
           large
           readonly
         ></v-rating>
-        <v-btn color="yellow lighten-2" text>Rating</v-btn>
+        <v-btn color="yellow lighten-2" text @click="ShowRate()">Rating</v-btn>
       </div>
 
       <v-divider></v-divider>
@@ -136,7 +182,6 @@ function difficult(dif: string): string {
       </v-col>
     </v-row>
   </v-container>
-
 </template>
 <style scoped lang="scss">
 .popup {
@@ -182,22 +227,20 @@ function difficult(dif: string): string {
   }
 }
 .ratingStars {
-  
 }
 .i-title {
   text-align: center;
   margin-bottom: 2rem;
 }
-.rating{
+.rating {
   display: flex;
   justify-content: center;
   margin-left: 2rem;
 
-  .v-btn{
+  .v-btn {
     margin: 0.3rem;
   }
 }
-
 
 .card {
   position: absolute;

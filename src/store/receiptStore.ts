@@ -11,7 +11,7 @@ export interface IReceipt {
   price: number;
   serving: number;
   difficulty: number;
-  rate: number,
+  rate: number;
   pic: string;
   ingredients: object;
 }
@@ -48,6 +48,11 @@ export interface IEditParams {
   difficulty: number;
 }
 
+export interface IRatingParams {
+  _id: string;
+  rate: number;
+}
+
 export interface INewReceiptParams {
   _id: string;
   name: string;
@@ -58,7 +63,7 @@ export interface INewReceiptParams {
   price: number;
   serving: number;
   difficulty: number;
-  rate: number,
+  rate: number;
   pic: string;
   ingredients: object;
 }
@@ -104,7 +109,7 @@ export const useReceiptStore = defineStore({
           serving: params.serving,
           difficulty: params.difficulty,
           ingredients: params.ingredients,
-          author:"",
+          author: "",
           rate: 0,
         })
         .then((res) => {
@@ -117,7 +122,7 @@ export const useReceiptStore = defineStore({
         .catch((error) => {
           console.log(params);
           console.error("hiba: " + error);
-          
+
           // context.commit("setLoading", false);
           this.loading = false;
         });
@@ -128,6 +133,24 @@ export const useReceiptStore = defineStore({
         .patch(`receipt/${params._id}`, {
           title: params.title,
           content: params.content,
+        })
+        .then((res) => {
+          if (res && res.data) {
+            console.log(res.data);
+          }
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error("hiba: " + error);
+          this.loading = false;
+        });
+    },
+    async ratingReceipt(params: IRatingParams): Promise<void> {
+      this.loading = true;
+      $axios
+        .patch(`receipt/${params._id}`, {
+          _id: params._id,
+          rate: params.rate,
         })
         .then((res) => {
           if (res && res.data) {
@@ -191,14 +214,12 @@ export const useReceiptStore = defineStore({
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
-          return {"hiba":error};
+          return { hiba: error };
         })
         .then((noterror) => {
           console.log("asd");
           return [];
-        })
-
-
+        });
 
       this.loading = true;
       await $axios
@@ -234,14 +255,12 @@ export const useReceiptStore = defineStore({
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
-          return {"hiba":error};
+          return { hiba: error };
         })
         .then((noterror) => {
           console.log("asd");
           return {};
-        })
-        
-      
+        });
     },
     async fetchPaginatedPosts(params: IPaginatedParams): Promise<void> {
       this.loading = true;
