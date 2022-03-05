@@ -42,13 +42,6 @@ const menuItems = ref([
     disabled: false,
   },
   {
-    icon: "mdi-account",
-    text: t("account"),
-    name: "account",
-    route: "/account",
-    disabled: false,
-  },
-  {
     icon: "mdi-food",
     text: t("food"),
     name: "food",
@@ -67,17 +60,9 @@ const menuItems = ref([
     text: t("modifyFood"),
     name: "modifyFood",
     route: "/modifyFood/" + loggedUser?.value?._id,
-    props: { "asd": "asd" },
+    props: { asd: "asd" },
     disabled: notLoggedIn,
   },
-  {
-    icon: "mdi-shield-crown",
-    text: t("admin"),
-    name: "admin",
-    route: "/admin",
-    disabled: notLoggedIn,
-  },
-
   {
     icon: "mdi-information",
     text: t("about"),
@@ -85,41 +70,11 @@ const menuItems = ref([
     route: "/about",
     disabled: false,
   },
-]);
-const links = ref([
-  {
-    icon: "mdi-github",
-    text: "GitHub",
-    name: "",
-    link: "https://github.com/nitslaszlo/jedlik-vite-ts-template",
-    disabled: false,
-  },
-  {
-    icon: "mdi-vuetify",
-    text: "Vuetify 3",
-    name: "",
-    link: "https://next.vuetifyjs.com/en/getting-started/installation",
-    disabled: false,
-  },
-  {
-    icon: "mdi-fruit-pineapple",
-    text: "Pinia",
-    name: "",
-    link: "https://pinia.vuejs.org/introduction.html",
-    disabled: false,
-  },
-  {
-    icon: "mdi-bootstrap",
-    text: "Bootstrap 5",
-    name: "",
-    link: "https://getbootstrap.com/docs/5.1/forms/overview/",
-    disabled: false,
-  },
-  {
-    icon: "mdi-responsive",
-    text: "MDB & Vue3",
-    name: "",
-    link: "https://mdbootstrap.com/docs/b5/vue/getting-started/installation/",
+    {
+    icon: "mdi-account",
+    text: t("account"),
+    name: "account",
+    route: "/account",
     disabled: false,
   },
 ]);
@@ -150,40 +105,23 @@ function toggleLanguage() {
           @click="drawer = !isMobileDevice"
         ></v-list-item>
       </v-list>
-      <p class="text-center my-3">{{ $t("links") }}</p>
-      <v-list dense nav>
-        <v-list-item
-          v-for="(item, i) in links"
-          :key="i"
-          :disabled="item.disabled"
-          :href="item.link"
-          link
-          :prepend-icon="item.icon"
-          target="_blank"
-          :title="item.text"
-          @click="drawer = !isMobileDevice"
-        ></v-list-item>
-      </v-list>
     </v-navigation-drawer>
-    <v-app-bar app :color="notLoggedIn ? 'surface' : 'success'" dark>
+    <v-app-bar app :color="notLoggedIn ? 'surface' : 'primary'" dark>
       <v-app-bar-nav-icon
-        :color="notLoggedIn ? 'surface' : 'success'"
+        :color="notLoggedIn ? 'surface' : 'primary'"
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
       FoodZebra
       <v-spacer></v-spacer>
       <v-badge :content="locale" offset-x="6" offset-y="6">
-        <v-btn :color="notLoggedIn ? 'surface' : 'success'" icon @click="toggleLanguage">
+        <v-btn :color="notLoggedIn ? 'surface' : 'primary'" icon @click="toggleLanguage">
           <v-icon>mdi-comment-text-multiple</v-icon>
         </v-btn>
       </v-badge>
-      <v-btn class="ml-5" :color="notLoggedIn ? 'surface' : 'success'" icon @click="toggleTheme">
+      <v-btn class="ml-5" :color="notLoggedIn ? 'surface' : 'primary'" icon @click="toggleTheme">
         <v-icon>mdi-theme-light-dark</v-icon>
       </v-btn>
-      <v-app-bar-nav-icon
-        :color="notLoggedIn ? 'surface' : 'success'"
-        @click="drawer = !drawer"
-      ></v-app-bar-nav-icon>
+
     </v-app-bar>
 
     <v-main>
