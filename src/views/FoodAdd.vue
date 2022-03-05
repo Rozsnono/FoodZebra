@@ -85,7 +85,12 @@ function ChooseDifficultyRate(value) {
   <v-card class="mx-auto card">
     <v-card-title class="title">Add new Food</v-card-title>
     <v-text-field v-model="name" class="inputs" label="Name"></v-text-field>
-    <v-file-input accept="image/*" truncate-length="15" @change="Tobase64($event)"></v-file-input>
+    <v-file-input
+      accept="image/*"
+      truncate-length="15"
+      @change="Tobase64($event)"
+      label="Picture"
+    ></v-file-input>
     <v-text-field v-model="type" class="inputs" label="Type"></v-text-field>
     <v-textarea
       v-model="description"
