@@ -47,6 +47,8 @@ const showDetail = ref(false);
 const showConfirmRate = ref(false);
 const resultConfirm = ref(false);
 
+const rerender = ref(0);
+
 const rate = ref(0);
 
 async function Loading() {
@@ -105,7 +107,8 @@ function confirmRate() {
       _id: receipt.value._id,
       rate: receiptRateCounter(rate.value),
     });
-    emit("reload");
+    Loading();
+    rerender.value += 1;
     show.value = false;
   } else {
     showConfirmRate.value = false;
@@ -114,7 +117,7 @@ function confirmRate() {
 </script>
 
 <template>
-  <v-container v-if="Loading()" class="popup">
+  <v-container v-if="Loading()" class="popup" :key="rerender">
     <ConfirmDialog
       v-if="showConfirmRate"
       v-model="showConfirmRate"

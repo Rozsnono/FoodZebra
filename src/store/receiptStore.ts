@@ -148,7 +148,7 @@ export const useReceiptStore = defineStore({
     async ratingReceipt(params: IRatingParams): Promise<void> {
       this.loading = true;
       $axios
-        .patch(`receipt/${params._id}`, {
+        .patch(`receipt/rating/${params._id}`, {
           _id: params._id,
           rate: params.rate,
         })
