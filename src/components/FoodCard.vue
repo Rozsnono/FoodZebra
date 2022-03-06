@@ -10,7 +10,7 @@ const showDetail = ref(false);
 const showConfirmDelete = ref(false);
 const resultConfirm = ref(false);
 
- const emit = defineEmits(["reload"]);
+const emit = defineEmits(["reload"]);
 
 const ReceiptStore = useReceiptStore();
 const receipt = props.item;
@@ -49,8 +49,24 @@ function confirmDeletePost() {
     <v-card-actions class="rate">
       <rating :rating="item.rate" :onlyStar="false" />
     </v-card-actions>
-    <v-btn color="green lighten-2" text class="btn" v-if="props.isModify">Modify</v-btn>
-    <v-btn color="red lighten-2" text class="btn" v-if="props.isModify" @click="showConfirmDelete = true">Delete</v-btn>
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="6" lg="6">
+          <v-btn color="green lighten-2" text class="btn" v-if="props.isModify">Modify</v-btn>
+        </v-col>
+        <v-col cols="12" sm="6" lg="6">
+          <v-btn
+            color="red lighten-2"
+            text
+            class="btn"
+            v-if="props.isModify"
+            @click="showConfirmDelete = true"
+          >
+            Delete
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-card>
   <ConfirmDialog
     v-if="showConfirmDelete"
@@ -62,7 +78,7 @@ function confirmDeletePost() {
   />
 </template>
 <style scoped>
-.card{
+.card {
   background-color: #00000040;
   border-radius: 1rem;
   padding: 1rem;
@@ -75,9 +91,8 @@ function confirmDeletePost() {
 }
 
 .btn {
-  margin: 1rem;
-  justify-content: center;
-  display: flex;
+  justify-content: center !important;
+  display: flex !important;
 }
 
 .rate {
