@@ -22,9 +22,9 @@ export default class PostController implements Controller {
 
     private initializeRoutes() {
         this.router.get(this.path, this.getAllReceipt);
-        this.router.get(`${this.path}/:id`, authMiddleware, this.getReceiptById);
+        this.router.get(`${this.path}/:id`, this.getReceiptById);
         this.router.get(`${this.path}/author/:author`, authMiddleware, this.getAllReceiptByUser);
-        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, authMiddleware, this.getPaginatedReceipt);
+        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, this.getPaginatedReceipt);
         this.router.patch(`${this.path}/:id`, [authMiddleware, validationMiddleware(CreatePostDto, true)], this.modifyReceipt);
         this.router.delete(`${this.path}/:id`, authMiddleware, this.deleteReceipt);
         this.router.post(this.path, [authMiddleware, validationMiddleware(CreatePostDto)], this.createReceipt);
