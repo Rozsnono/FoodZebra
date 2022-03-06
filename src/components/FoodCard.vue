@@ -62,6 +62,12 @@ function confirmDeletePost() {
   />
 </template>
 <style scoped>
+.card{
+  background-color: #00000040;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
 .img {
   width: 90%;
   height: 10rem;

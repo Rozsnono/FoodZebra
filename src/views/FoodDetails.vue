@@ -188,7 +188,9 @@ function confirmRate() {
 </template>
 <style scoped lang="scss">
 .popup {
-  background-color: aliceblue;
+  background-color: #00000020;
+  border-radius: 2rem;
+  padding: 2rem;
   width: 100%;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
     sans-serif;

@@ -21,7 +21,8 @@ import { useUsersStore } from "./store/usersStore";
 const isMobileDevice = useDisplay().mobile.value;
 const drawer = ref(!isMobileDevice);
 const usersStore = useUsersStore();
-const theme = ref("light");
+const theme = ref(false);
+const themeForApp = ref("light");
 
 const loggedUser = computed(() => usersStore.getLoggedUser);
 console.log(loggedUser);
@@ -70,7 +71,7 @@ const menuItems = ref([
     route: "/about",
     disabled: false,
   },
-    {
+  {
     icon: "mdi-account",
     text: t("account"),
     name: "account",
@@ -80,7 +81,8 @@ const menuItems = ref([
 ]);
 
 function toggleTheme() {
-  theme.value = theme.value === "light" ? "dark" : "light";
+  theme.value = theme.value === true ? false : true;
+  themeForApp.value = themeForApp.value === "light" ? "dark" : "light";
 }
 function toggleLanguage() {
   locale.value = locale.value == "hu" ? "en" : "hu";
@@ -91,9 +93,9 @@ function toggleLanguage() {
 </script>
 
 <template>
-  <v-app :theme="theme">
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list dense nav>
+  <v-app :theme="themeForApp" >
+    <v-navigation-drawer v-model="drawer" app :color="'primary'" dark>
+      <v-list dense nav :color="'primary'" dark>
         <v-list-item
           v-for="(item, i) in menuItems"
           :key="i"
@@ -106,22 +108,28 @@ function toggleLanguage() {
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app :color="notLoggedIn ? 'surface' : 'primary'" dark>
+    <v-app-bar app :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark>
       <v-app-bar-nav-icon
-        :color="notLoggedIn ? 'surface' : 'primary'"
+        :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
       FoodZebra
       <v-spacer></v-spacer>
-      <v-badge :content="locale" offset-x="6" offset-y="6">
-        <v-btn :color="notLoggedIn ? 'surface' : 'primary'" icon @click="toggleLanguage">
-          <v-icon>mdi-comment-text-multiple</v-icon>
-        </v-btn>
-      </v-badge>
-      <v-btn class="ml-5" :color="notLoggedIn ? 'surface' : 'primary'" icon @click="toggleTheme">
+      <v-btn
+        :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark
+        icon
+        @click="toggleLanguage"
+      >
+        <v-icon>mdi-comment-text-multiple</v-icon>
+      </v-btn>
+      <v-btn
+        class="ml-5"
+        :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark
+        icon
+        @click="toggleTheme"
+      >
         <v-icon>mdi-theme-light-dark</v-icon>
       </v-btn>
-
     </v-app-bar>
 
     <v-main>
@@ -135,6 +143,16 @@ function toggleLanguage() {
 
 <style>
 #app {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
+
+.dark {
+  background-color: #36443c;
+  color: white;
+}
+.default {
+  background-color: #a5b452;
+  color: black;
+}
+
 </style>
