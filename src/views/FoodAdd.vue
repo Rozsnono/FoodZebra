@@ -82,50 +82,115 @@ function ChooseDifficultyRate(value) {
 </script>
 
 <template>
-  <v-card class="mx-auto card">
-    <v-card-title class="title">Add new Food</v-card-title>
-    <v-text-field v-model="name" class="inputs" label="Name"></v-text-field>
-    <v-file-input
-      accept="image/*"
-      truncate-length="15"
-      @change="Tobase64($event)"
-      label="Picture"
-    ></v-file-input>
-    <v-text-field v-model="type" class="inputs" label="Type"></v-text-field>
-    <v-textarea
-      v-model="description"
-      class="inputs"
-      filled
-      label="Description"
-      rows="6"
-      shaped
-    ></v-textarea>
-    <v-text-field v-model="energy" class="inputs" label="Energy"></v-text-field>
-    <v-text-field v-model="time" class="inputs" label="Time"></v-text-field>
-    <v-textarea v-model="ingredients" class="inputs" filled label="Ingredients" shaped></v-textarea>
-    <rating title="Price" @rating="ChoosePriceRate"></rating>
-    <rating title="Serving" @rating="ChooseServingRate"></rating>
-    <rating title="Difficulty" @rating="ChooseDifficultyRate"></rating>
-    <v-card-actions>
+  <v-container class="card">
+    <v-row>
+      <v-col cols="12" sm="12">
+        <h1 class="title">Add new food</h1>
+        <v-divider></v-divider>
+      </v-col>
+      <v-col cols="12" sm="12" lg="6">
+        <v-text-field
+          v-model="name"
+          class="inputs"
+          label="Name"
+          prepend-icon="mdi-food-outline"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="12" lg="6">
+        <v-text-field
+          v-model="type"
+          class="inputs"
+          label="Type"
+          prepend-icon="mdi-food-fork-drink"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="12" lg="12">
+        <v-file-input
+          accept="image/*"
+          truncate-length="15"
+          @change="Tobase64($event)"
+          label="Picture"
+          prepend-icon="mdi-panorama-variant-outline"
+        ></v-file-input>
+      </v-col>
+      <v-col cols="12" sm="12" lg="6">
+        <v-textarea
+          v-model="description"
+          class="inputs"
+          filled
+          label="Description"
+          rows="6"
+          shaped
+        ></v-textarea>
+      </v-col>
+      <v-col cols="12" sm="12" lg="6">
+        <v-textarea
+          v-model="ingredients"
+          class="inputs"
+          filled
+          label="Ingredients"
+          shaped
+        ></v-textarea>
+      </v-col>
+      <v-col cols="12" sm="12" lg="6">
+        <v-text-field
+          v-model="energy"
+          class="inputs"
+          label="Energy"
+          prepend-icon="mdi-lightning-bolt-circle"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="12" lg="6">
+        <v-text-field
+          v-model="time"
+          class="inputs"
+          label="Time"
+          prepend-icon="mdi-clock-time-five"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="12" lg="4">
+        <rating title="Price" @rating="ChoosePriceRate"></rating>
+      </v-col>
+      <v-col cols="12" sm="12" lg="4">
+        <rating title="Serving" @rating="ChooseServingRate"></rating>
+      </v-col>
+      <v-col cols="12" sm="12" lg="4">
+        <rating title="Difficulty" @rating="ChooseDifficultyRate"></rating>
+      </v-col>
       <v-spacer></v-spacer>
-      <v-btn color="green-lighten-3" elevation="5" @click="confirmSaveReceipt()">Save</v-btn>
-    </v-card-actions>
-  </v-card>
+      <v-col cols="12" sm="12" lg="3"></v-col>
+      <v-col cols="12" sm="12" lg="6">
+        <v-btn color="green-lighten-3" class="btn" elevation="10" @click="confirmSaveReceipt()">
+          Save
+        </v-btn>
+      </v-col>
+      <v-col cols="12" sm="12" lg="3"></v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <style scoped>
 .card {
-  width: 40rem !important;
+  width: 80rem !important;
+  background-color: #00000030;
+  border-radius: 2rem;
+  padding: 2rem;
 }
 
 #file-input {
   text-align: center !important;
 }
 .title {
-  font-family: "Courier New", Courier, monospace;
   font-size: 4rem;
   text-align: center;
   margin: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  width: 100%;
 }
 
 .inputs {

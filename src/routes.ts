@@ -51,29 +51,6 @@ const routes: Array<RouteRecordRaw> = [
     component: Modify,
   },
   {
-    path: "/admin",
-    name: "Admin",
-    component: VueMasteryRealWorldVue3,
-    children: [
-      {
-        path: "event",
-        name: "EventList",
-        component: EventList,
-      },
-      {
-        path: "event/:id",
-        name: "EventDetails",
-        props: true,
-        component: EventDetails,
-      },
-      {
-        path: "about",
-        name: "AboutComp",
-        component: AboutComp,
-      },
-    ],
-  },
-  {
     path: "/about",
     name: "About",
     component: AboutView,
