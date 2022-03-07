@@ -2,18 +2,24 @@
 import { ref } from "@vue/reactivity";
 import { useReceiptStore } from "../store/receiptStore";
 import rating from "../components/Rating.vue";
+import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-const name = ref("");
-const type = ref("");
-const description = ref("");
-const energy = ref(0);
-const time = ref(0);
-const price = ref(0);
-const serving = ref(0);
-const difficulty = ref(0);
-const rate = ref(0);
-const image = ref("");
-const ingredients = ref("");
+const props = defineProps<{ item: object; isModify: boolean; title: boolean }>();
+console.log(props.item);
+
+const emit = defineEmits(["close"]);
+
+const name = ref(props.item ? props.item.name : "");
+const type = ref(props.item ? props.item.type : "");
+const description = ref(props.item ? props.item.description : "");
+const energy = ref(props.item ? props.item.energy : "");
+const time = ref(props.item ? props.item.time : "");
+const price = ref(props.item ? props.item.price : "");
+const serving = ref(props.item ? props.item.serving : "");
+const difficulty = ref(props.item ? props.item.difficulty : "");
+const rate = ref(props.item ? props.item.rate : 0);
+const image = ref(props.item ? props.item.pic : "");
+const ingredients = ref(props.item ? props.item.ingredients.join("\n") : "");
 
 const setImage = (img) => {
   image.value = img;
@@ -36,6 +42,7 @@ const receiptStore = useReceiptStore();
 const showConfirmSave = ref(false);
 const showConfirmClose = ref(false);
 const resultConfirm = ref(true);
+const showConfirm = ref(false);
 
 function confirmSaveReceipt() {
   if (resultConfirm.value) {
@@ -53,6 +60,31 @@ function confirmSaveReceipt() {
       ingredients: ingredients.value.split("\n"),
       _id: "",
     });
+
+    showConfirm.value = true;
+    
+  } else {
+    showConfirmSave.value = false;
+  }
+}
+
+function confirmEditReceipt() {
+  if (resultConfirm.value) {
+    console.log(ingredients.value);
+    receiptStore.editReceiptById({
+      name: name.value,
+      type: type.value,
+      description: description.value,
+      energy: parseInt(energy.value.toString()),
+      time: parseInt(time.value.toString()),
+      price: price.value,
+      serving: serving.value,
+      difficulty: difficulty.value,
+      pic: image.value,
+      ingredients: ingredients.value.split("\n"),
+      _id: props.item._id,
+    });
+    showConfirm.value = true;
   } else {
     showConfirmSave.value = false;
   }
@@ -79,13 +111,17 @@ function ChooseServingRate(value) {
 function ChooseDifficultyRate(value) {
   setDifficulty(value);
 }
+
+function confirm() {
+  emit("close");
+}
 </script>
 
 <template>
   <v-container class="card">
     <v-row>
       <v-col cols="12" sm="12">
-        <h1 class="title">Add new food</h1>
+        <h1 class="title">{{ props.title ? props.title : "Add new receipt" }}</h1>
         <v-divider></v-divider>
       </v-col>
       <v-col cols="12" sm="12" lg="6">
@@ -150,23 +186,60 @@ function ChooseDifficultyRate(value) {
         ></v-text-field>
       </v-col>
       <v-col cols="12" sm="12" lg="4">
-        <rating title="Price" @rating="ChoosePriceRate"></rating>
+        <rating title="Price" @rating="ChoosePriceRate" :rating="price" :justShow="true"></rating>
       </v-col>
       <v-col cols="12" sm="12" lg="4">
-        <rating title="Serving" @rating="ChooseServingRate"></rating>
+        <rating
+          title="Serving"
+          @rating="ChooseServingRate"
+          :rating="serving"
+          :justShow="true"
+        ></rating>
       </v-col>
       <v-col cols="12" sm="12" lg="4">
-        <rating title="Difficulty" @rating="ChooseDifficultyRate"></rating>
+        <rating
+          title="Difficulty"
+          @rating="ChooseDifficultyRate"
+          :rating="difficulty"
+          :justShow="true"
+        ></rating>
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="12" sm="12" lg="3"></v-col>
       <v-col cols="12" sm="12" lg="6">
-        <v-btn color="green-lighten-3" class="btn" elevation="10" @click="confirmSaveReceipt()">
+        <v-btn
+          color="green-lighten-3"
+          class="btn"
+          elevation="10"
+          @click="confirmEditReceipt()"
+          v-if="props.isModify"
+        >
+          Edit
+        </v-btn>
+
+        <v-btn
+          color="green-lighten-3"
+          class="btn"
+          elevation="10"
+          @click="confirmSaveReceipt()"
+          v-if="!props.isModify"
+        >
           Save
         </v-btn>
       </v-col>
       <v-col cols="12" sm="12" lg="3"></v-col>
     </v-row>
+    <ConfirmDialog
+      v-if="showConfirm"
+      v-model="showConfirm"
+      v-model:result="resultConfirm"
+      :retain-focus="false"
+      title="Successful add"
+      okBtn="OK"
+      :justAccept="true"
+      message="The receipt is added successfully!"
+      @close="confirm"
+    />
   </v-container>
 </template>
 

@@ -2,15 +2,21 @@
 import { computed, ref } from "vue";
 import rating from "../components/Rating.vue";
 import ConfirmDialog from "../components/ConfirmDialog.vue";
+
 import { useReceiptStore } from "@/store/receiptStore";
 const props = defineProps<{ item: object; isModify: boolean }>();
 
 const show = ref(true);
 const showDetail = ref(false);
 const showConfirmDelete = ref(false);
+const showConfirm = ref(false);
+
+
+const title = ref("");
+
 const resultConfirm = ref(false);
 
-const emit = defineEmits(["reload"]);
+const emit = defineEmits(["reload", "modify"]);
 
 const ReceiptStore = useReceiptStore();
 const receipt = props.item;
@@ -27,21 +33,38 @@ function showDetails(id) {
 function closeDetails() {
   showDetail.value = false;
 }
+
+function confirm() {
+  showConfirm.value = false;
+  emit("reload");
+}
+
 function confirmDeletePost() {
   if (resultConfirm.value) {
-    ReceiptStore.deletePostById({
+    ReceiptStore.deleteReceiptById({
       _id: receipt._id,
     });
-    emit("reload");
+
     show.value = false;
+    title.value = "Successful delete";
+    showConfirm.value = true;
   } else {
     showConfirmDelete.value = false;
   }
 }
+
+function showEdit() {
+  emit("modify",props.item);
+}
 </script>
 
 <template>
-  <v-card class="mx-auto card" max-width="344" :to="props.isModify ? '' : showDetails(item._id)">
+  <v-card
+    class="mx-auto card"
+    max-width="344"
+    :to="props.isModify ? '' : showDetails(item._id)"
+    v-if="!showConfirmEdit"
+  >
     <v-img class="img" :src="picToBase64(item.pic)"></v-img>
 
     <v-card-title>{{ item.name }}</v-card-title>
@@ -52,7 +75,9 @@ function confirmDeletePost() {
     <v-container>
       <v-row>
         <v-col cols="12" sm="6" lg="6">
-          <v-btn color="green lighten-2" text class="btn" v-if="props.isModify">Modify</v-btn>
+          <v-btn color="green lighten-2" text class="btn" v-if="props.isModify" @click="showEdit()">
+            Modify
+          </v-btn>
         </v-col>
         <v-col cols="12" sm="6" lg="6">
           <v-btn
@@ -76,6 +101,20 @@ function confirmDeletePost() {
     title="Delete document"
     @close="confirmDeletePost"
   />
+
+  <ConfirmDialog
+    v-if="showConfirm"
+    v-model="showConfirm"
+    v-model:result="resultConfirm"
+    :retain-focus="false"
+    title="Successful delete"
+    okBtn="OK"
+    :justAccept="true"
+    message="The receipt is deleted successfully!"
+    @close="confirm"
+  />
+
+  
 </template>
 <style scoped>
 .card {
