@@ -146,7 +146,6 @@ export default class PostController implements Controller {
             const receiptData: Receipt = req.body;
             const createdreceipt = new this.receipt({
                 ...receiptData,
-                author: req.user._id,
             });
             const savedreceipt = await createdreceipt.save();
             await savedreceipt.populate("author", "-password");
