@@ -8,9 +8,9 @@
   "template": "Sablon",
   "noUser": "nincs bejelentkezve",
   "startPage": "Kezdőlap",
-  "addFood": "Étel hozzáadás",
-  "modifyFood": "Ételeim",
-  "food": "Ételek",
+  "addFood": "Recept hozzáadás",
+  "modifyFood": "Recepteim",
+  "food": "Receptek",
   "admin": "Admin",
   "links": "Hivatkozások"
 }

@@ -42,6 +42,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  justAccept: {
+    type: Boolean,
+    required: false,
+  },
 });
 const emit = defineEmits(["update:modelValue", "update:result", "close", "resultData"]);
 
@@ -94,7 +98,9 @@ function addRating(data) {
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green-lighten-3" @click="pressOk">{{ okBtn }}</v-btn>
-          <v-btn color="red-lighten-3" @click="pressCancel">{{ cancelBtn }}</v-btn>
+          <v-btn color="red-lighten-3" @click="pressCancel" v-if="!props.justAccept">
+            {{ cancelBtn }}
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

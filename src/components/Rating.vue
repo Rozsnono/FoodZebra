@@ -12,12 +12,16 @@
     onlyStar: {
       type: String,
       required: true,
+    },
+    justShow: {
+      type: Boolean,
+      required: false,
     }
   });
 
   const maxStars = 5;
   const stars = ref(props.rating);
-  const rateable = ref(props.rating != null ? false : true);
+  const rateable = ref(props.justShow);
   const hasCounter = props.onlyStar;
   const emit = defineEmits(["rating"]);
 

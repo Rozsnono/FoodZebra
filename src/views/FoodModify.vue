@@ -6,11 +6,13 @@ import rating from "../components/Rating.vue";
 import { useUsersStore } from "@/store/usersStore";
 import { useRoute } from "vue-router";
 import card from "../components/FoodCard.vue";
+import EditDialog from "../views/FoodAdd.vue";
 
 const receiptStore = useReceiptStore();
 let allReceipt = ref([]);
 const rerender = ref(0);
 const load = ref(false);
+const item = ref({});
 
 const props = defineProps({
   user: {
@@ -20,12 +22,14 @@ const props = defineProps({
 });
 
 const router = useRoute();
+const showConfirmEdit = ref(false);
+const resultConfirm = ref(false);
 
 async function Loading() {
   await receiptStore.auhtorReceipt(sessionStorage.getItem("currentUser"));
   allReceipt.value = receiptStore.getAuthorReceipt.receipt;
   load.value = true;
-  
+  console.log(sessionStorage.getItem("currentUser"));
   return load;
 }
 
@@ -38,6 +42,7 @@ onMounted(() => {
 });
 
 function Reload() {
+  showConfirmEdit.value = false;
   rerender.value += 1;
   Loading();
 }
@@ -45,16 +50,31 @@ function Reload() {
 function picToBase64(code) {
   return "data:image/png;base64," + code;
 }
+
+function Modify(i) {
+  item.value = i;
+  showConfirmEdit.value = true;
+}
 </script>
 
 <template>
   <div :key="rerender">
     <v-container class="page" v-if="Loading()">
-      <v-row>
+      <v-row v-if="!showConfirmEdit">
         <v-col v-for="(item, i) in allReceipt" :key="i" cols="12" lg="3" md="4" sm="6">
-          <card :item="item" :isModify="true" @reload="Reload()" />
+          <card :item="item" :isModify="true" @reload="Reload()" @modify="Modify" />
         </v-col>
       </v-row>
+      <EditDialog
+        v-if="showConfirmEdit"
+        v-model="showConfirmEdit"
+        v-model:result="resultConfirm"
+        :retain-focus="false"
+        title="Edit receipt"
+        :item="item"
+        isModify="true"
+        @close="Reload()"
+      />
     </v-container>
   </div>
 </template>

@@ -46,6 +46,8 @@ export interface IEditParams {
   price: number;
   serving: number;
   difficulty: number;
+  pic: string;
+  ingredients: object;
 }
 
 export interface IRatingParams {
@@ -127,12 +129,20 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         });
     },
-    async editPostById(params: IEditParams): Promise<void> {
+    async editReceiptById(params: IEditParams): Promise<void> {
       this.loading = true;
       $axios
         .patch(`receipt/${params._id}`, {
-          title: params.title,
-          content: params.content,
+          name: params.name,
+          type: params.type,
+          description: params.description,
+          energy: params.energy,
+          time: params.time,
+          pic: params.pic,
+          price: params.price,
+          serving: params.serving,
+          difficulty: params.difficulty,
+          ingredients: params.ingredients,
         })
         .then((res) => {
           if (res && res.data) {
@@ -163,7 +173,7 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         });
     },
-    async deletePostById(params: IIdParams): Promise<void> {
+    async deleteReceiptById(params: IIdParams): Promise<void> {
       this.loading = true;
       $axios
         .delete(`receipt/${params._id}`)

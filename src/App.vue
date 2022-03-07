@@ -19,6 +19,7 @@ import { useI18n } from "vue-i18n";
 import { useUsersStore } from "./store/usersStore";
 
 const isMobileDevice = useDisplay().mobile.value;
+sessionStorage.removeItem('currentUser');
 const drawer = ref(!isMobileDevice);
 const usersStore = useUsersStore();
 const theme = ref(false);
@@ -60,7 +61,7 @@ const menuItems = ref([
     icon: "mdi-food-fork-drink",
     text: t("modifyFood"),
     name: "modifyFood",
-    route: "/modifyFood/" + loggedUser?.value?._id,
+    route: "/modifyFood",
     props: { asd: "asd" },
     disabled: notLoggedIn,
   },
@@ -93,13 +94,13 @@ function toggleLanguage() {
 </script>
 
 <template>
-  <v-app :theme="themeForApp" >
+  <v-app :theme="themeForApp">
     <v-navigation-drawer v-model="drawer" app :color="'primary'" dark>
       <v-list dense nav :color="'primary'" dark>
         <v-list-item
           v-for="(item, i) in menuItems"
           :key="i"
-          :disabled="item.disabled"
+          v-show="!item.disabled"
           link
           :prepend-icon="item.icon"
           :title="item.text"
@@ -110,13 +111,15 @@ function toggleLanguage() {
     </v-navigation-drawer>
     <v-app-bar app :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark>
       <v-app-bar-nav-icon
-        :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark
+        :color="notLoggedIn ? 'primary' : 'loginedBackground'"
+        dark
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
       FoodZebra
       <v-spacer></v-spacer>
       <v-btn
-        :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark
+        :color="notLoggedIn ? 'primary' : 'loginedBackground'"
+        dark
         icon
         @click="toggleLanguage"
       >
@@ -124,7 +127,8 @@ function toggleLanguage() {
       </v-btn>
       <v-btn
         class="ml-5"
-        :color="notLoggedIn ? 'primary' : 'loginedBackground'" dark
+        :color="notLoggedIn ? 'primary' : 'loginedBackground'"
+        dark
         icon
         @click="toggleTheme"
       >
@@ -154,5 +158,4 @@ function toggleLanguage() {
   background-color: #a5b452;
   color: black;
 }
-
 </style>
