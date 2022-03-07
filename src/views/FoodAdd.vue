@@ -20,6 +20,7 @@ const difficulty = ref(props.item ? props.item.difficulty : "");
 const rate = ref(props.item ? props.item.rate : 0);
 const image = ref(props.item ? props.item.pic : "");
 const ingredients = ref(props.item ? props.item.ingredients.join("\n") : "");
+const userID = ref(sessionStorage.getItem("currentUser"));
 
 const setImage = (img) => {
   image.value = img;
@@ -57,12 +58,12 @@ function confirmSaveReceipt() {
       difficulty: difficulty.value,
       pic: image.value,
       rate: rate.value,
+      author: userID.value,
       ingredients: ingredients.value.split("\n"),
       _id: "",
     });
 
     showConfirm.value = true;
-    
   } else {
     showConfirmSave.value = false;
   }

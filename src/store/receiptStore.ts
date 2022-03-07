@@ -68,6 +68,7 @@ export interface INewReceiptParams {
   rate: number;
   pic: string;
   ingredients: object;
+  author: string;
 }
 
 export const useReceiptStore = defineStore({
@@ -111,7 +112,7 @@ export const useReceiptStore = defineStore({
           serving: params.serving,
           difficulty: params.difficulty,
           ingredients: params.ingredients,
-          author: "",
+          author: params.author,
           rate: 0,
         })
         .then((res) => {
