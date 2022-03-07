@@ -33,7 +33,7 @@ export const useUsersStore = defineStore({
     getLoggedUser(): null | IUser {
       return this.loggedUser;
     },
-    getUser(): null | Object {
+    getUser(): any {
       return this.user;
     },
   },
@@ -62,7 +62,7 @@ export const useUsersStore = defineStore({
     async getUserById(params: string): Promise<Object | any> {
       this.loading = true;
       await $axios
-        .get(`auth/${params}`)
+        .get(`users/${params}`)
         .then((res) => {
           if (res && res.data) {
             this.user = res.data;
