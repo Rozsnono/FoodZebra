@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import AboutView from "./views/AboutView.vue";
 import AccountView from "./views/AccountView.vue";
-import ExamplesView from "./views/ExamplesView.vue";
 import Modify from "./views/FoodModify.vue";
 import StartPageView from "./views/StartPageView.vue";
 import VTableView from "./views/FoodView.vue";
@@ -14,11 +13,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "StartPage",
     component: StartPageView,
-  },
-  {
-    path: "/examples",
-    name: "Examples",
-    component: ExamplesView,
   },
   {
     path: "/account",
