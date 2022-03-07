@@ -62,7 +62,6 @@
       text: t("modifyFood"),
       name: "modifyFood",
       route: "/modifyFood",
-      props: { asd: "asd" },
       disabled: notLoggedIn,
     },
     {
