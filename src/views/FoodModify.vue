@@ -11,6 +11,7 @@
   const receiptStore = useReceiptStore();
   const usersStore = useUsersStore();
   let allReceipt = ref([]);
+  const user = ref({});
   const rerender = ref(0);
   const load = ref(false);
   const item = ref({});
@@ -27,7 +28,9 @@
   const resultConfirm = ref(false);
 
   async function Loading() {
-    await usersStore.
+    await usersStore.getUserById(sessionStorage.getItem("currentUser"));
+    user.value = usersStore.getUser();
+    console.log(user.value);
     await receiptStore.auhtorReceipt(sessionStorage.getItem("currentUser"));
     allReceipt.value = receiptStore.getAuthorReceipt.receipt;
     load.value = true;

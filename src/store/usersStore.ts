@@ -12,6 +12,7 @@ interface IState {
   loading: boolean;
   errorMsg: string;
   loggedUser: null | IUser;
+  user: object;
 }
 
 export const useUsersStore = defineStore({
@@ -20,6 +21,7 @@ export const useUsersStore = defineStore({
     loading: false,
     errorMsg: "",
     loggedUser: null,
+    user: {},
   }),
   getters: {
     getLoading(): boolean {
@@ -30,6 +32,9 @@ export const useUsersStore = defineStore({
     },
     getLoggedUser(): null | IUser {
       return this.loggedUser;
+    },
+    getUser(): null | Object {
+      return this.user;
     },
   },
   actions: {
@@ -45,13 +50,34 @@ export const useUsersStore = defineStore({
         })
         .then((res) => {
           this.loggedUser = res.data;
-          sessionStorage.setItem("currentUser",this.loggedUser?._id);
+          sessionStorage.setItem("currentUser", this.loggedUser?._id);
           this.loading = false;
         })
         .catch(() => {
           this.loggedUser = null;
           this.loading = false;
           this.errorMsg = "Error on Authentication";
+        });
+    },
+    async getUserById(params: string): Promise<Object | any> {
+      this.loading = true;
+      await $axios
+        .get(`auth/${params}`)
+        .then((res) => {
+          if (res && res.data) {
+            this.user = res.data;
+          }
+          console.log(this.user);
+          return this.user;
+        })
+        .catch((error) => {
+          console.error("hiba: " + error);
+          this.loading = false;
+          return { hiba: error };
+        })
+        .then((noterror) => {
+          console.log("asd");
+          return {};
         });
     },
     async logOut(): Promise<void> {
