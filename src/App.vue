@@ -94,7 +94,7 @@
 
 <template>
   <v-app :theme="themeForApp">
-    <v-navigation-drawer permanent v-model="drawer" app :color="'primary'" dark>
+    <v-navigation-drawer drawer v-model="drawer" app :color="'primary'" dark>
       <v-system-bar></v-system-bar>
       <v-list :color="'primary'" dark>
         <v-list-item prepend-avatar="../src/assets/logo.png">
