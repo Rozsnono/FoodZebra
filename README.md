@@ -1,7 +1,20 @@
-FoodZebra
+# FoodZebra
 
-Weboldal otthon is elkészíthető ételek recepteivel.
+## Bemutató
 
-Magashegyi Ádám, Rozs Norbert
+A weboldal azért jött létre, hogy a főzés iránt érdeklődő emberek megtudják osztani másokkal a receptjeiket vagy éppen a mások által megosztottak között böngészhessenek.
 
-Heroku: https://foodzebra2.herokuapp.com/
+## Funckiók
+
+- Felhasználó fiók
+- Recept létrehozása, meglévő módosítása, törlése
+- Recept értékelése 3 fő szempont alapján
+
+## Csapattagok
+
+- Rozs Norbert
+- Szebik Levente
+
+## Heroku
+
+<https://foodzebra2.herokuapp.com/>
