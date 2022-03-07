@@ -29,7 +29,7 @@ async function Loading() {
   await receiptStore.auhtorReceipt(sessionStorage.getItem("currentUser"));
   allReceipt.value = receiptStore.getAuthorReceipt.receipt;
   load.value = true;
-
+  console.log(sessionStorage.getItem("currentUser"));
   return load;
 }
 

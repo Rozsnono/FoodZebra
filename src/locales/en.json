@@ -8,9 +8,9 @@
   "template": "Template",
   "noUser": "is not logged in",
   "startPage": "Start page",
-  "addFood": "Add food",
-  "modifyFood": "Food modify",
-  "food": "Food",
+  "addFood": "Add Receipt",
+  "modifyFood": "Receipt modify",
+  "food": "Receipt",
   "admin": "Admin",
   "links": "Links"
 }
