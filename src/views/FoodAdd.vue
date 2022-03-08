@@ -1,121 +1,122 @@
 <script setup lang="ts">
-import { ref } from "@vue/reactivity";
-import { useReceiptStore } from "../store/receiptStore";
-import rating from "../components/Rating.vue";
-import ConfirmDialog from "../components/ConfirmDialog.vue";
+  import { ref } from "@vue/reactivity";
+  import { useReceiptStore } from "../store/receiptStore";
+  import rating from "../components/Rating.vue";
+  import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-const props = defineProps<{ item: object; isModify: boolean; title: boolean }>();
-console.log(props.item);
+  const props = defineProps<{ item: object; isModify: boolean; title: boolean }>();
+  console.log(props.item);
 
-const emit = defineEmits(["close"]);
+  const emit = defineEmits(["close"]);
 
-const name = ref(props.item ? props.item.name : "");
-const type = ref(props.item ? props.item.type : "");
-const description = ref(props.item ? props.item.description : "");
-const energy = ref(props.item ? props.item.energy : "");
-const time = ref(props.item ? props.item.time : "");
-const price = ref(props.item ? props.item.price : "");
-const serving = ref(props.item ? props.item.serving : "");
-const difficulty = ref(props.item ? props.item.difficulty : "");
-const rate = ref(props.item ? props.item.rate : 0);
-const image = ref(props.item ? props.item.pic : "");
-const ingredients = ref(props.item ? props.item.ingredients.join("\n") : "");
-const userID = ref(sessionStorage.getItem("currentUser"));
+  const name = ref(props.item ? props.item.name : "");
+  const type = ref(props.item ? props.item.type : "");
+  const description = ref(props.item ? props.item.description : "");
+  const energy = ref(props.item ? props.item.energy : "");
+  const time = ref(props.item ? props.item.time : "");
+  const price = ref(props.item ? props.item.price : "");
+  const serving = ref(props.item ? props.item.serving : "");
+  const difficulty = ref(props.item ? props.item.difficulty : "");
+  const rate = ref(props.item ? props.item.rate : 0);
+  const image = ref(props.item ? props.item.pic : "");
+  const ingredients = ref(props.item ? props.item.ingredients.join("\n") : "");
+  const userID = ref(sessionStorage.getItem("currentUser"));
 
-const setImage = (img) => {
-  image.value = img;
-};
-
-const setPrice = (getprice) => {
-  price.value = getprice;
-};
-
-const setServing = (getserving) => {
-  serving.value = getserving;
-};
-
-const setDifficulty = (getdifficulty) => {
-  difficulty.value = getdifficulty;
-};
-
-const receiptStore = useReceiptStore();
-
-const showConfirmSave = ref(false);
-const showConfirmClose = ref(false);
-const resultConfirm = ref(true);
-const showConfirm = ref(false);
-
-function confirmSaveReceipt() {
-  if (resultConfirm.value) {
-    receiptStore.createNewReceipt({
-      name: name.value,
-      type: type.value,
-      description: description.value,
-      energy: parseInt(energy.value.toString()),
-      time: parseInt(time.value.toString()),
-      price: price.value,
-      serving: serving.value,
-      difficulty: difficulty.value,
-      pic: image.value,
-      rate: rate.value,
-      author: userID.value,
-      ingredients: ingredients.value.split("\n"),
-      _id: "",
-    });
-
-    showConfirm.value = true;
-  } else {
-    showConfirmSave.value = false;
-  }
-}
-
-function confirmEditReceipt() {
-  if (resultConfirm.value) {
-    console.log(ingredients.value);
-    receiptStore.editReceiptById({
-      name: name.value,
-      type: type.value,
-      description: description.value,
-      energy: parseInt(energy.value.toString()),
-      time: parseInt(time.value.toString()),
-      price: price.value,
-      serving: serving.value,
-      difficulty: difficulty.value,
-      pic: image.value,
-      ingredients: ingredients.value.split("\n"),
-      _id: props.item._id,
-    });
-    showConfirm.value = true;
-  } else {
-    showConfirmSave.value = false;
-  }
-}
-
-function Tobase64(event) {
-  const selected = event.target?.files[0];
-  const reader = new FileReader();
-  let rawFile = "";
-  reader.onloadend = () => {
-    rawFile = reader.result;
-    setImage(rawFile.split(",")[1]);
+  const setImage = (img) => {
+    image.value = img;
   };
-  reader.readAsDataURL(selected);
-}
 
-function ChoosePriceRate(value) {
-  console.log(value);
-  setPrice(value);
-}
-function ChooseServingRate(value) {
-  setServing(value);
-}
-function ChooseDifficultyRate(value) {
-  setDifficulty(value);
-}
+  const setPrice = (getprice) => {
+    price.value = getprice;
+  };
 
-function confirm() {
-  emit("close");
-}
+  const setServing = (getserving) => {
+    serving.value = getserving;
+  };
+
+  const setDifficulty = (getdifficulty) => {
+    difficulty.value = getdifficulty;
+  };
+
+  const receiptStore = useReceiptStore();
+
+  const showConfirmSave = ref(false);
+  const showConfirmEdit = ref(false);
+  const showConfirmClose = ref(false);
+  const resultConfirm = ref(true);
+  const showConfirm = ref(false);
+
+  function confirmSaveReceipt() {
+    if (resultConfirm.value) {
+      receiptStore.createNewReceipt({
+        name: name.value,
+        type: type.value,
+        description: description.value,
+        energy: parseInt(energy.value.toString()),
+        time: parseInt(time.value.toString()),
+        price: price.value,
+        serving: serving.value,
+        difficulty: difficulty.value,
+        pic: image.value,
+        rate: rate.value,
+        author: userID.value,
+        ingredients: ingredients.value.split("\n"),
+        _id: "",
+      });
+
+      showConfirm.value = true;
+    } else {
+      showConfirmSave.value = false;
+    }
+  }
+
+  function confirmEditReceipt() {
+    if (resultConfirm.value) {
+      console.log(ingredients.value);
+      receiptStore.editReceiptById({
+        name: name.value,
+        type: type.value,
+        description: description.value,
+        energy: parseInt(energy.value.toString()),
+        time: parseInt(time.value.toString()),
+        price: price.value,
+        serving: serving.value,
+        difficulty: difficulty.value,
+        pic: image.value,
+        ingredients: ingredients.value.split("\n"),
+        _id: props.item._id,
+      });
+      showConfirmEdit.value = true;
+    } else {
+      showConfirmSave.value = false;
+    }
+  }
+
+  function Tobase64(event) {
+    const selected = event.target?.files[0];
+    const reader = new FileReader();
+    let rawFile = "";
+    reader.onloadend = () => {
+      rawFile = reader.result;
+      setImage(rawFile.split(",")[1]);
+    };
+    reader.readAsDataURL(selected);
+  }
+
+  function ChoosePriceRate(value) {
+    console.log(value);
+    setPrice(value);
+  }
+  function ChooseServingRate(value) {
+    setServing(value);
+  }
+  function ChooseDifficultyRate(value) {
+    setDifficulty(value);
+  }
+
+  function confirm() {
+    emit("close");
+  }
 </script>
 
 <template>
@@ -241,33 +242,44 @@ function confirm() {
       message="The receipt is added successfully!"
       @close="confirm"
     />
+    <ConfirmDialog
+      v-if="showConfirmEdit"
+      v-model="showConfirmEdit"
+      v-model:result="resultConfirm"
+      :retain-focus="false"
+      title="Successful modify"
+      okBtn="OK"
+      :justAccept="true"
+      message="The receipt is modified successfully!"
+      @close="confirm"
+    />
   </v-container>
 </template>
 
 <style scoped>
-.card {
-  width: 80rem !important;
-  background-color: #00000030;
-  border-radius: 2rem;
-  padding: 2rem;
-}
+  .card {
+    width: 80rem !important;
+    background-color: #00000030;
+    border-radius: 2rem;
+    padding: 2rem;
+  }
 
-#file-input {
-  text-align: center !important;
-}
-.title {
-  font-size: 4rem;
-  text-align: center;
-  margin: 2.5rem;
-  display: flex;
-  justify-content: center;
-}
+  #file-input {
+    text-align: center !important;
+  }
+  .title {
+    font-size: 4rem;
+    text-align: center;
+    margin: 2.5rem;
+    display: flex;
+    justify-content: center;
+  }
 
-.btn {
-  width: 100%;
-}
+  .btn {
+    width: 100%;
+  }
 
-.inputs {
-  margin: 0.5rem;
-}
+  .inputs {
+    margin: 0.5rem;
+  }
 </style>

@@ -70,7 +70,7 @@
   <div :key="rerender">
     <v-container class="page" v-if="Loading()">
       <v-row v-if="!showConfirmEdit">
-        <v-col v-for="(item, i) in allReceipt" :key="i" cols="12" lg="3" md="4" sm="6">
+        <v-col v-for="(item, i) in allReceipt" :key="i" cols="12" lg="2" md="2" sm="6">
           <card :item="item" :isModify="true" @reload="Reload()" @modify="Modify" />
         </v-col>
       </v-row>
