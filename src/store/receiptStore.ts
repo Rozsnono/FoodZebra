@@ -22,6 +22,7 @@ interface IState {
   receipt: Array<IReceipt>;
   oneReceipt: Object;
   authorReceipt: any;
+  PaginatedReceipt: any;
 }
 
 interface IPaginatedParams {
@@ -79,6 +80,7 @@ export const useReceiptStore = defineStore({
     receipt: [],
     oneReceipt: {},
     authorReceipt: [],
+    PaginatedReceipt: [],
   }),
   getters: {
     getLoading(): boolean {
@@ -95,6 +97,9 @@ export const useReceiptStore = defineStore({
     },
     getAuthorReceipt(): any {
       return this.authorReceipt;
+    },
+    getPaginatedReceipt(): any {
+      return this.PaginatedReceipt;
     },
   },
   actions: {
@@ -273,15 +278,16 @@ export const useReceiptStore = defineStore({
           return {};
         });
     },
-    async fetchPaginatedPosts(params: IPaginatedParams): Promise<void> {
+    async fetchPaginatedReceipt(params: IPaginatedParams): Promise<void> {
       this.loading = true;
-      $axios
+      await $axios
         .get(
           `receipt/${params.offset}/${params.limit}/${params.order}/${params.sort}/${params.keyword}`
         )
         .then((res) => {
           if (res && res.data) {
-            this.receipt = res.data.receipt;
+            this.PaginatedReceipt = res.data.receipt;
+            console.log(this.PaginatedReceipt);
             this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
