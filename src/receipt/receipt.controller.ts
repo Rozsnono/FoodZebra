@@ -28,7 +28,7 @@ export default class PostController implements Controller {
         this.router.patch(`${this.path}/rating/:id`, [validationMiddleware(CreatePostDto, true)], this.modifyReceipt);
         this.router.patch(`${this.path}/:id`, [authMiddleware, validationMiddleware(CreatePostDto, true)], this.modifyReceipt);
         this.router.delete(`${this.path}/:id`, authMiddleware, this.deleteReceipt);
-        this.router.post(this.path, [authMiddleware, validationMiddleware(CreatePostDto)], this.createReceipt);
+        this.router.post(this.path, [authMiddleware], this.createReceipt);
     }
 
     private getAllReceipt = async (req: Request, res: Response, next: NextFunction) => {
