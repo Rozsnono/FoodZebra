@@ -38,15 +38,12 @@ export default class App {
         this.app.use(express.json());
         this.app.use(cookieParser());
         // Enabled CORS:
-        // this.app.use(
-        //     cors({
-        //         origin: "http://localhost:8080",
-        //         credentials: true,
-        //         exposedHeaders: ["set-cookie"],
-        //         optionsSuccessStatus: 200,
-        //         methods: "GET, PUT, POST, DELETE, PATCH",
-        //     }),
-        // );
+        this.app.use(
+            cors({
+                origin: "http://localhost:8080",
+                credentials: true,
+            }),
+        );
         this.app.use(loggerMiddleware);
     }
 
