@@ -64,9 +64,9 @@ export default class PostController implements Controller {
             let count = 0;
             if (req.params.keyword) {
                 const regex = new RegExp(req.params.keyword, "i"); // i for case insensitive
-                count = await this.receipt.find({ $or: [{ title: { $regex: regex } }, { content: { $regex: regex } }] }).count();
+                count = await this.receipt.find({ $or: [{ name: { $regex: regex } }, { type: { $regex: regex } }] }).count();
                 receipt = await this.receipt
-                    .find({ $or: [{ title: { $regex: regex } }, { content: { $regex: regex } }] })
+                    .find({ $or: [{ name: { $regex: regex } }, { type: { $regex: regex } }] })
                     .sort(`${sort == -1 ? "-" : ""}${order}`)
                     .skip(offset)
                     .limit(limit);
