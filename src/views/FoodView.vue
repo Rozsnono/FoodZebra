@@ -5,16 +5,7 @@ import { useReceiptStore } from "../store/receiptStore";
 import card from "../components/FoodCard.vue";
 
 const onePages = ref(["10", "20", "30", "50"]);
-const Categories = ref([
-  "Főétel",
-  "Leves",
-  "Valami",
-  "ASD",
-  "Főétel2",
-  "Leves2",
-  "Valami2",
-  "ASD2",
-]);
+const Categories = ref([]);
 const load = ref(false);
 
 const reload = ref(0);
@@ -29,6 +20,16 @@ const receiptStore = useReceiptStore();
 const catValue = ref([]);
 
 async function Loading() {
+  let receipt = [];
+  await receiptStore.fetchReceipt();
+  receipt = receiptStore.getReceipt;
+  console.log(receipt);
+  receipt.forEach((element) => {
+    if (!Categories.value.includes(element.type)) {
+      Categories.value.push(element.type);
+    }
+  });
+  console.log(Categories.value);
   pages.value = parseInt(receiptStore.getNumberOfReceipt / onePage.value) + 1;
   reload.value += 1;
   offset.value = (currentPage.value - 1) * onePage.value;
@@ -49,7 +50,6 @@ async function Loading() {
 const show = ref(true);
 
 onMounted(() => {
-  // receiptStore.fetchPosts();
   Loading();
 });
 

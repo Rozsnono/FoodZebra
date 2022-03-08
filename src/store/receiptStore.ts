@@ -87,6 +87,7 @@ export const useReceiptStore = defineStore({
       return this.loading;
     },
     getReceipt(): Array<IReceipt> {
+      
       return this.receipt;
     },
     getNumberOfReceipt(): number {
@@ -195,13 +196,14 @@ export const useReceiptStore = defineStore({
           this.loading = false;
         });
     },
-    async fetchPosts(): Promise<void> {
+    async fetchReceipt(): Promise<void> {
       this.loading = true;
-      $axios
+      await $axios
         .get("receipt")
         .then((res) => {
           if (res && res.data) {
             this.receipt = res.data.receipt;
+            console.log(this.receipt);
             this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
