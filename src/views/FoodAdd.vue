@@ -41,13 +41,15 @@ const setDifficulty = (getdifficulty) => {
 const receiptStore = useReceiptStore();
 
 const showConfirmSave = ref(false);
+const showConfirmEdit = ref(false);
 const showConfirmClose = ref(false);
 const resultConfirm = ref(true);
 const showConfirm = ref(false);
+const showError = ref(false);
 
-function confirmSaveReceipt() {
+async function confirmSaveReceipt() {
   if (resultConfirm.value) {
-    receiptStore.createNewReceipt({
+    await receiptStore.createNewReceipt({
       name: name.value,
       type: type.value,
       description: description.value,
@@ -62,8 +64,15 @@ function confirmSaveReceipt() {
       ingredients: ingredients.value.split("\n"),
       _id: "",
     });
-
-    showConfirm.value = true;
+    let ok = await receiptStore.getCode;
+    console.log("ok --" + ok);
+    if (ok != 200) {
+      showError.value = true;
+      console.log("asd");
+    } else {
+      showConfirm.value = true;
+      console.log("asd2");
+    }
   } else {
     showConfirmSave.value = false;
   }
@@ -85,7 +94,7 @@ function confirmEditReceipt() {
       ingredients: ingredients.value.split("\n"),
       _id: props.item._id,
     });
-    showConfirm.value = true;
+    showConfirmEdit.value = true;
   } else {
     showConfirmSave.value = false;
   }
@@ -231,6 +240,18 @@ function confirm() {
       <v-col cols="12" sm="12" lg="3"></v-col>
     </v-row>
     <ConfirmDialog
+      v-if="showError"
+      v-model="showError"
+      v-model:result="resultConfirm"
+      :retain-focus="false"
+      title="Opss.."
+      okBtn="OK"
+      :justAccept="true"
+      message="Something went wrong!"
+      @close="confirm"
+      color="danger"
+    />
+    <ConfirmDialog
       v-if="showConfirm"
       v-model="showConfirm"
       v-model:result="resultConfirm"
@@ -239,6 +260,17 @@ function confirm() {
       okBtn="OK"
       :justAccept="true"
       message="The receipt is added successfully!"
+      @close="confirm"
+    />
+    <ConfirmDialog
+      v-if="showConfirmEdit"
+      v-model="showConfirmEdit"
+      v-model:result="resultConfirm"
+      :retain-focus="false"
+      title="Successful modify"
+      okBtn="OK"
+      :justAccept="true"
+      message="The receipt is modified successfully!"
       @close="confirm"
     />
   </v-container>

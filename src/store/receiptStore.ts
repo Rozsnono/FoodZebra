@@ -22,6 +22,8 @@ interface IState {
   receipt: Array<IReceipt>;
   oneReceipt: Object;
   authorReceipt: any;
+  PaginatedReceipt: any;
+  code: number;
 }
 
 interface IPaginatedParams {
@@ -79,12 +81,15 @@ export const useReceiptStore = defineStore({
     receipt: [],
     oneReceipt: {},
     authorReceipt: [],
+    PaginatedReceipt: [],
+    code: 0,
   }),
   getters: {
     getLoading(): boolean {
       return this.loading;
     },
     getReceipt(): Array<IReceipt> {
+      
       return this.receipt;
     },
     getNumberOfReceipt(): number {
@@ -96,11 +101,18 @@ export const useReceiptStore = defineStore({
     getAuthorReceipt(): any {
       return this.authorReceipt;
     },
+    getPaginatedReceipt(): any {
+      return this.PaginatedReceipt;
+    },
+    getCode(): number {
+      return this.code;
+    },
   },
   actions: {
     async createNewReceipt(params: INewReceiptParams): Promise<void> {
       this.loading = true;
-      $axios
+      this.code = 0;
+      await $axios
         .post("receipt", {
           name: params.name,
           type: params.type,
@@ -121,17 +133,20 @@ export const useReceiptStore = defineStore({
             this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
+          this.code = 200;
+          console.log(this.code);
         })
         .catch((error) => {
           console.log(params);
           console.error("hiba: " + error);
-
           // context.commit("setLoading", false);
           this.loading = false;
+          this.code = 404;
         });
     },
     async editReceiptById(params: IEditParams): Promise<void> {
       this.loading = true;
+      this.code = 0;
       $axios
         .patch(`receipt/${params._id}`, {
           name: params.name,
@@ -150,14 +165,17 @@ export const useReceiptStore = defineStore({
             console.log(res.data);
           }
           this.loading = false;
+          this.code = 200;
         })
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
+          this.code = 404;
         });
     },
     async ratingReceipt(params: IRatingParams): Promise<void> {
       this.loading = true;
+      this.code = 0;
       $axios
         .patch(`receipt/rating/${params._id}`, {
           _id: params._id,
@@ -167,16 +185,19 @@ export const useReceiptStore = defineStore({
           if (res && res.data) {
             console.log(res.data);
           }
+          this.code = 200;
           this.loading = false;
         })
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
+          this.code = 404;
         });
     },
     async deleteReceiptById(params: IIdParams): Promise<void> {
       this.loading = true;
-      $axios
+      this.code = 0;
+      await $axios
         .delete(`receipt/${params._id}`)
         .then((res) => {
           if (res && res.data) {
@@ -184,30 +205,38 @@ export const useReceiptStore = defineStore({
             this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
+          this.code = 200;
+          console.log(this.code);
         })
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
+          this.code = 404;
         });
     },
-    async fetchPosts(): Promise<void> {
+    async fetchReceipt(): Promise<void> {
       this.loading = true;
-      $axios
+      this.code = 0;
+      await $axios
         .get("receipt")
         .then((res) => {
           if (res && res.data) {
             this.receipt = res.data.receipt;
+            console.log(this.receipt);
             this.numberOfReceipt = res.data.count;
           }
           this.loading = false;
+          this.code = 200;
         })
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
+          this.code = 404;
         });
     },
     async auhtorReceipt(params: string): Promise<any> {
       this.loading = true;
+      this.code = 0;
       let all = [];
       await $axios
         .get(`receipt/author/${params}`)
@@ -220,36 +249,24 @@ export const useReceiptStore = defineStore({
           }
           this.loading = false;
           console.log(all);
+          this.code = 200;
           return all;
         })
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
+          this.code = 404;
           return { hiba: error };
         })
         .then((noterror) => {
           console.log("asd");
+          this.code = 200;
           return [];
-        });
-
-      this.loading = true;
-      await $axios
-        .get(`receipt/author/${params}`)
-        .then((res) => {
-          if (res && res.data) {
-            console.log(res.data);
-            this.receipt = res.data.receipt;
-            this.numberOfReceipt = res.data.count;
-          }
-          this.loading = false;
-        })
-        .catch((error) => {
-          console.error("hiba: " + error);
-          this.loading = false;
         });
     },
     async getReceiptById(params: string): Promise<Object | any> {
       this.loading = true;
+      this.code = 0;
       let one = {};
       await $axios
         .get(`receipt/${params}`)
@@ -261,33 +278,40 @@ export const useReceiptStore = defineStore({
           }
           this.loading = false;
           console.log(one);
+          this.code = 200;
           return one;
         })
         .catch((error) => {
           console.error("hiba: " + error);
           this.loading = false;
+          this.code = 404;
           return { hiba: error };
         })
         .then((noterror) => {
           console.log("asd");
+          this.code = 200;
           return {};
         });
     },
-    async fetchPaginatedPosts(params: IPaginatedParams): Promise<void> {
+    async fetchPaginatedReceipt(params: IPaginatedParams): Promise<void> {
       this.loading = true;
-      $axios
+      this.code = 0;
+      await $axios
         .get(
           `receipt/${params.offset}/${params.limit}/${params.order}/${params.sort}/${params.keyword}`
         )
         .then((res) => {
           if (res && res.data) {
-            this.receipt = res.data.receipt;
+            this.PaginatedReceipt = res.data.receipt;
+            console.log(this.PaginatedReceipt);
             this.numberOfReceipt = res.data.count;
           }
+          this.code = 200;
           this.loading = false;
         })
         .catch((error) => {
           console.error("hiba: " + error);
+          this.code = 404;
           this.loading = false;
         });
     },
