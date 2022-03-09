@@ -89,6 +89,7 @@ export const useRecipeStore = defineStore({
       return this.loading;
     },
     getRecipe(): Array<IRecipe> {
+      
       return this.recipe;
     },
     getNumberOfRecipe(): number {
@@ -128,15 +129,13 @@ export const useRecipeStore = defineStore({
         })
         .then((res) => {
           if (res && res.data) {
-            console.log(res.data.post);
             this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
           this.code = 200;
-          console.log(this.code);
         })
         .catch((error) => {
-          console.log(params);
+
           console.error("hiba: " + error);
           // context.commit("setLoading", false);
           this.loading = false;
@@ -161,7 +160,7 @@ export const useRecipeStore = defineStore({
         })
         .then((res) => {
           if (res && res.data) {
-            console.log(res.data);
+
           }
           this.loading = false;
           this.code = 200;
@@ -175,16 +174,15 @@ export const useRecipeStore = defineStore({
     async ratingRecipe(params: IRatingParams): Promise<void> {
       this.loading = true;
       this.code = 0;
-      $axios
+      await $axios
         .patch(`recipe/rating/${params._id}`, {
           _id: params._id,
           rate: params.rate,
         })
         .then((res) => {
           if (res && res.data) {
-            console.log(res.data);
+            this.code = 200;
           }
-          this.code = 200;
           this.loading = false;
         })
         .catch((error) => {
@@ -200,12 +198,11 @@ export const useRecipeStore = defineStore({
         .delete(`recipe/${params._id}`)
         .then((res) => {
           if (res && res.data) {
-            console.log(res.data.status);
+
             this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
           this.code = 200;
-          console.log(this.code);
         })
         .catch((error) => {
           console.error("hiba: " + error);
@@ -221,7 +218,7 @@ export const useRecipeStore = defineStore({
         .then((res) => {
           if (res && res.data) {
             this.recipe = res.data.recipe;
-            console.log(this.recipe);
+
             this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
@@ -241,13 +238,11 @@ export const useRecipeStore = defineStore({
         .get(`recipe/author/${params}`)
         .then((res) => {
           if (res && res.data) {
-            console.log(res.data);
             all = res.data;
             this.authorRecipe = res.data;
             this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
-          console.log(all);
           this.code = 200;
           return all;
         })
@@ -258,7 +253,7 @@ export const useRecipeStore = defineStore({
           return { hiba: error };
         })
         .then((noterror) => {
-          console.log("asd");
+
           this.code = 200;
           return [];
         });
@@ -276,7 +271,7 @@ export const useRecipeStore = defineStore({
             this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
-          console.log(one);
+
           this.code = 200;
           return one;
         })
@@ -287,7 +282,7 @@ export const useRecipeStore = defineStore({
           return { hiba: error };
         })
         .then((noterror) => {
-          console.log("asd");
+
           this.code = 200;
           return {};
         });
@@ -302,7 +297,6 @@ export const useRecipeStore = defineStore({
         .then((res) => {
           if (res && res.data) {
             this.PaginatedRecipe = res.data.recipe;
-            console.log(this.PaginatedRecipe);
             this.numberOfRecipe = res.data.count;
           }
           this.code = 200;

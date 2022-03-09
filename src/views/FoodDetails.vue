@@ -1,119 +1,127 @@
 <script setup lang="ts">
-  import { computed, ref } from "vue";
-  import {
-    VBtn,
-    VCard,
-    VCardActions,
-    VCardTitle,
-    VDialog,
-    VRow,
-    VSpacer,
-    VTextarea,
-    VTextField,
-  } from "vuetify/components";
-  import rating from "../components/Rating.vue";
-  import { useRecipeStore } from "../store/recipeStore";
-  import { useRoute } from "vue-router";
-  import ConfirmDialog from "../components/ConfirmDialog.vue";
+import { computed, ref } from "vue";
+import {
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardTitle,
+  VDialog,
+  VRow,
+  VSpacer,
+  VTextarea,
+  VTextField,
+} from "vuetify/components";
+import rating from "../components/Rating.vue";
+import { useRecipeStore } from "../store/recipeStore";
+import { useRoute } from "vue-router";
+import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-  const recipeStore = useRecipeStore();
+const recipeStore = useRecipeStore();
 
-  const props = defineProps({
-    modelValue: {
-      type: Boolean,
-      default: false,
-      required: true,
-    },
-    item: {
-      type: String,
-      required: true,
-    },
-  });
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  item: {
+    type: String,
+    required: true,
+  },
+});
 
-  const router = useRoute();
-  const emit = defineEmits(["close"]);
+const router = useRoute();
+const emit = defineEmits(["close"]);
 
-  const show = computed({
-    get() {
-      return props.modelValue;
-    },
-    set(value: boolean) {},
-  });
+const show = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value: boolean) {},
+});
 
-  const load = ref(false);
-  const recipe = ref({});
+const load = ref(false);
+const recipe = ref({});
 
-  const showDetail = ref(false);
-  const showConfirmRate = ref(false);
-  const resultConfirm = ref(false);
+const showDetail = ref(false);
+const showConfirmRate = ref(false);
+const resultConfirm = ref(false);
 
-  const rerender = ref(0);
+const showConfirm = ref(false);
+const showError = ref(false);
 
-  const rate = ref(0);
+const rerender = ref(0);
 
-  async function Loading() {
-    await recipeStore.getRecipeById(router.params.id.toString());
-    recipe.value = recipeStore.getOneRecipe;
-    console.log(recipe);
-    load.value = true;
-    return load;
+const rate = ref(0);
+
+async function Loading() {
+  await recipeStore.getRecipeById(router.params.id.toString());
+  recipe.value = recipeStore.getOneRecipe;
+
+  load.value = true;
+  return load;
+}
+
+function picToBase64(code) {
+  return "data:image/png;base64," + code;
+}
+
+function difficult(dif: string): string {
+  switch (dif) {
+    case 1:
+      return "Very easy";
+      break;
+    case 2:
+      return "Easy";
+      break;
+    case 3:
+      return "Medium";
+      break;
+    case 4:
+      return "Hard";
+      break;
+    case 5:
+      return "Really hard";
+      break;
+    default:
+      return "Impossible";
+      break;
   }
+}
 
-  function picToBase64(code) {
-    return "data:image/png;base64," + code;
-  }
+function ShowRate() {
+  showConfirmRate.value = true;
+}
 
-  function difficult(dif: string): string {
-    switch (dif) {
-      case 1:
-        return "Very easy";
-        break;
-      case 2:
-        return "Easy";
-        break;
-      case 3:
-        return "Medium";
-        break;
-      case 4:
-        return "Hard";
-        break;
-      case 5:
-        return "Really hard";
-        break;
-      default:
-        return "Impossible";
-        break;
-    }
-  }
+function getRating(v) {
+  rate.value = v;
+}
 
-  function ShowRate() {
-    showConfirmRate.value = true;
-    console.log("asd");
-  }
+function recipeRateCounter(plusRate: number) {
+  return recipe.value == 0
+    ? plusRate
+    : (recipe.value.rate == null ? 0 : recipe.value.rate + plusRate) / 2;
+}
 
-  function getRating(v) {
-    rate.value = v;
-  }
-
-  function recipeRateCounter(plusRate: number) {
-    return recipe.value == 0
-      ? plusRate
-      : (recipe.value.rate == null ? 0 : recipe.value.rate + plusRate) / 2;
-  }
-
-  function confirmRate() {
-    if (resultConfirm.value) {
-      recipeStore.ratingRecipe({
-        _id: recipe.value._id,
-        rate: recipeRateCounter(rate.value),
-      });
+async function confirmRate() {
+  if (resultConfirm.value) {
+    await recipeStore.ratingRecipe({
+      _id: recipe.value._id,
+      rate: recipeRateCounter(rate.value),
+    });
+    let ok = await recipeStore.getCode;
+    if (ok !== 200) {
+      showError.value = true;
+    } else {
+      showConfirm.value = true;
       Loading();
       rerender.value += 1;
-      show.value = false;
-    } else {
-      showConfirmRate.value = false;
     }
+    show.value = false;
+  } else {
+    showConfirmRate.value = false;
   }
+}
 </script>
 
 <template>
@@ -129,6 +137,30 @@
       title="Rating Recipe"
       @close="confirmRate"
       @resultData="getRating"
+    />
+
+    <ConfirmDialog
+      v-if="showError"
+      v-model="showError"
+      v-model:result="resultConfirm"
+      :retain-focus="false"
+      title="Opss.."
+      okBtn="OK"
+      :justAccept="true"
+      message="Something went wrong!"
+      @close="confirm"
+      color="danger"
+    />
+    <ConfirmDialog
+      v-if="showConfirm"
+      v-model="showConfirm"
+      v-model:result="resultConfirm"
+      :retain-focus="false"
+      title="Successfull rating"
+      okBtn="OK"
+      :justAccept="true"
+      message="You have rated this recipe!"
+      @close="confirm"
     />
     <v-row>
       <v-col cols="12" sm="12">
@@ -187,80 +219,80 @@
   </v-container>
 </template>
 <style scoped lang="scss">
-  .popup {
-    background-color: #00000020;
-    border-radius: 2rem;
-    padding: 2rem;
-    width: 100%;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
-      sans-serif;
-  }
+.popup {
+  background-color: #00000020;
+  border-radius: 2rem;
+  padding: 2rem;
+  width: 100%;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
+    sans-serif;
+}
 
-  .name {
-    float: left;
-    margin: 2rem;
-    font-size: 2rem;
-  }
-  .type {
-    float: right;
-    margin: 2rem;
-    font-size: 2rem;
-  }
-  .description {
-    text-align: justify;
-    margin-top: 3rem;
-  }
+.name {
+  float: left;
+  margin: 2rem;
+  font-size: 2rem;
+}
+.type {
+  float: right;
+  margin: 2rem;
+  font-size: 2rem;
+}
+.description {
+  text-align: justify;
+  margin-top: 3rem;
+}
+.img {
+  width: 30%;
+  margin: auto;
+}
+
+@media only screen and (max-width: 600px) {
   .img {
-    width: 30%;
     margin: auto;
+    width: 50%;
   }
-
-  @media only screen and (max-width: 600px) {
-    .img {
-      margin: auto;
-      width: 50%;
-    }
-  }
-  .icon {
-    font-size: 3rem;
-    justify-content: center;
-    display: flex;
-    .in-text {
-      font-size: 2rem;
-      margin: auto;
-      margin-left: 0.5rem;
-    }
-  }
-  .ratingStars {
-  }
-  .i-title {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  .rating {
-    display: flex;
-    justify-content: center;
-    margin-left: 2rem;
-
-    .v-btn {
-      margin: 0.3rem;
-    }
-  }
-
-  .card {
-    position: absolute;
-    top: -0rem;
-    left: -30rem;
-    width: 80rem;
+}
+.icon {
+  font-size: 3rem;
+  justify-content: center;
+  display: flex;
+  .in-text {
+    font-size: 2rem;
     margin: auto;
+    margin-left: 0.5rem;
   }
-  .end {
-    float: right;
-    text-align: end;
-    display: flex;
-    justify-content: end;
-    position: absolute;
-    right: 0;
-    margin-right: 1rem;
+}
+.ratingStars {
+}
+.i-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.rating {
+  display: flex;
+  justify-content: center;
+  margin-left: 2rem;
+
+  .v-btn {
+    margin: 0.3rem;
   }
+}
+
+.card {
+  position: absolute;
+  top: -0rem;
+  left: -30rem;
+  width: 80rem;
+  margin: auto;
+}
+.end {
+  float: right;
+  text-align: end;
+  display: flex;
+  justify-content: end;
+  position: absolute;
+  right: 0;
+  margin-right: 1rem;
+}
 </style>

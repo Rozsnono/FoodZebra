@@ -1,59 +1,63 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref } from "vue";
-  import { VContainer } from "vuetify/components";
-  import { useRecipeStore } from "../store/recipeStore";
-  import card from "../components/FoodCard.vue";
+import { computed, onMounted, ref } from "vue";
+import { VContainer } from "vuetify/components";
+import { useRecipeStore } from "../store/recipeStore";
+import card from "../components/FoodCard.vue";
 
-  const onePages = ref(["12", "20", "32", "48"]);
-  const Categories = ref([]);
-  const load = ref(false);
+const onePages = ref(["12", "20", "32", "48"]);
+const Categories = ref([]);
+const load = ref(false);
 
-  const reload = ref(0);
-  const isLoading = ref(false);
+const reload = ref(0);
+const isLoading = ref(false);
 
-  const offset = ref(0);
-  const onePage = ref(12);
+const offset = ref(0);
+const onePage = ref(12);
 
-  const allRecipe = ref([]);
-  const pages = ref([]);
-  const currentPage = ref(1);
-  const recipeStore = useRecipeStore();
-  const catValue = ref("");
+const allRecipe = ref([]);
+const pages = ref([]);
+const currentPage = ref(1);
+const recipeStore = useRecipeStore();
+const catValue = ref("");
 
-  const name = ref("");
+const name = ref("");
 
-  async function Loading() {
-    isLoading.value = true;
-    reload.value += 1;
-    offset.value = (currentPage.value - 1) * onePage.value;
-    await recipeStore.fetchPaginatedRecipe({
-      offset: offset.value,
-      limit: onePage.value.toString(),
-      keyword: name.value,
-    });
-    allRecipe.value = recipeStore.getPaginatedRecipe;
-    pages.value =
-      parseInt(
-        (recipeStore.getNumberOfRecipe ? recipeStore.getNumberOfRecipe : 0) / onePage.value
-      ) + 1;
-    console.log(onePage.value);
-    console.log(pages.value);
-    load.value = true;
-    isLoading.value = false;
-    return load;
-  }
+const noR = ref(0);
+const empty = ref(false);
 
-  // const allRecipe = computed(() => recipeStore.getRecipe);
-
-  const show = ref(true);
-
-  onMounted(() => {
-    Loading();
+async function Loading() {
+  isLoading.value = true;
+  reload.value += 1;
+  offset.value = (currentPage.value - 1) * onePage.value;
+  await recipeStore.fetchPaginatedRecipe({
+    offset: offset.value,
+    limit: onePage.value.toString(),
+    keyword: name.value,
   });
-
-  function setPage(v) {
-    console.log(v);
+  noR.value = recipeStore.getNumberOfRecipe;
+  if (noR.value === 0) {
+    empty.value = true;
+  } else {
+    empty.value = false;
   }
+  allRecipe.value = recipeStore.getPaginatedRecipe;
+  pages.value =
+    parseInt((recipeStore.getNumberOfRecipe ? recipeStore.getNumberOfRecipe : 0) / onePage.value) +
+    1;
+
+  load.value = true;
+  isLoading.value = false;
+  return load;
+}
+
+// const allRecipe = computed(() => recipeStore.getRecipe);
+
+const show = ref(true);
+
+onMounted(() => {
+  Loading();
+});
+
 </script>
 
 <template>
@@ -84,7 +88,10 @@
         <v-pagination v-model="currentPage" :length="pages" circle @click="Loading"></v-pagination>
       </v-col>
     </v-row>
-    <v-row :key="reload">
+    <v-row :key="reload" class="rows">
+      <v-alert v-if="empty" color="red lighten-2" dark>
+        Unfortunately, we don't have any recipes now.
+      </v-alert>
       <v-col v-for="(item, i) in allRecipe" :key="i" cols="12" lg="3" md="4" sm="6">
         <card :item="item" />
       </v-col>
@@ -101,9 +108,14 @@
 </template>
 
 <style scoped>
-  .btn {
-    width: 100% !important;
-    margin: auto;
-    margin-top: 0.5rem;
-  }
+.btn {
+  width: 100% !important;
+  margin: auto;
+  margin-top: 0.5rem;
+}
+.rows{
+  display: flex;
+  justify-content: center;
+}
+
 </style>
