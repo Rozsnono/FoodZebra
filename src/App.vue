@@ -98,9 +98,7 @@
       <v-system-bar></v-system-bar>
       <v-list :color="'primary'" dark>
         <v-list-item prepend-avatar="../src/assets/logo.png">
-          <v-list-item-avatar>
-            <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-          </v-list-item-avatar>
+
         </v-list-item>
 
         <v-list-item link to="/account">
