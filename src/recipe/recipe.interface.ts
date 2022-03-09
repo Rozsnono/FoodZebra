@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-export default interface Receipt {
+export default interface Recipe {
     _id: Types.ObjectId | string;
     name: string;
     type: string;

@@ -7,88 +7,88 @@ import Controller from "../interfaces/controller.interface";
 import RequestWithUser from "../interfaces/requestWithUser.interface";
 import authMiddleware from "../middleware/auth.middleware";
 import validationMiddleware from "../middleware/validation.middleware";
-import CreatePostDto from "./receipt.dto";
-import Receipt from "./receipt.interface";
-import receiptModel from "./receipt.model";
+import CreatePostDto from "./recipe.dto";
+import Recipe from "./recipe.interface";
+import recipeModel from "./recipe.model";
 
 export default class PostController implements Controller {
-    public path = "/receipt";
+    public path = "/recipe";
     public router = Router();
-    private receipt = receiptModel;
+    private recipe = recipeModel;
 
     constructor() {
         this.initializeRoutes();
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, this.getAllReceipt);
-        this.router.get(`${this.path}/:id`, this.getReceiptById);
-        this.router.get(`${this.path}/author/:author`, authMiddleware, this.getAllReceiptByUser);
-        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, this.getPaginatedReceipt);
-        this.router.patch(`${this.path}/rating/:id`, [validationMiddleware(CreatePostDto, true)], this.modifyReceipt);
-        this.router.patch(`${this.path}/:id`, [authMiddleware, validationMiddleware(CreatePostDto, true)], this.modifyReceipt);
-        this.router.delete(`${this.path}/:id`, authMiddleware, this.deleteReceipt);
-        this.router.post(this.path, [authMiddleware], this.createReceipt);
+        this.router.get(this.path, this.getAllRecipe);
+        this.router.get(`${this.path}/:id`, this.getRecipeById);
+        this.router.get(`${this.path}/author/:author`, authMiddleware, this.getAllRecipeByUser);
+        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, this.getPaginatedRecipe);
+        this.router.patch(`${this.path}/rating/:id`, [validationMiddleware(CreatePostDto, true)], this.modifyRecipe);
+        this.router.patch(`${this.path}/:id`, [authMiddleware, validationMiddleware(CreatePostDto, true)], this.modifyRecipe);
+        this.router.delete(`${this.path}/:id`, authMiddleware, this.deleteRecipe);
+        this.router.post(this.path, [authMiddleware], this.createRecipe);
     }
 
-    private getAllReceipt = async (req: Request, res: Response, next: NextFunction) => {
+    private getAllRecipe = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // const posts = await this.post.find().populate("author", "-password");
-            const count = await this.receipt.countDocuments();
-            const receipt = await this.receipt.find();
-            res.send({ count: count, receipt: receipt });
+            const count = await this.recipe.countDocuments();
+            const recipe = await this.recipe.find();
+            res.send({ count: count, recipe: recipe });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
-    private getAllReceiptByUser = async (req: Request, res: Response, next: NextFunction) => {
+    private getAllRecipeByUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.author;
-            const count = await this.receipt.find({ author: { $eq: id } }).countDocuments();
-            const receipt = await this.receipt.find({ author: { $eq: id } }).populate("author", "-password");
-            // const receipt = await this.receipt.find();
-            res.send({ teszt: "true", author: id, count: count, receipt: receipt });
+            const count = await this.recipe.find({ author: { $eq: id } }).countDocuments();
+            const recipe = await this.recipe.find({ author: { $eq: id } }).populate("author", "-password");
+            // const recipe = await this.recipe.find();
+            res.send({ teszt: "true", author: id, count: count, recipe: recipe });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
-    private getPaginatedReceipt = async (req: Request, res: Response, next: NextFunction) => {
+    private getPaginatedRecipe = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const offset = parseInt(req.params.offset);
             const limit = parseInt(req.params.limit);
             const order = req.params.order;
             const sort = parseInt(req.params.sort); // desc: -1  asc: 1
-            let receipt = [];
+            let recipe = [];
             let count = 0;
             if (req.params.keyword) {
                 const regex = new RegExp(req.params.keyword, "i"); // i for case insensitive
-                count = await this.receipt.find({ $or: [{ name: { $regex: regex } }, { type: { $regex: regex } }] }).count();
-                receipt = await this.receipt
+                count = await this.recipe.find({ $or: [{ name: { $regex: regex } }, { type: { $regex: regex } }] }).count();
+                recipe = await this.recipe
                     .find({ $or: [{ name: { $regex: regex } }, { type: { $regex: regex } }] })
                     .sort(`${sort == -1 ? "-" : ""}${order}`)
                     .skip(offset)
                     .limit(limit);
             } else {
-                count = await this.receipt.countDocuments();
-                receipt = await this.receipt
+                count = await this.recipe.countDocuments();
+                recipe = await this.recipe
                     .find({})
                     .sort(`${sort == -1 ? "-" : ""}${order}`)
                     .skip(offset)
                     .limit(limit);
             }
-            res.send({ count: count, receipt: receipt });
+            res.send({ count: count, recipe: recipe });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
-    private getReceiptById = async (req: Request, res: Response, next: NextFunction) => {
+    private getRecipeById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const post = await this.receipt.findById(id).populate("author", "-password");
+                const post = await this.recipe.findById(id).populate("author", "-password");
                 if (post) {
                     res.send(post);
                 } else {
@@ -102,12 +102,12 @@ export default class PostController implements Controller {
         }
     };
 
-    private modifyReceipt = async (req: Request, res: Response, next: NextFunction) => {
+    private modifyRecipe = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const postData: Receipt = req.body;
-                const post = await this.receipt.findByIdAndUpdate(id, postData, { new: true });
+                const postData: Recipe = req.body;
+                const post = await this.recipe.findByIdAndUpdate(id, postData, { new: true });
                 if (post) {
                     res.send(post);
                 } else {
@@ -121,12 +121,12 @@ export default class PostController implements Controller {
         }
     };
 
-    private rateReceipt = async (req: Request, res: Response, next: NextFunction) => {
+    private rateRecipe = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const postData: Receipt = req.body;
-                const post = await this.receipt.findByIdAndUpdate(id, postData, { new: true });
+                const postData: Recipe = req.body;
+                const post = await this.recipe.findByIdAndUpdate(id, postData, { new: true });
                 if (post) {
                     res.send(post);
                 } else {
@@ -141,25 +141,25 @@ export default class PostController implements Controller {
     };
 
 
-    private createReceipt = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    private createRecipe = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const receiptData: Receipt = req.body;
-            const createdreceipt = new this.receipt({
-                ...receiptData,
+            const recipeData: Recipe = req.body;
+            const createdrecipe = new this.recipe({
+                ...recipeData,
             });
-            const savedreceipt = await createdreceipt.save();
-            await savedreceipt.populate("author", "-password");
-            res.send(savedreceipt);
+            const savedrecipe = await createdrecipe.save();
+            await savedrecipe.populate("author", "-password");
+            res.send(savedrecipe);
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
-    private deleteReceipt = async (req: Request, res: Response, next: NextFunction) => {
+    private deleteRecipe = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const successResponse = await this.receipt.findByIdAndDelete(id);
+                const successResponse = await this.recipe.findByIdAndDelete(id);
                 if (successResponse) {
                     res.sendStatus(200);
                 } else {

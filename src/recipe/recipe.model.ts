@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import Receipt from "./receipt.interface";
+import Recipe from "./recipe.interface";
 
-const receiptSchema = new Schema<Receipt>(
+const recipeSchema = new Schema<Recipe>(
     {
         name: String,
         type: String,
@@ -19,6 +19,6 @@ const receiptSchema = new Schema<Receipt>(
     { versionKey: false },
 );
 
-const receiptModel = model<Receipt>("receipt", receiptSchema);
+const recipeModel = model<Recipe>("recipe", recipeSchema);
 
-export default receiptModel;
+export default recipeModel;

@@ -99,7 +99,7 @@
 			"response": []
 		},
 		{
-			"name": "getAllReceiptOfUserByID",
+			"name": "getAllRecipeOfUserByID",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -155,7 +155,7 @@
 			"response": []
 		},
 		{
-			"name": "getAllReceipt",
+			"name": "getAllRecipe",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -172,31 +172,31 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:5000/receipt",
+					"raw": "localhost:5000/recipe",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"receipt"
+						"recipe"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "getReceiptById",
+			"name": "getRecipeById",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/receipt/61d2cb52f010788043a80c18",
+					"raw": "localhost:5000/recipe/61d2cb52f010788043a80c18",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"receipt",
+						"recipe",
 						"61d2cb52f010788043a80c18"
 					]
 				}
@@ -204,18 +204,18 @@
 			"response": []
 		},
 		{
-			"name": "getPaginatedReceipt",
+			"name": "getPaginatedRecipe",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/receipt/2/2/2/1",
+					"raw": "localhost:5000/recipe/2/2/2/1",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"receipt",
+						"recipe",
 						"2",
 						"2",
 						"2",
@@ -226,7 +226,7 @@
 			"response": []
 		},
 		{
-			"name": "createReceipt",
+			"name": "createRecipe",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -240,20 +240,20 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:5000/receipt",
+					"raw": "localhost:5000/recipe",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"receipt"
+						"recipe"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "modifyReceipt",
+			"name": "modifyRecipe",
 			"request": {
 				"method": "PATCH",
 				"header": [],
@@ -267,13 +267,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:5000/receipt/61d2cb52f010788043a80c18",
+					"raw": "localhost:5000/recipe/61d2cb52f010788043a80c18",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"receipt",
+						"recipe",
 						"61d2cb52f010788043a80c18"
 					]
 				}
@@ -281,18 +281,18 @@
 			"response": []
 		},
 		{
-			"name": "deleteReceipt",
+			"name": "deleteRecipe",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/receipt/61d2cb52f010788043a80c18",
+					"raw": "localhost:5000/recipe/61d2cb52f010788043a80c18",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"receipt",
+						"recipe",
 						"61d2cb52f010788043a80c18"
 					]
 				}
