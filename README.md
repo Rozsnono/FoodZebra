@@ -8,7 +8,7 @@ A weboldal azért jött létre, hogy a főzés iránt érdeklődő emberek megtu
 
 - Felhasználó fiók
 - Recept létrehozása, meglévő módosítása, törlése
-- Recept értékelése 3 fő szempont alapján
+- Recept értékelése
 
 ## Csapattagok
 
