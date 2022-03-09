@@ -1,65 +1,65 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import rating from "../components/Rating.vue";
-import ConfirmDialog from "../components/ConfirmDialog.vue";
+  import { computed, ref } from "vue";
+  import rating from "../components/Rating.vue";
+  import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-import { useReceiptStore } from "@/store/receiptStore";
-const props = defineProps<{ item: object; isModify: boolean }>();
+  import { useRecipeStore } from "@/store/recipeStore";
+  const props = defineProps<{ item: object; isModify: boolean }>();
 
-const show = ref(true);
-const showDetail = ref(false);
-const showConfirmDelete = ref(false);
-const showConfirm = ref(false);
-const showError = ref(false);
+  const show = ref(true);
+  const showDetail = ref(false);
+  const showConfirmDelete = ref(false);
+  const showConfirm = ref(false);
+  const showError = ref(false);
 
-const title = ref("");
+  const title = ref("");
 
-const resultConfirm = ref(false);
+  const resultConfirm = ref(false);
 
-const emit = defineEmits(["reload", "modify"]);
+  const emit = defineEmits(["reload", "modify"]);
 
-const ReceiptStore = useReceiptStore();
-const receipt = props.item;
+  const RecipeStore = useRecipeStore();
+  const recipe = props.item;
 
-function picToBase64(code) {
-  return "data:image/png;base64," + code;
-}
-
-function showDetails(id) {
-  return "/food/" + id;
-  console.log(id);
-}
-
-function closeDetails() {
-  showDetail.value = false;
-}
-
-function confirm() {
-  showConfirm.value = false;
-  emit("reload");
-}
-
-async function confirmDeletePost() {
-  if (resultConfirm.value) {
-    await ReceiptStore.deleteReceiptById({
-      _id: receipt._id,
-    });
-    let ok = await ReceiptStore.getCode;
-    show.value = false;
-    console.log(ok);
-    if (ok != 200) {
-      showError.value = true;
-    } else {
-      showConfirm.value = true;
-    }
-  } else {
-    showConfirmDelete.value = false;
+  function picToBase64(code) {
+    return "data:image/png;base64," + code;
   }
-}
 
-function showEdit() {
-  emit("modify", props.item);
-}
+  function showDetails(id) {
+    return "/recipe/" + id;
+    console.log(id);
+  }
+
+  function closeDetails() {
+    showDetail.value = false;
+  }
+
+  function confirm() {
+    showConfirm.value = false;
+    emit("reload");
+  }
+
+  async function confirmDeletePost() {
+    if (resultConfirm.value) {
+      await RecipeStore.deleteRecipeById({
+        _id: recipe._id,
+      });
+      let ok = await RecipeStore.getCode;
+      show.value = false;
+      console.log(ok);
+      if (ok != 200) {
+        showError.value = true;
+      } else {
+        showConfirm.value = true;
+      }
+    } else {
+      showConfirmDelete.value = false;
+    }
+  }
+
+  function showEdit() {
+    emit("modify", props.item);
+  }
 </script>
 
 <template>
@@ -114,44 +114,44 @@ function showEdit() {
     title="Successful delete"
     okBtn="OK"
     :justAccept="true"
-    message="The receipt is deleted successfully!"
+    message="The recipe is deleted successfully!"
     @close="confirm"
   />
 
   <ConfirmDialog
-      v-if="showError"
-      v-model="showError"
-      v-model:result="resultConfirm"
-      :retain-focus="false"
-      title="Opss.."
-      okBtn="OK"
-      :justAccept="true"
-      message="Something went wrong!"
-      @close="confirm"
-      color="danger"
-    />
+    v-if="showError"
+    v-model="showError"
+    v-model:result="resultConfirm"
+    :retain-focus="false"
+    title="Opss.."
+    okBtn="OK"
+    :justAccept="true"
+    message="Something went wrong!"
+    @close="confirm"
+    color="danger"
+  />
 </template>
 <style scoped>
-.card {
-  background-color: #00000040;
-  border-radius: 1rem;
-  padding: 1rem;
-}
+  .card {
+    background-color: #00000040;
+    border-radius: 1rem;
+    padding: 1rem;
+  }
 
-.img {
-  width: 90%;
-  height: 10rem;
-  margin: auto;
-}
+  .img {
+    width: 90%;
+    height: 10rem;
+    margin: auto;
+  }
 
-.btn {
-  justify-content: center !important;
-  display: flex !important;
-}
+  .btn {
+    justify-content: center !important;
+    display: flex !important;
+  }
 
-.rate {
-  margin: auto;
-  justify-content: center;
-  display: flex;
-}
+  .rate {
+    margin: auto;
+    justify-content: center;
+    display: flex;
+  }
 </style>

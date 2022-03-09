@@ -1,137 +1,137 @@
 <script setup lang="ts">
-import { ref } from "@vue/reactivity";
-import { useReceiptStore } from "../store/receiptStore";
-import rating from "../components/Rating.vue";
-import ConfirmDialog from "../components/ConfirmDialog.vue";
+  import { ref } from "@vue/reactivity";
+  import { useRecipeStore } from "../store/recipeStore";
+  import rating from "../components/Rating.vue";
+  import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-const props = defineProps<{ item: object; isModify: boolean; title: boolean }>();
-console.log(props.item);
+  const props = defineProps<{ item: object; isModify: boolean; title: boolean }>();
+  console.log(props.item);
 
-const emit = defineEmits(["close"]);
+  const emit = defineEmits(["close"]);
 
-const name = ref(props.item ? props.item.name : "");
-const type = ref(props.item ? props.item.type : "");
-const description = ref(props.item ? props.item.description : "");
-const energy = ref(props.item ? props.item.energy : "");
-const time = ref(props.item ? props.item.time : "");
-const price = ref(props.item ? props.item.price : "");
-const serving = ref(props.item ? props.item.serving : "");
-const difficulty = ref(props.item ? props.item.difficulty : "");
-const rate = ref(props.item ? props.item.rate : 0);
-const image = ref(props.item ? props.item.pic : "");
-const ingredients = ref(props.item ? props.item.ingredients.join("\n") : "");
-const userID = ref(sessionStorage.getItem("currentUser"));
+  const name = ref(props.item ? props.item.name : "");
+  const type = ref(props.item ? props.item.type : "");
+  const description = ref(props.item ? props.item.description : "");
+  const energy = ref(props.item ? props.item.energy : "");
+  const time = ref(props.item ? props.item.time : "");
+  const price = ref(props.item ? props.item.price : "");
+  const serving = ref(props.item ? props.item.serving : "");
+  const difficulty = ref(props.item ? props.item.difficulty : "");
+  const rate = ref(props.item ? props.item.rate : 0);
+  const image = ref(props.item ? props.item.pic : "");
+  const ingredients = ref(props.item ? props.item.ingredients.join("\n") : "");
+  const userID = ref(sessionStorage.getItem("currentUser"));
 
-const setImage = (img) => {
-  image.value = img;
-};
-
-const setPrice = (getprice) => {
-  price.value = getprice;
-};
-
-const setServing = (getserving) => {
-  serving.value = getserving;
-};
-
-const setDifficulty = (getdifficulty) => {
-  difficulty.value = getdifficulty;
-};
-
-const receiptStore = useReceiptStore();
-
-const showConfirmSave = ref(false);
-const showConfirmEdit = ref(false);
-const showConfirmClose = ref(false);
-const resultConfirm = ref(true);
-const showConfirm = ref(false);
-const showError = ref(false);
-
-async function confirmSaveReceipt() {
-  if (resultConfirm.value) {
-    await receiptStore.createNewReceipt({
-      name: name.value,
-      type: type.value,
-      description: description.value,
-      energy: parseInt(energy.value.toString()),
-      time: parseInt(time.value.toString()),
-      price: price.value,
-      serving: serving.value,
-      difficulty: difficulty.value,
-      pic: image.value,
-      rate: rate.value,
-      author: userID.value,
-      ingredients: ingredients.value.split("\n"),
-      _id: "",
-    });
-    let ok = await receiptStore.getCode;
-    console.log("ok --" + ok);
-    if (ok != 200) {
-      showError.value = true;
-      console.log("asd");
-    } else {
-      showConfirm.value = true;
-      console.log("asd2");
-    }
-  } else {
-    showConfirmSave.value = false;
-  }
-}
-
-function confirmEditReceipt() {
-  if (resultConfirm.value) {
-    console.log(ingredients.value);
-    receiptStore.editReceiptById({
-      name: name.value,
-      type: type.value,
-      description: description.value,
-      energy: parseInt(energy.value.toString()),
-      time: parseInt(time.value.toString()),
-      price: price.value,
-      serving: serving.value,
-      difficulty: difficulty.value,
-      pic: image.value,
-      ingredients: ingredients.value.split("\n"),
-      _id: props.item._id,
-    });
-    showConfirmEdit.value = true;
-  } else {
-    showConfirmSave.value = false;
-  }
-}
-
-function Tobase64(event) {
-  const selected = event.target?.files[0];
-  const reader = new FileReader();
-  let rawFile = "";
-  reader.onloadend = () => {
-    rawFile = reader.result;
-    setImage(rawFile.split(",")[1]);
+  const setImage = (img) => {
+    image.value = img;
   };
-  reader.readAsDataURL(selected);
-}
 
-function ChoosePriceRate(value) {
-  console.log(value);
-  setPrice(value);
-}
-function ChooseServingRate(value) {
-  setServing(value);
-}
-function ChooseDifficultyRate(value) {
-  setDifficulty(value);
-}
+  const setPrice = (getprice) => {
+    price.value = getprice;
+  };
 
-function confirm() {
-  emit("close");
-}
+  const setServing = (getserving) => {
+    serving.value = getserving;
+  };
+
+  const setDifficulty = (getdifficulty) => {
+    difficulty.value = getdifficulty;
+  };
+
+  const recipeStore = useRecipeStore();
+
+  const showConfirmSave = ref(false);
+  const showConfirmEdit = ref(false);
+  const showConfirmClose = ref(false);
+  const resultConfirm = ref(true);
+  const showConfirm = ref(false);
+  const showError = ref(false);
+
+  async function confirmSaveRecipe() {
+    if (resultConfirm.value) {
+      await recipeStore.createNewRecipe({
+        name: name.value,
+        type: type.value,
+        description: description.value,
+        energy: parseInt(energy.value.toString()),
+        time: parseInt(time.value.toString()),
+        price: price.value,
+        serving: serving.value,
+        difficulty: difficulty.value,
+        pic: image.value,
+        rate: rate.value,
+        author: userID.value,
+        ingredients: ingredients.value.split("\n"),
+        _id: "",
+      });
+      let ok = await recipeStore.getCode;
+      console.log("ok --" + ok);
+      if (ok != 200) {
+        showError.value = true;
+        console.log("asd");
+      } else {
+        showConfirm.value = true;
+        console.log("asd2");
+      }
+    } else {
+      showConfirmSave.value = false;
+    }
+  }
+
+  function confirmEditRecipe() {
+    if (resultConfirm.value) {
+      console.log(ingredients.value);
+      recipeStore.editRecipeById({
+        name: name.value,
+        type: type.value,
+        description: description.value,
+        energy: parseInt(energy.value.toString()),
+        time: parseInt(time.value.toString()),
+        price: price.value,
+        serving: serving.value,
+        difficulty: difficulty.value,
+        pic: image.value,
+        ingredients: ingredients.value.split("\n"),
+        _id: props.item._id,
+      });
+      showConfirmEdit.value = true;
+    } else {
+      showConfirmSave.value = false;
+    }
+  }
+
+  function Tobase64(event) {
+    const selected = event.target?.files[0];
+    const reader = new FileReader();
+    let rawFile = "";
+    reader.onloadend = () => {
+      rawFile = reader.result;
+      setImage(rawFile.split(",")[1]);
+    };
+    reader.readAsDataURL(selected);
+  }
+
+  function ChoosePriceRate(value) {
+    console.log(value);
+    setPrice(value);
+  }
+  function ChooseServingRate(value) {
+    setServing(value);
+  }
+  function ChooseDifficultyRate(value) {
+    setDifficulty(value);
+  }
+
+  function confirm() {
+    emit("close");
+  }
 </script>
 
 <template>
   <v-container class="card">
     <v-row>
       <v-col cols="12" sm="12">
-        <h1 class="title">{{ props.title ? props.title : "Add new receipt" }}</h1>
+        <h1 class="title">{{ props.title ? props.title : "Add new recipe" }}</h1>
         <v-divider></v-divider>
       </v-col>
       <v-col cols="12" sm="12" lg="6">
@@ -221,7 +221,7 @@ function confirm() {
           color="green-lighten-3"
           class="btn"
           elevation="10"
-          @click="confirmEditReceipt()"
+          @click="confirmEditRecipe()"
           v-if="props.isModify"
         >
           Edit
@@ -231,7 +231,7 @@ function confirm() {
           color="green-lighten-3"
           class="btn"
           elevation="10"
-          @click="confirmSaveReceipt()"
+          @click="confirmSaveRecipe()"
           v-if="!props.isModify"
         >
           Save
@@ -259,7 +259,7 @@ function confirm() {
       title="Successful add"
       okBtn="OK"
       :justAccept="true"
-      message="The receipt is added successfully!"
+      message="The recipe is added successfully!"
       @close="confirm"
     />
     <ConfirmDialog
@@ -270,36 +270,36 @@ function confirm() {
       title="Successful modify"
       okBtn="OK"
       :justAccept="true"
-      message="The receipt is modified successfully!"
+      message="The recipe is modified successfully!"
       @close="confirm"
     />
   </v-container>
 </template>
 
 <style scoped>
-.card {
-  width: 80rem !important;
-  background-color: #00000030;
-  border-radius: 2rem;
-  padding: 2rem;
-}
+  .card {
+    width: 80rem !important;
+    background-color: #00000030;
+    border-radius: 2rem;
+    padding: 2rem;
+  }
 
-#file-input {
-  text-align: center !important;
-}
-.title {
-  font-size: 4rem;
-  text-align: center;
-  margin: 2.5rem;
-  display: flex;
-  justify-content: center;
-}
+  #file-input {
+    text-align: center !important;
+  }
+  .title {
+    font-size: 4rem;
+    text-align: center;
+    margin: 2.5rem;
+    display: flex;
+    justify-content: center;
+  }
 
-.btn {
-  width: 100%;
-}
+  .btn {
+    width: 100%;
+  }
 
-.inputs {
-  margin: 0.5rem;
-}
+  .inputs {
+    margin: 0.5rem;
+  }
 </style>
