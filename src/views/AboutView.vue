@@ -16,6 +16,7 @@ import { VAlert, VBtn, VContainer, VImg } from "vuetify/components";
         <h2 class="mb-3">Functions:</h2>
         <ul>
           <li>Felhasználó fiók</li>
+          <li>Receptek böngészése</li>
           <li>Recept létrehozása, meglévő módosítása, törlése</li>
           <li>Recept értékelése</li>
         </ul>
