@@ -4,41 +4,36 @@ import { VContainer } from "vuetify/components";
 import { useReceiptStore } from "../store/receiptStore";
 import card from "../components/FoodCard.vue";
 
-const onePages = ref(["10", "20", "30", "50"]);
+const onePages = ref(["12", "20", "32", "48"]);
 const Categories = ref([]);
 const load = ref(false);
 
 const reload = ref(0);
 
 const offset = ref(0);
-const onePage = ref(10);
+const onePage = ref(12);
 
 const allReceipt = ref([]);
 const pages = ref([]);
 const currentPage = ref(1);
 const receiptStore = useReceiptStore();
-const catValue = ref([]);
+const catValue = ref("");
+
+const name = ref("");
 
 async function Loading() {
-  let receipt = [];
-  await receiptStore.fetchReceipt();
-  receipt = receiptStore.getReceipt;
-  console.log(receipt);
-  receipt.forEach((element) => {
-    if (!Categories.value.includes(element.type)) {
-      Categories.value.push(element.type);
-    }
-  });
-  console.log(Categories.value);
-  pages.value = parseInt(receiptStore.getNumberOfReceipt / onePage.value) + 1;
   reload.value += 1;
   offset.value = (currentPage.value - 1) * onePage.value;
   await receiptStore.fetchPaginatedReceipt({
     offset: offset.value,
     limit: onePage.value.toString(),
+    keyword: name.value,
   });
   allReceipt.value = receiptStore.getPaginatedReceipt;
-
+  pages.value =
+    parseInt(
+      (receiptStore.getNumberOfReceipt ? receiptStore.getNumberOfReceipt : 0) / onePage.value
+    ) + 1;
   console.log(onePage.value);
   console.log(pages.value);
   load.value = true;
@@ -53,8 +48,8 @@ onMounted(() => {
   Loading();
 });
 
-function setPage(p) {
-  console.log(currentPage.value);
+function setPage(v) {
+  console.log(v);
 }
 </script>
 
@@ -71,17 +66,6 @@ function setPage(p) {
       </v-col>
       <v-col cols="12" lg="2" sm="12">
         <v-select
-          v-on:input="setPage($event)"
-          :items="Categories"
-          v-model="catValue"
-          filled
-          label="Category"
-          prepend-icon="mdi-shape-outline"
-        ></v-select>
-      </v-col>
-      <v-col cols="12" lg="2" sm="12">
-        <v-select
-          v-on:input="setPage($event)"
           :items="onePages"
           v-model="onePage"
           filled
@@ -89,11 +73,11 @@ function setPage(p) {
           prepend-icon="mdi-book-open-page-variant-outline"
         ></v-select>
       </v-col>
-      <v-col cols="12" lg="2" sm="12">
+      <v-col cols="12" lg="3" sm="12">
         <v-btn depressed color="success" class="btn" @click="Loading">Search</v-btn>
       </v-col>
 
-      <v-col cols="12" lg="3" sm="12">
+      <v-col cols="12" lg="4" sm="12">
         <v-pagination v-model="currentPage" :length="pages" circle @click="Loading"></v-pagination>
       </v-col>
     </v-row>
