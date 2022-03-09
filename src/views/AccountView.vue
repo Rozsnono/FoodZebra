@@ -1,39 +1,45 @@
 <script setup lang="ts">
-  import { computed, reactive } from "vue";
-  import {
-    VBtn,
-    VCard,
-    VCardActions,
-    VCardText,
-    VCardTitle,
-    VCol,
-    VContainer,
-    VDialog,
-    VForm,
-    VIcon,
-    VProgressLinear,
-    VRow,
-    VSpacer,
-    VTextField,
-  } from "vuetify/components";
-  import { useUsersStore } from "../store/usersStore";
+import { computed, reactive } from "vue";
+import {
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardText,
+  VCardTitle,
+  VCol,
+  VContainer,
+  VDialog,
+  VForm,
+  VIcon,
+  VProgressLinear,
+  VRow,
+  VSpacer,
+  VTextField,
+} from "vuetify/components";
+import { useUsersStore } from "../store/usersStore";
 
-  const usersStore = useUsersStore();
+const usersStore = useUsersStore();
 
-  const anyLoggedUser = computed(() => (usersStore.getLoggedUser ? true : false));
-  const isLoading = computed(() => usersStore.getLoading);
-  const errorMsg = computed(() => usersStore.getErrorMsg);
-  const isErrorMsg = computed(() => usersStore.getErrorMsg != "");
+const anyLoggedUser = computed(() => (usersStore.getLoggedUser ? true : false));
+const isLoading = computed(() => usersStore.getLoading);
+const errorMsg = computed(() => usersStore.getErrorMsg);
+const isErrorMsg = computed(() => usersStore.getErrorMsg != "");
 
-  interface IReactiveData {
-    email: string;
-    password: string;
-  }
+interface IReactiveData {
+  email: string;
+  password: string;
+}
 
-  const r = reactive<IReactiveData>({
-    email: "user@user.com",
-    password: "user",
-  });
+const r = reactive<IReactiveData>({
+  email: "user@user.com",
+  password: "user",
+});
+
+import { useI18n } from "vue-i18n";
+let { locale, t } = useI18n({
+  inheritLocale: true,
+  useScope: "global", // Change to "local" if you want to add <i18n></i18n> locally
+});
 </script>
 
 <template>
@@ -42,11 +48,11 @@
       <v-col md="4" sm="8" xs="12">
         <v-card class="elevation-12">
           <v-card-title v-if="!anyLoggedUser">
-            Login form
+            {{ t("login") }} form
             <v-icon>mdi-login</v-icon>
           </v-card-title>
           <v-card-title v-else>
-            Logout form
+            {{ t("logout") }} form
             <v-icon>mdi-logout</v-icon>
           </v-card-title>
           <v-card-text>
@@ -81,18 +87,20 @@
                 })
               "
             >
-              Login
+              {{ t("login") }}
             </v-btn>
-            <v-btn v-else class="mt-3" color="warning" @click="usersStore.logOut()">Log out</v-btn>
+            <v-btn v-else class="mt-3" color="warning" @click="usersStore.logOut()">
+              {{ t("logout") }}
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
     <!-- Dialog1: Wait for login response -->
     <v-dialog v-model="isLoading" hide-overlay persistent>
-      <v-card color="primary">
+      <v-card color="background">
         <v-card-text>
-          Please wait...
+          {{ t("wait") }}
           <v-progress-linear class="mb-0" color="white" indeterminate></v-progress-linear>
         </v-card-text>
       </v-card>
@@ -100,10 +108,10 @@
     <!-- Dialog 2: Show error messages -->
     <v-dialog v-model="isErrorMsg">
       <v-card>
-        <v-card-title>Error</v-card-title>
+        <v-card-title>{{ t("error") }}</v-card-title>
         <v-card-text>{{ errorMsg }}</v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="usersStore.clearErrorMsg()">Close</v-btn>
+          <v-btn color="primary" text @click="usersStore.clearErrorMsg()">{{ t("close") }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -111,7 +119,7 @@
 </template>
 
 <style scoped>
-  .v-card-title {
-    background-color: lightgray;
-  }
+.v-card-title {
+  background-color: lightgray;
+}
 </style>

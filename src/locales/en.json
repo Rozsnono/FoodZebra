@@ -12,5 +12,11 @@
   "modifyFood": "Receipt modify",
   "food": "Receipt",
   "admin": "Admin",
-  "links": "Links"
+  "links": "Links",
+
+  "login":"Login",
+  "logout":"Logout",
+  "wait":"Please wait...",
+  "error":"Error",
+  "close":"Close"
 }
