@@ -57,7 +57,7 @@ function setPage(v) {
 </script>
 
 <template>
-  <v-container class="page">
+  <v-container class="page" style="min-height: 90vh">
     <v-row>
       <v-col cols="12" lg="3" sm="12">
         <v-text-field
