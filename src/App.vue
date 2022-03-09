@@ -45,21 +45,21 @@
     },
     {
       icon: "mdi-food",
-      text: t("recipe"),
-      name: "recipe",
+      text: "Recipes",
+      name: "Recipe",
       route: "/recipe",
       disabled: false,
     },
     {
       icon: "mdi-food-fork-drink",
-      text: t("addRecipe"),
+      text: "Add recipe",
       name: "addRecipe",
       route: "/addRecipe",
       disabled: notLoggedIn,
     },
     {
       icon: "mdi-food-fork-drink",
-      text: t("modifyRecipe"),
+      text: "My recipes",
       name: "modifyRecipe",
       route: "/modifyRecipe",
       disabled: notLoggedIn,
@@ -141,14 +141,14 @@
       ></v-app-bar-nav-icon>
       FoodZebra
       <v-spacer></v-spacer>
-      <v-btn
+      <!-- <v-btn
         :color="notLoggedIn ? 'primary' : 'loginedBackground'"
         dark
         icon
         @click="toggleLanguage"
       >
         <v-icon>mdi-comment-text-multiple</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-btn
         class="ml-5"
         :color="notLoggedIn ? 'primary' : 'loginedBackground'"
@@ -171,7 +171,7 @@
 
 <style>
   #app {
-    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
   }
 
   .dark {

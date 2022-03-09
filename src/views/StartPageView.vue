@@ -20,9 +20,9 @@
 <template>
   <div class="d-flex flex-column text-center" style="min-height: 90vh">
     <h1 class="title linear-wipe">Welcome to FoodZebra</h1>
-    <h5 class="slogan">Where your favourite recipe find you</h5>
+    <h5 class="slogan">Where your favourite recipes'll find you</h5>
     <v-divider></v-divider>
-    <h5 class="rTitle">Newest recipe:</h5>
+    <h5 class="rTitle">Newest recipes:</h5>
     <v-container>
       <v-row :key="reload" v-if="Loading()" class="rows">
         <v-col v-for="(item, i) in allRecipe" :key="i" cols="9" lg="3" md="3" sm="9">
@@ -31,7 +31,7 @@
       </v-row>
     </v-container>
     <div class="btn_div">
-      <v-btn class="btn" to="recipe">more recipe..</v-btn>
+      <v-btn class="btn" to="recipe">more...</v-btn>
     </div>
   </div>
 </template>
