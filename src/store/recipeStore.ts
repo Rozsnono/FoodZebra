@@ -1,7 +1,7 @@
 import $axios from "./axios.instance";
 import { defineStore } from "pinia";
 
-export interface IReceipt {
+export interface IRecipe {
   _id: string;
   name: string;
   type: string;
@@ -18,11 +18,11 @@ export interface IReceipt {
 
 interface IState {
   loading: boolean;
-  numberOfReceipt: number;
-  receipt: Array<IReceipt>;
-  oneReceipt: Object;
-  authorReceipt: any;
-  PaginatedReceipt: any;
+  numberOfRecipe: number;
+  recipe: Array<IRecipe>;
+  oneRecipe: Object;
+  authorRecipe: any;
+  PaginatedRecipe: any;
   code: number;
 }
 
@@ -57,7 +57,7 @@ export interface IRatingParams {
   rate: number;
 }
 
-export interface INewReceiptParams {
+export interface INewRecipeParams {
   _id: string;
   name: string;
   type: string;
@@ -73,47 +73,46 @@ export interface INewReceiptParams {
   author: string;
 }
 
-export const useReceiptStore = defineStore({
-  id: "receiptStore",
+export const useRecipeStore = defineStore({
+  id: "recipeStore",
   state: (): IState => ({
     loading: false,
-    numberOfReceipt: 0,
-    receipt: [],
-    oneReceipt: {},
-    authorReceipt: [],
-    PaginatedReceipt: [],
+    numberOfRecipe: 0,
+    recipe: [],
+    oneRecipe: {},
+    authorRecipe: [],
+    PaginatedRecipe: [],
     code: 0,
   }),
   getters: {
     getLoading(): boolean {
       return this.loading;
     },
-    getReceipt(): Array<IReceipt> {
-      
-      return this.receipt;
+    getRecipe(): Array<IRecipe> {
+      return this.recipe;
     },
-    getNumberOfReceipt(): number {
-      return this.numberOfReceipt;
+    getNumberOfRecipe(): number {
+      return this.numberOfRecipe;
     },
-    getOneReceipt(): any {
-      return this.oneReceipt;
+    getOneRecipe(): any {
+      return this.oneRecipe;
     },
-    getAuthorReceipt(): any {
-      return this.authorReceipt;
+    getAuthorRecipe(): any {
+      return this.authorRecipe;
     },
-    getPaginatedReceipt(): any {
-      return this.PaginatedReceipt;
+    getPaginatedRecipe(): any {
+      return this.PaginatedRecipe;
     },
     getCode(): number {
       return this.code;
     },
   },
   actions: {
-    async createNewReceipt(params: INewReceiptParams): Promise<void> {
+    async createNewRecipe(params: INewRecipeParams): Promise<void> {
       this.loading = true;
       this.code = 0;
       await $axios
-        .post("receipt", {
+        .post("recipe", {
           name: params.name,
           type: params.type,
           description: params.description,
@@ -130,7 +129,7 @@ export const useReceiptStore = defineStore({
         .then((res) => {
           if (res && res.data) {
             console.log(res.data.post);
-            this.numberOfReceipt = res.data.count;
+            this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
           this.code = 200;
@@ -144,11 +143,11 @@ export const useReceiptStore = defineStore({
           this.code = 404;
         });
     },
-    async editReceiptById(params: IEditParams): Promise<void> {
+    async editRecipeById(params: IEditParams): Promise<void> {
       this.loading = true;
       this.code = 0;
       $axios
-        .patch(`receipt/${params._id}`, {
+        .patch(`recipe/${params._id}`, {
           name: params.name,
           type: params.type,
           description: params.description,
@@ -173,11 +172,11 @@ export const useReceiptStore = defineStore({
           this.code = 404;
         });
     },
-    async ratingReceipt(params: IRatingParams): Promise<void> {
+    async ratingRecipe(params: IRatingParams): Promise<void> {
       this.loading = true;
       this.code = 0;
       $axios
-        .patch(`receipt/rating/${params._id}`, {
+        .patch(`recipe/rating/${params._id}`, {
           _id: params._id,
           rate: params.rate,
         })
@@ -194,15 +193,15 @@ export const useReceiptStore = defineStore({
           this.code = 404;
         });
     },
-    async deleteReceiptById(params: IIdParams): Promise<void> {
+    async deleteRecipeById(params: IIdParams): Promise<void> {
       this.loading = true;
       this.code = 0;
       await $axios
-        .delete(`receipt/${params._id}`)
+        .delete(`recipe/${params._id}`)
         .then((res) => {
           if (res && res.data) {
             console.log(res.data.status);
-            this.numberOfReceipt = res.data.count;
+            this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
           this.code = 200;
@@ -214,16 +213,16 @@ export const useReceiptStore = defineStore({
           this.code = 404;
         });
     },
-    async fetchReceipt(): Promise<void> {
+    async fetchRecipe(): Promise<void> {
       this.loading = true;
       this.code = 0;
       await $axios
-        .get("receipt")
+        .get("recipe")
         .then((res) => {
           if (res && res.data) {
-            this.receipt = res.data.receipt;
-            console.log(this.receipt);
-            this.numberOfReceipt = res.data.count;
+            this.recipe = res.data.recipe;
+            console.log(this.recipe);
+            this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
           this.code = 200;
@@ -234,18 +233,18 @@ export const useReceiptStore = defineStore({
           this.code = 404;
         });
     },
-    async auhtorReceipt(params: string): Promise<any> {
+    async auhtorRecipe(params: string): Promise<any> {
       this.loading = true;
       this.code = 0;
       let all = [];
       await $axios
-        .get(`receipt/author/${params}`)
+        .get(`recipe/author/${params}`)
         .then((res) => {
           if (res && res.data) {
             console.log(res.data);
             all = res.data;
-            this.authorReceipt = res.data;
-            this.numberOfReceipt = res.data.count;
+            this.authorRecipe = res.data;
+            this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
           console.log(all);
@@ -264,17 +263,17 @@ export const useReceiptStore = defineStore({
           return [];
         });
     },
-    async getReceiptById(params: string): Promise<Object | any> {
+    async getRecipeById(params: string): Promise<Object | any> {
       this.loading = true;
       this.code = 0;
       let one = {};
       await $axios
-        .get(`receipt/${params}`)
+        .get(`recipe/${params}`)
         .then((res) => {
           if (res && res.data) {
             one = res.data;
-            this.oneReceipt = one;
-            this.numberOfReceipt = res.data.count;
+            this.oneRecipe = one;
+            this.numberOfRecipe = res.data.count;
           }
           this.loading = false;
           console.log(one);
@@ -293,18 +292,18 @@ export const useReceiptStore = defineStore({
           return {};
         });
     },
-    async fetchPaginatedReceipt(params: IPaginatedParams): Promise<void> {
+    async fetchPaginatedRecipe(params: IPaginatedParams): Promise<void> {
       this.loading = true;
       this.code = 0;
       await $axios
         .get(
-          `receipt/${params.offset}/${params.limit}/${params.order}/${params.sort}/${params.keyword}`
+          `recipe/${params.offset}/${params.limit}/${params.order}/${params.sort}/${params.keyword}`
         )
         .then((res) => {
           if (res && res.data) {
-            this.PaginatedReceipt = res.data.receipt;
-            console.log(this.PaginatedReceipt);
-            this.numberOfReceipt = res.data.count;
+            this.PaginatedRecipe = res.data.recipe;
+            console.log(this.PaginatedRecipe);
+            this.numberOfRecipe = res.data.count;
           }
           this.code = 200;
           this.loading = false;

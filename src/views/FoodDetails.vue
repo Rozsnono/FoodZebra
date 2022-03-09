@@ -12,11 +12,11 @@
     VTextField,
   } from "vuetify/components";
   import rating from "../components/Rating.vue";
-  import { useReceiptStore } from "../store/receiptStore";
+  import { useRecipeStore } from "../store/recipeStore";
   import { useRoute } from "vue-router";
   import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-  const receiptStore = useReceiptStore();
+  const recipeStore = useRecipeStore();
 
   const props = defineProps({
     modelValue: {
@@ -41,7 +41,7 @@
   });
 
   const load = ref(false);
-  const receipt = ref({});
+  const recipe = ref({});
 
   const showDetail = ref(false);
   const showConfirmRate = ref(false);
@@ -52,9 +52,9 @@
   const rate = ref(0);
 
   async function Loading() {
-    await receiptStore.getReceiptById(router.params.id.toString());
-    receipt.value = receiptStore.getOneReceipt;
-    console.log(receipt);
+    await recipeStore.getRecipeById(router.params.id.toString());
+    recipe.value = recipeStore.getOneRecipe;
+    console.log(recipe);
     load.value = true;
     return load;
   }
@@ -95,17 +95,17 @@
     rate.value = v;
   }
 
-  function receiptRateCounter(plusRate: number) {
-    return receipt.value == 0
+  function recipeRateCounter(plusRate: number) {
+    return recipe.value == 0
       ? plusRate
-      : (receipt.value.rate == null ? 0 : receipt.value.rate + plusRate) / 2;
+      : (recipe.value.rate == null ? 0 : recipe.value.rate + plusRate) / 2;
   }
 
   function confirmRate() {
     if (resultConfirm.value) {
-      receiptStore.ratingReceipt({
-        _id: receipt.value._id,
-        rate: receiptRateCounter(rate.value),
+      recipeStore.ratingRecipe({
+        _id: recipe.value._id,
+        rate: recipeRateCounter(rate.value),
       });
       Loading();
       rerender.value += 1;
@@ -126,25 +126,25 @@
       message="rating"
       ok-btn="Rating"
       :retain-focus="false"
-      title="Rating Receipt"
+      title="Rating Recipe"
       @close="confirmRate"
       @resultData="getRating"
     />
     <v-row>
       <v-col cols="12" sm="12">
-        <v-img alt="Food" class="img" :src="picToBase64(receipt.pic)"></v-img>
+        <v-img alt="Food" class="img" :src="picToBase64(recipe.pic)"></v-img>
       </v-col>
       <v-col cols="12" sm="12">
         <div class="name">
-          {{ receipt.name }}
+          {{ recipe.name }}
         </div>
         <div class="type">
-          <v-chip>{{ receipt.type }}</v-chip>
+          <v-chip>{{ recipe.type }}</v-chip>
         </div>
       </v-col>
       <div class="rating">
         <v-rating
-          v-model="receipt.rate"
+          v-model="recipe.rate"
           background-color="yellow lighten-3"
           class="ratingStars"
           color="yellow"
@@ -157,21 +157,21 @@
       <v-divider></v-divider>
       <v-col class="icon" cols="12" lg="4" sm="12">
         <v-icon class="in-icon">mdi-clock</v-icon>
-        <div class="in-text">{{ receipt.time }} min</div>
+        <div class="in-text">{{ recipe.time }} min</div>
       </v-col>
       <v-col class="icon" cols="12" lg="4" sm="12">
         <v-icon class="in-icon">mdi-lightning-bolt-circle</v-icon>
-        <div class="in-text">{{ receipt.energy }} cal</div>
+        <div class="in-text">{{ recipe.energy }} cal</div>
       </v-col>
       <v-col class="icon" cols="12" lg="4" sm="12">
         <v-icon class="in-icon">mdi-chef-hat</v-icon>
-        <div class="in-text">{{ difficult(receipt.difficulty) }}</div>
+        <div class="in-text">{{ difficult(recipe.difficulty) }}</div>
       </v-col>
       <v-divider></v-divider>
       <v-col cols="12" md="5" sm="12">
         <h2 class="i-title">Description</h2>
         <p class="description">
-          {{ receipt.description }}
+          {{ recipe.description }}
         </p>
       </v-col>
       <v-col cols="12" sm="1"></v-col>
@@ -179,7 +179,7 @@
         <div class="ingredients">
           <h2 class="i-title">Ingredients</h2>
           <ul>
-            <li v-for="(item, i) in receipt.ingredients" :key="i">{{ item }}</li>
+            <li v-for="(item, i) in recipe.ingredients" :key="i">{{ item }}</li>
           </ul>
         </div>
       </v-col>

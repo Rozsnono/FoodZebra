@@ -1,63 +1,63 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import { VContainer } from "vuetify/components";
-import { useReceiptStore } from "../store/receiptStore";
-import card from "../components/FoodCard.vue";
+  import { computed, onMounted, ref } from "vue";
+  import { VContainer } from "vuetify/components";
+  import { useRecipeStore } from "../store/recipeStore";
+  import card from "../components/FoodCard.vue";
 
-const onePages = ref(["12", "20", "32", "48"]);
-const Categories = ref([]);
-const load = ref(false);
+  const onePages = ref(["12", "20", "32", "48"]);
+  const Categories = ref([]);
+  const load = ref(false);
 
-const reload = ref(0);
-const isLoading = ref(false);
+  const reload = ref(0);
+  const isLoading = ref(false);
 
-const offset = ref(0);
-const onePage = ref(12);
+  const offset = ref(0);
+  const onePage = ref(12);
 
-const allReceipt = ref([]);
-const pages = ref([]);
-const currentPage = ref(1);
-const receiptStore = useReceiptStore();
-const catValue = ref("");
+  const allRecipe = ref([]);
+  const pages = ref([]);
+  const currentPage = ref(1);
+  const recipeStore = useRecipeStore();
+  const catValue = ref("");
 
-const name = ref("");
+  const name = ref("");
 
-async function Loading() {
-  isLoading.value = true;
-  reload.value += 1;
-  offset.value = (currentPage.value - 1) * onePage.value;
-  await receiptStore.fetchPaginatedReceipt({
-    offset: offset.value,
-    limit: onePage.value.toString(),
-    keyword: name.value,
+  async function Loading() {
+    isLoading.value = true;
+    reload.value += 1;
+    offset.value = (currentPage.value - 1) * onePage.value;
+    await recipeStore.fetchPaginatedRecipe({
+      offset: offset.value,
+      limit: onePage.value.toString(),
+      keyword: name.value,
+    });
+    allRecipe.value = recipeStore.getPaginatedRecipe;
+    pages.value =
+      parseInt(
+        (recipeStore.getNumberOfRecipe ? recipeStore.getNumberOfRecipe : 0) / onePage.value
+      ) + 1;
+    console.log(onePage.value);
+    console.log(pages.value);
+    load.value = true;
+    isLoading.value = false;
+    return load;
+  }
+
+  // const allRecipe = computed(() => recipeStore.getRecipe);
+
+  const show = ref(true);
+
+  onMounted(() => {
+    Loading();
   });
-  allReceipt.value = receiptStore.getPaginatedReceipt;
-  pages.value =
-    parseInt(
-      (receiptStore.getNumberOfReceipt ? receiptStore.getNumberOfReceipt : 0) / onePage.value
-    ) + 1;
-  console.log(onePage.value);
-  console.log(pages.value);
-  load.value = true;
-  isLoading.value = false;
-  return load;
-}
 
-// const allReceipt = computed(() => receiptStore.getReceipt);
-
-const show = ref(true);
-
-onMounted(() => {
-  Loading();
-});
-
-function setPage(v) {
-  console.log(v);
-}
+  function setPage(v) {
+    console.log(v);
+  }
 </script>
 
 <template>
-  <v-container class="page">
+  <v-container class="page" style="min-height: 90vh">
     <v-row>
       <v-col cols="12" lg="3" sm="12">
         <v-text-field
@@ -85,7 +85,7 @@ function setPage(v) {
       </v-col>
     </v-row>
     <v-row :key="reload">
-      <v-col v-for="(item, i) in allReceipt" :key="i" cols="12" lg="3" md="4" sm="6">
+      <v-col v-for="(item, i) in allRecipe" :key="i" cols="12" lg="3" md="4" sm="6">
         <card :item="item" />
       </v-col>
     </v-row>
@@ -101,9 +101,9 @@ function setPage(v) {
 </template>
 
 <style scoped>
-.btn {
-  width: 100% !important;
-  margin: auto;
-  margin-top: 0.5rem;
-}
+  .btn {
+    width: 100% !important;
+    margin: auto;
+    margin-top: 0.5rem;
+  }
 </style>

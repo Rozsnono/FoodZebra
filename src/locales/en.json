@@ -8,15 +8,15 @@
   "template": "Template",
   "noUser": "is not logged in",
   "startPage": "Start page",
-  "addFood": "Add Receipt",
-  "modifyFood": "Receipt modify",
-  "food": "Receipt",
+  "addFood": "Add Recipe",
+  "modifyFood": "Recipe modify",
+  "food": "Recipe",
   "admin": "Admin",
   "links": "Links",
 
-  "login":"Login",
-  "logout":"Logout",
-  "wait":"Please wait...",
-  "error":"Error",
-  "close":"Close"
+  "login": "Login",
+  "logout": "Logout",
+  "wait": "Please wait...",
+  "error": "Error",
+  "close": "Close"
 }
