@@ -90,7 +90,7 @@
     </v-row>
     <!-- Dialog1: Wait for login response -->
     <v-dialog v-model="isLoading" hide-overlay persistent>
-      <v-card color="primary">
+      <v-card color="background">
         <v-card-text>
           Please wait...
           <v-progress-linear class="mb-0" color="white" indeterminate></v-progress-linear>

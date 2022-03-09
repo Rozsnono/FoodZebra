@@ -47,7 +47,7 @@
   const show = ref(true);
 
   onMounted(() => {
-    receiptStore.fetchPosts();
+    receiptStore.fetchReceipt();
   });
 
   function Reload() {

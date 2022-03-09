@@ -10,7 +10,7 @@ const show = ref(true);
 const showDetail = ref(false);
 const showConfirmDelete = ref(false);
 const showConfirm = ref(false);
-
+const showError = ref(false);
 
 const title = ref("");
 
@@ -39,22 +39,26 @@ function confirm() {
   emit("reload");
 }
 
-function confirmDeletePost() {
+async function confirmDeletePost() {
   if (resultConfirm.value) {
-    ReceiptStore.deleteReceiptById({
+    await ReceiptStore.deleteReceiptById({
       _id: receipt._id,
     });
-
+    let ok = await ReceiptStore.getCode;
     show.value = false;
-    title.value = "Successful delete";
-    showConfirm.value = true;
+    console.log(ok);
+    if (ok != 200) {
+      showError.value = true;
+    } else {
+      showConfirm.value = true;
+    }
   } else {
     showConfirmDelete.value = false;
   }
 }
 
 function showEdit() {
-  emit("modify",props.item);
+  emit("modify", props.item);
 }
 </script>
 
@@ -114,7 +118,18 @@ function showEdit() {
     @close="confirm"
   />
 
-  
+  <ConfirmDialog
+      v-if="showError"
+      v-model="showError"
+      v-model:result="resultConfirm"
+      :retain-focus="false"
+      title="Opss.."
+      okBtn="OK"
+      :justAccept="true"
+      message="Something went wrong!"
+      @close="confirm"
+      color="danger"
+    />
 </template>
 <style scoped>
 .card {

@@ -9,6 +9,7 @@ const Categories = ref([]);
 const load = ref(false);
 
 const reload = ref(0);
+const isLoading = ref(false);
 
 const offset = ref(0);
 const onePage = ref(12);
@@ -22,6 +23,7 @@ const catValue = ref("");
 const name = ref("");
 
 async function Loading() {
+  isLoading.value = true;
   reload.value += 1;
   offset.value = (currentPage.value - 1) * onePage.value;
   await receiptStore.fetchPaginatedReceipt({
@@ -37,6 +39,7 @@ async function Loading() {
   console.log(onePage.value);
   console.log(pages.value);
   load.value = true;
+  isLoading.value = false;
   return load;
 }
 
@@ -87,6 +90,14 @@ function setPage(v) {
       </v-col>
     </v-row>
   </v-container>
+  <v-dialog v-model="isLoading" hide-overlay persistent>
+    <v-card color="background">
+      <v-card-text>
+        Please wait...
+        <v-progress-linear class="mb-0" color="white" indeterminate></v-progress-linear>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>

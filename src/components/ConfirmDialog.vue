@@ -46,6 +46,10 @@
       type: Boolean,
       required: false,
     },
+    color: {
+      type: String,
+      required: false,
+    },
   });
   const emit = defineEmits(["update:modelValue", "update:result", "close", "resultData"]);
 
@@ -91,7 +95,7 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="show" persistent :retain-focus="false" transition="fab-transition">
-      <v-card>
+      <v-card :color="props.color">
         <v-card-title class="text-h5">{{ title }}</v-card-title>
         <v-card-text v-if="message != 'rating'">{{ message }}</v-card-text>
         <rate v-if="message == 'rating'" @rating="addRating" :justShow="true" />
