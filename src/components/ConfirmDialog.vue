@@ -78,7 +78,7 @@
     show.value = false;
     emit("resultData", rating.value);
     emit("close");
-    console.log(rating.value);
+
   }
 
   function pressCancel() {

@@ -41,7 +41,6 @@
   const content = ref("");
 
   const recipe = props.item;
-  console.log(recipe);
 
   const showConfirmSave = ref(false);
   const showConfirmClose = ref(false);

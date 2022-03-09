@@ -50,7 +50,7 @@ export const useUsersStore = defineStore({
         })
         .then((res) => {
           this.loggedUser = res.data;
-          sessionStorage.setItem("currentUser", this.loggedUser?._id);
+          sessionStorage.setItem("currentUser", [this.loggedUser?._id,this.loggedUser?.name,this.loggedUser?.email]);
           this.loading = false;
         })
         .catch(() => {
@@ -67,7 +67,7 @@ export const useUsersStore = defineStore({
           if (res && res.data) {
             this.user = res.data;
           }
-          console.log(this.user);
+
           return this.user;
         })
         .catch((error) => {
@@ -76,7 +76,7 @@ export const useUsersStore = defineStore({
           return { hiba: error };
         })
         .then((noterror) => {
-          console.log("asd");
+  
           return {};
         });
     },

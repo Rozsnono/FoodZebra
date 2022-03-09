@@ -27,7 +27,6 @@
 
   function showDetails(id) {
     return "/recipe/" + id;
-    console.log(id);
   }
 
   function closeDetails() {
@@ -46,7 +45,6 @@
       });
       let ok = await RecipeStore.getCode;
       show.value = false;
-      console.log(ok);
       if (ok != 200) {
         showError.value = true;
       } else {

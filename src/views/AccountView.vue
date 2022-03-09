@@ -22,6 +22,7 @@ const usersStore = useUsersStore();
 
 const anyLoggedUser = computed(() => (usersStore.getLoggedUser ? true : false));
 const isLoading = computed(() => usersStore.getLoading);
+console.log(isLoading);
 const errorMsg = computed(() => usersStore.getErrorMsg);
 const isErrorMsg = computed(() => usersStore.getErrorMsg != "");
 
@@ -43,18 +44,19 @@ let { locale, t } = useI18n({
 </script>
 
 <template>
-  <v-container fluid>
+  <v-container fluid style="min-height:90vh;">
     <v-row justify="center">
       <v-col md="4" sm="8" xs="12">
         <v-card class="elevation-12">
           <v-card-title v-if="!anyLoggedUser">
-            {{ t("login") }} form
+            Login form
             <v-icon>mdi-login</v-icon>
           </v-card-title>
           <v-card-title v-else>
-            {{ t("logout") }} form
+            Logout form
             <v-icon>mdi-logout</v-icon>
           </v-card-title>
+          <v-divider></v-divider>
           <v-card-text>
             <v-form>
               <v-text-field
@@ -119,7 +121,4 @@ let { locale, t } = useI18n({
 </template>
 
 <style scoped>
-.v-card-title {
-  background-color: lightgray;
-}
 </style>

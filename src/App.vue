@@ -26,7 +26,6 @@
   const themeForApp = ref("light");
 
   const loggedUser = computed(() => usersStore.getLoggedUser);
-  console.log(loggedUser);
   const notLoggedIn = computed(() => usersStore.getLoggedUser == null);
 
   let { locale, t } = useI18n({
