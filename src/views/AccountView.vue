@@ -119,6 +119,3 @@ let { locale, t } = useI18n({
     </v-dialog>
   </v-container>
 </template>
-
-<style scoped>
-</style>

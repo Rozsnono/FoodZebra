@@ -5,15 +5,18 @@ import { ref } from "vue";
 const version = ref(5);
 const recipeStore = useRecipeStore();
 const allRecipe = ref([]);
-
+const isLoading = ref(false);
 const noR = ref(0);
 const empty = ref(false);
 
 async function Loading() {
+  isLoading.value = true;
   await recipeStore.fetchPaginatedRecipe({
     offset: 0,
     limit: "3",
     keyword: "",
+    order: "1",
+    sort: "1"
   });
   allRecipe.value = recipeStore.getPaginatedRecipe;
 
@@ -23,6 +26,7 @@ async function Loading() {
   } else {
     empty.value = false;
   }
+  isLoading.value = false;
   return true;
 }
 </script>
@@ -32,6 +36,14 @@ async function Loading() {
     <h5 class="slogan">Where your favourite recipes'll find you</h5>
     <v-divider></v-divider>
     <h5 class="rTitle">Newest recipes:</h5>
+    <v-dialog v-model="isLoading" hide-overlay persistent>
+      <v-card color="background">
+        <v-card-text>
+          Please wait...
+          <v-progress-linear class="mb-0" color="white" indeterminate></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-container>
       <v-row :key="reload" v-if="Loading()" class="rows">
         <v-alert v-if="empty" color="red lighten-2" dark class="mb-5 mt-5">

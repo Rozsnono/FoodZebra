@@ -156,7 +156,7 @@ function confirm() {
           accept="image/*"
           truncate-length="15"
           @change="Tobase64($event)"
-          label="Picture"
+          label="Picture (max. 50 Kb)"
           prepend-icon="mdi-panorama-variant-outline"
         ></v-file-input>
       </v-col>

@@ -33,6 +33,7 @@ async function Loading() {
     offset: offset.value,
     limit: onePage.value.toString(),
     keyword: name.value,
+    sort: '1',
   });
   noR.value = recipeStore.getNumberOfRecipe;
   if (noR.value === 0) {
