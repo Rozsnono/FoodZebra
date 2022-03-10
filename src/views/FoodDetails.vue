@@ -57,8 +57,9 @@ const rate = ref(0);
 async function Loading() {
   await recipeStore.getRecipeById(router.params.id.toString());
   recipe.value = recipeStore.getOneRecipe;
-
+  console.log(recipe.value);
   load.value = true;
+  rerender.value += 1;
   return load;
 }
 
@@ -115,7 +116,6 @@ async function confirmRate() {
     } else {
       showConfirm.value = true;
       Loading();
-      rerender.value += 1;
     }
     show.value = false;
   } else {
@@ -125,7 +125,7 @@ async function confirmRate() {
 </script>
 
 <template>
-  <v-container v-if="Loading()" class="popup" :key="rerender">
+  <v-container v-if="Loading()" class="popup">
     <ConfirmDialog
       v-if="showConfirmRate"
       v-model="showConfirmRate"
@@ -162,9 +162,11 @@ async function confirmRate() {
       message="You have rated this recipe!"
       @close="confirm"
     />
-    <v-row>
+    <v-row :key="rerender">
       <v-col cols="12" sm="12">
-        <v-img alt="Food" class="img" :src="picToBase64(recipe.pic)"></v-img>
+        <div class="imgDiv">
+          <v-img alt="Food" class="img-in" :src="picToBase64(recipe.pic)"></v-img>
+        </div>
       </v-col>
       <v-col cols="12" sm="12">
         <div class="name">
@@ -175,14 +177,8 @@ async function confirmRate() {
         </div>
       </v-col>
       <div class="rating">
-        <v-rating
-          v-model="recipe.rate"
-          background-color="yellow lighten-3"
-          class="ratingStars"
-          color="yellow"
-          large
-          readonly
-        ></v-rating>
+        <rating :rating="recipe.rate" :onlyStar="false"></rating>
+
         <v-btn color="yellow lighten-2" text @click="ShowRate()">Rating</v-btn>
       </div>
 
@@ -242,15 +238,29 @@ async function confirmRate() {
   text-align: justify;
   margin-top: 3rem;
 }
-.img {
-  width: 30%;
+.imgDiv {
+  width: 80%;
+  height: 20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   margin: auto;
+  margin-bottom: 1rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  box-shadow: 1px 1px 10px 2px black;
+}
+
+.img-in {
+  width: 100%;
+  flex-shrink: 0;
 }
 
 @media only screen and (max-width: 600px) {
-  .img {
+  .img-in {
     margin: auto;
-    width: 50%;
+    width: 60%;
   }
 }
 .icon {
@@ -272,10 +282,10 @@ async function confirmRate() {
 .rating {
   display: flex;
   justify-content: center;
-  margin-left: 2rem;
+  margin-bottom: 1rem;
 
   .v-btn {
-    margin: 0.3rem;
+    margin: 0.8rem;
   }
 }
 
