@@ -67,9 +67,9 @@ function showEdit() {
     :to="props.isModify ? '' : showDetails(item._id)"
     v-if="!showConfirmEdit"
   >
-    <v-img class="img">
+    <div class="img-div">
       <v-img class="img-in" :src="picToBase64(item.pic)"></v-img>
-    </v-img>
+    </div>
 
     <v-card-title class="title">{{ item.name }}</v-card-title>
 
@@ -142,7 +142,7 @@ function showEdit() {
   font-size: 1.5rem;
   letter-spacing: 0.1rem;
 }
-.img {
+.img-div {
   width: 80%;
   height: 10rem;
   display: flex;
@@ -157,8 +157,8 @@ function showEdit() {
 }
 
 .img-in {
-  min-width: 100%;
-  min-height: 100%;
+  min-width: 20rem;
+  min-height: 16rem;
   flex-shrink: 0;
 }
 

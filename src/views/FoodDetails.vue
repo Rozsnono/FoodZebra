@@ -172,9 +172,6 @@ async function confirmRate() {
         <div class="name">
           {{ recipe.name }}
         </div>
-        <div class="type">
-          <v-chip>{{ recipe.type }}</v-chip>
-        </div>
       </v-col>
       <div class="rating">
         <rating :rating="recipe.rate" :onlyStar="false"></rating>
@@ -183,6 +180,7 @@ async function confirmRate() {
       </div>
 
       <v-divider></v-divider>
+
       <v-col class="icon" cols="12" lg="4" sm="12">
         <v-icon class="in-icon">mdi-clock</v-icon>
         <div class="in-text">{{ recipe.time }} min</div>
@@ -196,6 +194,9 @@ async function confirmRate() {
         <div class="in-text">{{ difficult(recipe.difficulty) }}</div>
       </v-col>
       <v-divider></v-divider>
+      <v-col cols="12" md="1">
+        <p class="type">{{ recipe.type }}</p>
+      </v-col>
       <v-col cols="12" md="5" sm="12">
         <h2 class="i-title">Description</h2>
         <p class="description">
@@ -229,10 +230,12 @@ async function confirmRate() {
   margin: 2rem;
   font-size: 2rem;
 }
-.type {
-  float: right;
-  margin: 2rem;
-  font-size: 2rem;
+.type { 
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  background-color: #00000020;
+  border-radius: 1rem;
+  padding: 0.3rem;
 }
 .description {
   text-align: justify;
