@@ -278,7 +278,7 @@ function confirm() {
 
 <style scoped>
 .card {
-  width: 80rem !important;
+  /* width: 80rem !important; */
   background-color: #00000030;
   border-radius: 2rem;
   padding: 2rem;
