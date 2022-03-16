@@ -1,127 +1,127 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import {
-  VBtn,
-  VCard,
-  VCardActions,
-  VCardTitle,
-  VDialog,
-  VRow,
-  VSpacer,
-  VTextarea,
-  VTextField,
-} from "vuetify/components";
-import rating from "../components/Rating.vue";
-import { useRecipeStore } from "../store/recipeStore";
-import { useRoute } from "vue-router";
-import ConfirmDialog from "../components/ConfirmDialog.vue";
+  import { computed, ref } from "vue";
+  import {
+    VBtn,
+    VCard,
+    VCardActions,
+    VCardTitle,
+    VDialog,
+    VRow,
+    VSpacer,
+    VTextarea,
+    VTextField,
+  } from "vuetify/components";
+  import rating from "../components/Rating.vue";
+  import { useRecipeStore } from "../store/recipeStore";
+  import { useRoute } from "vue-router";
+  import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-const recipeStore = useRecipeStore();
+  const recipeStore = useRecipeStore();
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-    required: true,
-  },
-  item: {
-    type: String,
-    required: true,
-  },
-});
+  const props = defineProps({
+    modelValue: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    item: {
+      type: String,
+      required: true,
+    },
+  });
 
-const router = useRoute();
-const emit = defineEmits(["close"]);
+  const router = useRoute();
+  const emit = defineEmits(["close"]);
 
-const show = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value: boolean) {},
-});
+  const show = computed({
+    get() {
+      return props.modelValue;
+    },
+    set(value: boolean) {},
+  });
 
-const load = ref(false);
-const recipe = ref({});
+  const load = ref(false);
+  const recipe = ref({});
 
-const showDetail = ref(false);
-const showConfirmRate = ref(false);
-const resultConfirm = ref(false);
+  const showDetail = ref(false);
+  const showConfirmRate = ref(false);
+  const resultConfirm = ref(false);
 
-const showConfirm = ref(false);
-const showError = ref(false);
+  const showConfirm = ref(false);
+  const showError = ref(false);
 
-const rerender = ref(0);
+  const rerender = ref(0);
 
-const rate = ref(0);
+  const rate = ref(0);
 
-async function Loading() {
-  await recipeStore.getRecipeById(router.params.id.toString());
-  recipe.value = recipeStore.getOneRecipe;
-  console.log(recipe.value);
-  load.value = true;
-  rerender.value += 1;
-  return load;
-}
-
-function picToBase64(code) {
-  return "data:image/png;base64," + code;
-}
-
-function difficult(dif: string): string {
-  switch (dif) {
-    case 1:
-      return "Very easy";
-      break;
-    case 2:
-      return "Easy";
-      break;
-    case 3:
-      return "Medium";
-      break;
-    case 4:
-      return "Hard";
-      break;
-    case 5:
-      return "Really hard";
-      break;
-    default:
-      return "Impossible";
-      break;
+  async function Loading() {
+    await recipeStore.getRecipeById(router.params.id.toString());
+    recipe.value = recipeStore.getOneRecipe;
+    console.log(recipe.value);
+    load.value = true;
+    rerender.value += 1;
+    return load;
   }
-}
 
-function ShowRate() {
-  showConfirmRate.value = true;
-}
+  function picToBase64(code) {
+    return "data:image/png;base64," + code;
+  }
 
-function getRating(v) {
-  rate.value = v;
-}
-
-function recipeRateCounter(plusRate: number) {
-  return recipe.value == 0
-    ? plusRate
-    : (recipe.value.rate == null ? 0 : recipe.value.rate + plusRate) / 2;
-}
-
-async function confirmRate() {
-  if (resultConfirm.value) {
-    await recipeStore.ratingRecipe({
-      _id: recipe.value._id,
-      rate: recipeRateCounter(rate.value),
-    });
-    let ok = await recipeStore.getCode;
-    if (ok !== 200) {
-      showError.value = true;
-    } else {
-      showConfirm.value = true;
-      Loading();
+  function difficult(dif: string): string {
+    switch (dif) {
+      case 1:
+        return "Very easy";
+        break;
+      case 2:
+        return "Easy";
+        break;
+      case 3:
+        return "Medium";
+        break;
+      case 4:
+        return "Hard";
+        break;
+      case 5:
+        return "Really hard";
+        break;
+      default:
+        return "Impossible";
+        break;
     }
-    show.value = false;
-  } else {
-    showConfirmRate.value = false;
   }
-}
+
+  function ShowRate() {
+    showConfirmRate.value = true;
+  }
+
+  function getRating(v) {
+    rate.value = v;
+  }
+
+  function recipeRateCounter(plusRate: number) {
+    return recipe.value == 0
+      ? plusRate
+      : (recipe.value.rate == null ? 0 : recipe.value.rate + plusRate) / 2;
+  }
+
+  async function confirmRate() {
+    if (resultConfirm.value) {
+      await recipeStore.ratingRecipe({
+        _id: recipe.value._id,
+        rate: recipeRateCounter(rate.value),
+      });
+      let ok = await recipeStore.getCode;
+      if (ok !== 200) {
+        showError.value = true;
+      } else {
+        showConfirm.value = true;
+        Loading();
+      }
+      show.value = false;
+    } else {
+      showConfirmRate.value = false;
+    }
+  }
 </script>
 
 <template>
@@ -165,7 +165,8 @@ async function confirmRate() {
     <v-row :key="rerender">
       <v-col cols="12" sm="12">
         <div class="imgDiv">
-          <v-img alt="Food" class="img-in" :src="picToBase64(recipe.pic)"></v-img>
+          <!-- <v-img alt="Food" class="img-in" :src="picToBase64(recipe.pic)"></v-img>  -->
+          <img :src="picToBase64(recipe.pic)" alt="Food" class="img-in" />
         </div>
       </v-col>
       <v-col cols="12" sm="12">
@@ -216,96 +217,96 @@ async function confirmRate() {
   </v-container>
 </template>
 <style scoped lang="scss">
-.popup {
-  background-color: #00000020;
-  border-radius: 2rem;
-  padding: 2rem;
-  width: 100%;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
-    sans-serif;
-}
-
-.name {
-  float: left;
-  margin: 2rem;
-  font-size: 2rem;
-}
-.type { 
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  background-color: #00000020;
-  border-radius: 1rem;
-  padding: 0.3rem;
-}
-.description {
-  text-align: justify;
-  margin-top: 3rem;
-}
-.imgDiv {
-  width: 80%;
-  height: 20rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  margin: auto;
-  margin-bottom: 1rem;
-  border: 1px solid black;
-  border-radius: 1rem;
-  box-shadow: 1px 1px 10px 2px black;
-}
-
-.img-in {
-  width: 100%;
-  flex-shrink: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  .img-in {
-    margin: auto;
-    width: 60%;
+  .popup {
+    background-color: #00000020;
+    border-radius: 2rem;
+    padding: 2rem;
+    width: 100%;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
+      sans-serif;
   }
-}
-.icon {
-  font-size: 3rem;
-  justify-content: center;
-  display: flex;
-  .in-text {
+
+  .name {
+    float: left;
+    margin: 2rem;
     font-size: 2rem;
+  }
+  .type {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    background-color: #00000020;
+    border-radius: 1rem;
+    padding: 0.3rem;
+  }
+  .description {
+    text-align: justify;
+    margin-top: 3rem;
+  }
+  .imgDiv {
+    width: 80%;
+    height: 20rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: auto;
-    margin-left: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 1px solid black;
+    border-radius: 1rem;
+    box-shadow: 1px 1px 10px 2px black;
+    background-color: #00000070;
   }
-}
-.ratingStars {
-}
-.i-title {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.rating {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
 
-  .v-btn {
-    margin: 0.8rem;
+  .img-in {
+    width: 100%;
   }
-}
 
-.card {
-  position: absolute;
-  top: -0rem;
-  left: -30rem;
-  width: 80rem;
-  margin: auto;
-}
-.end {
-  float: right;
-  text-align: end;
-  display: flex;
-  justify-content: end;
-  position: absolute;
-  right: 0;
-  margin-right: 1rem;
-}
+  @media only screen and (max-width: 600px) {
+    .img-in {
+      margin: auto;
+      width: 60%;
+    }
+  }
+  .icon {
+    font-size: 3rem;
+    justify-content: center;
+    display: flex;
+    .in-text {
+      font-size: 2rem;
+      margin: auto;
+      margin-left: 0.5rem;
+    }
+  }
+  .ratingStars {
+  }
+  .i-title {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .rating {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+
+    .v-btn {
+      margin: 0.8rem;
+    }
+  }
+
+  .card {
+    position: absolute;
+    top: -0rem;
+    left: -30rem;
+    width: 80rem;
+    margin: auto;
+  }
+  .end {
+    float: right;
+    text-align: end;
+    display: flex;
+    justify-content: end;
+    position: absolute;
+    right: 0;
+    margin-right: 1rem;
+  }
 </style>
