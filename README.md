@@ -18,3 +18,7 @@ A weboldal azért jött létre, hogy a főzés iránt érdeklődő emberek megtu
 ## Heroku
 
 <https://foodzebra2.herokuapp.com/>
+
+##Netlify
+
+<https://62385fa42035230008f160f0--foodzebra.netlify.app/>
