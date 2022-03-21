@@ -20,8 +20,10 @@ const props = defineProps({
 });
 
 const maxStars = 5;
-const stars = ref(props.rating);
-if (props.rating % 1 > 0.8) {
+const stars = ref(props.rating ? props.rating : 0);
+const propRating = ref(props.rating ? props.rating : 0);
+
+if (propRating.value % 1 > 0.8) {
   stars.value += 1;
 }
 const rateable = ref(props.justShow);

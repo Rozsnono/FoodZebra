@@ -59,7 +59,7 @@ async function confirmSaveRecipe() {
       difficulty: difficulty.value,
       pic: image.value,
       rate: rate.value,
-      author: userID.value,
+      author: userID.value ? userID.value : "",
       ingredients: ingredients.value.split("\n"),
       _id: "",
     });
