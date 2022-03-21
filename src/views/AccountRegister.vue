@@ -25,6 +25,8 @@
 
   const errorMsg = computed(() => usersStore.getErrorMsg);
   const isErrorMsg = computed(() => usersStore.getErrorMsg != "");
+  const errorMsg2 = ref("");
+  const isError = ref(false);
 
   const email = ref("");
   const name = ref("");
@@ -42,6 +44,20 @@
       setImage(reader.result?.toString().split(",")[1]);
     };
     reader.readAsDataURL(selected);
+  }
+
+  function register() {
+    if (email.value && name.value && password.value && picture.value) {
+      usersStore.UserRegister({
+        email: email.value,
+        password: password.value,
+        name: name.value,
+        picture: picture.value,
+      });
+    } else {
+      errorMsg2.value = "Not enough data";
+      isError.value = true;
+    }
   }
 </script>
 
@@ -98,21 +114,8 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              v-if="!anyLoggedUser"
-              color="success"
-              @click="
-                usersStore.UserRegister({
-                  email: email,
-                  password: password,
-                  name: name,
-                  picture: picture,
-                })
-              "
-            >
-              Register
-            </v-btn>
-            <v-btn v-else class="mt-3" color="warning" @click="usersStore.logOut()">Logout</v-btn>
+            <v-btn color="success" @click="register()">Register</v-btn>
+            <v-btn color="warning" to="/account">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -133,6 +136,15 @@
         <v-card-text>{{ errorMsg }}</v-card-text>
         <v-card-actions>
           <v-btn color="primary" text @click="usersStore.clearErrorMsg()">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="isError">
+      <v-card>
+        <v-card-title>Error</v-card-title>
+        <v-card-text>{{ errorMsg2 }}</v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="isError = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

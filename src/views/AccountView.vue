@@ -32,8 +32,8 @@
   }
 
   const r = reactive<IReactiveData>({
-    email: "user@user.com",
-    password: "user",
+    email: "",
+    password: "",
   });
 </script>
 
@@ -56,7 +56,7 @@
               <v-text-field
                 v-model="r.email"
                 :disabled="anyLoggedUser"
-                :label="anyLoggedUser ? 'Logged user´s email' : 'E-mail'"
+                :label="anyLoggedUser ? 'User logged in' : 'E-mail'"
                 name="login"
                 type="text"
               ></v-text-field>
@@ -85,9 +85,10 @@
             >
               Login
             </v-btn>
+            <v-btn v-if="!anyLoggedUser" color="info" to="/register">Register</v-btn>
             <v-btn v-else class="mt-3" color="warning" @click="usersStore.logOut()">Logout</v-btn>
           </v-card-actions>
-          <v-btn to="/register">Register</v-btn>
+          
         </v-card>
       </v-col>
     </v-row>

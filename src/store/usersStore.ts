@@ -74,6 +74,7 @@ export const useUsersStore = defineStore({
         })
         .then((res) => {
           console.log(res);
+          this.loading = false;
         })
         .catch(() => {
           this.loggedUser = null;

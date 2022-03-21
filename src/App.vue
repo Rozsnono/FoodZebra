@@ -89,6 +89,9 @@
       if (e.name != "") e.text = t(e.name);
     });
   }
+  function picToBase64(code) {
+    return "data:image/png;base64," + code;
+  }
 </script>
 
 <template>
@@ -96,9 +99,7 @@
     <v-navigation-drawer drawer v-model="drawer" app :color="'primary'" dark>
       <v-system-bar></v-system-bar>
       <v-list :color="'primary'" dark>
-        <v-list-item prepend-avatar="../src/assets/logo.png">
-
-        </v-list-item>
+        <v-list-item :prepend-avatar="picToBase64(loggedUser?.picture)"></v-list-item>
 
         <v-list-item link to="/account">
           <v-list-item-content>
@@ -168,7 +169,7 @@
 
 <style>
   #app {
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
 
   .dark {

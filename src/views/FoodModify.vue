@@ -26,7 +26,7 @@
     tmpUser = sessionStorage.getItem("currentUser") as string;
     user = tmpUser.split(",");
 
-    if (user[1] == "admin") {
+    if (user[2] == "admin@admin.com") {
       allRecipe.value = recipeStore.getRecipe as [];
     } else {
       await recipeStore.auhtorRecipe(user[0]);
