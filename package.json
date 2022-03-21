@@ -1,5 +1,5 @@
 {
-  "name": "jedlik-vite-ts-tamplate",
+  "name": "foodZebra",
   "version": "0.0.1",
   "scripts": {
     "dev": "vite --port 8080 --open",
