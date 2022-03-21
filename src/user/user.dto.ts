@@ -9,4 +9,7 @@ export default class CreateUserDto {
 
     @IsString()
     public password: string;
+
+    @IsString()
+    public picture: string;
 }

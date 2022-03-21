@@ -6,6 +6,7 @@ const userSchema = new Schema<User>(
         email: String,
         name: String,
         password: String,
+        picture: String,
     },
     { versionKey: false },
 );
