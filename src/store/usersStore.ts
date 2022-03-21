@@ -50,7 +50,10 @@ export const useUsersStore = defineStore({
         })
         .then((res) => {
           this.loggedUser = res.data;
-          sessionStorage.setItem("currentUser", [this.loggedUser?._id,this.loggedUser?.name,this.loggedUser?.email]);
+          sessionStorage.setItem(
+            "currentUser",
+            this.loggedUser?._id + "," + this.loggedUser?.name + "," + this.loggedUser?.email + ","
+          );
           this.loading = false;
         })
         .catch(() => {
@@ -59,7 +62,7 @@ export const useUsersStore = defineStore({
           this.errorMsg = "Error on Authentication";
         });
     },
-    async getUserById(params: string): Promise<Object | any> {
+    async getUserById(params: string): Promise<object | any> {
       this.loading = true;
       await $axios
         .get(`users/${params}`)
@@ -76,7 +79,7 @@ export const useUsersStore = defineStore({
           return { hiba: error };
         })
         .then((noterror) => {
-  
+          console.log(noterror);
           return {};
         });
     },

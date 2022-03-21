@@ -36,18 +36,22 @@
     },
     result: {
       type: Boolean,
+      default: true,
       required: true,
     },
     resultData: {
       type: Number,
+      default: 200,
       required: true,
     },
     justAccept: {
       type: Boolean,
+      default: false,
       required: false,
     },
     color: {
       type: String,
+      default: "Green",
       required: false,
     },
   });
@@ -78,7 +82,6 @@
     show.value = false;
     emit("resultData", rating.value);
     emit("close");
-
   }
 
   function pressCancel() {
@@ -98,11 +101,17 @@
       <v-card :color="props.color">
         <v-card-title class="text-h5">{{ title }}</v-card-title>
         <v-card-text v-if="message != 'rating'">{{ message }}</v-card-text>
-        <rate v-if="message == 'rating'" @rating="addRating" :justShow="true" />
+        <rate
+          v-if="message == 'rating'"
+          :justShow="true"
+          onlyStar="false"
+          title=""
+          @rating="addRating"
+        />
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green-lighten-3" @click="pressOk">{{ okBtn }}</v-btn>
-          <v-btn color="red-lighten-3" @click="pressCancel" v-if="!props.justAccept">
+          <v-btn color="red-lighten-3" v-if="!props.justAccept" @click="pressCancel">
             {{ cancelBtn }}
           </v-btn>
         </v-card-actions>
