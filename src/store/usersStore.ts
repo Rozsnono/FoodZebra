@@ -6,6 +6,7 @@ interface IUser {
   email?: string;
   name?: string;
   password?: string;
+  picture?: string;
 }
 
 interface IState {
@@ -60,6 +61,24 @@ export const useUsersStore = defineStore({
           this.loggedUser = null;
           this.loading = false;
           this.errorMsg = "Error on Authentication";
+        });
+    },
+    async UserRegister(params: IUser): Promise<void> {
+      this.loading = true;
+      $axios
+        .post("auth/register", {
+          name: params.name,
+          email: params.email,
+          password: params.password,
+          picture: params.picture,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch(() => {
+          this.loggedUser = null;
+          this.loading = false;
+          this.errorMsg = "Error on Registration";
         });
     },
     async getUserById(params: string): Promise<object | any> {
