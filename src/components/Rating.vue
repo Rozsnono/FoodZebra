@@ -21,7 +21,6 @@ const props = defineProps({
 
 const maxStars = 5;
 const stars = ref(props.rating);
-console.log(props.rating);
 if (props.rating % 1 > 0.8) {
   stars.value += 1;
 }
@@ -69,7 +68,8 @@ function Rating(i) {
   align-items: center;
   padding: 1rem;
 
-  background-color: #00000000 !important;
+  background-color: #ffffff08 !important;
+  border-bottom: 1px solid;
   border-radius: 8px;
   box-shadow: 0 6px 33px rgba(19, 18, 18, 0.09);
   .list {

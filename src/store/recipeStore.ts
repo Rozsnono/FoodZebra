@@ -145,7 +145,7 @@ export const useRecipeStore = defineStore({
     async editRecipeById(params: IEditParams): Promise<void> {
       this.loading = true;
       this.code = 0;
-      $axios
+      await $axios
         .patch(`recipe/${params._id}`, {
           name: params.name,
           type: params.type,
@@ -159,9 +159,6 @@ export const useRecipeStore = defineStore({
           ingredients: params.ingredients,
         })
         .then((res) => {
-          if (res && res.data) {
-
-          }
           this.loading = false;
           this.code = 200;
         })

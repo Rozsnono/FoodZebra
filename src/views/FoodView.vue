@@ -3,58 +3,70 @@ import { computed, onMounted, ref } from "vue";
 import { VContainer } from "vuetify/components";
 import { useRecipeStore } from "../store/recipeStore";
 import card from "../components/FoodCard.vue";
+import { watch } from "vue";
 
-const onePages = ref(["12", "20", "32", "48"]);
-const Categories = ref([]);
-const load = ref(false);
+const limits = ref(["12", "20", "28", "36"]);
+const limit = ref("12");
+
+watch(limit, function () {
+  Loading();
+});
 
 const reload = ref(0);
 const isLoading = ref(false);
+const load = ref(false);
 
 const offset = ref(0);
-const onePage = ref(12);
 
 const allRecipe = ref([]);
 const pages = ref([]);
 const currentPage = ref(1);
 const recipeStore = useRecipeStore();
-const catValue = ref("");
 
 const name = ref("");
 
-const noR = ref(0);
+const numberOfRecipes = ref(0);
 const empty = ref(false);
 
-async function Loading() {
+function Loading() {
   isLoading.value = true;
-  reload.value += 1;
-  offset.value = (currentPage.value - 1) * onePage.value;
+
+  offset.value = (currentPage.value - 1) * limit.value;
+
+  doSearch(offset.value, limit.value.toString(), name.value);
+}
+
+async function doSearch(
+  offset: number,
+  limit: string,
+  keyword: string,
+  sort: string = "asc",
+  order: string = "1"
+) {
   await recipeStore.fetchPaginatedRecipe({
-    offset: offset.value,
-    limit: onePage.value.toString(),
-    keyword: name.value,
-    sort: '1',
+    offset: offset,
+    limit: limit,
+    keyword: keyword,
+    sort: sort,
+    order: order,
   });
-  noR.value = recipeStore.getNumberOfRecipe;
-  if (noR.value === 0) {
+  allRecipe.value = recipeStore.getPaginatedRecipe;
+  pages.value =
+    parseInt(
+      (recipeStore.getNumberOfRecipe ? recipeStore.getNumberOfRecipe : 0) / parseInt(limit)
+    ) + 1;
+  numberOfRecipes.value = recipeStore.getNumberOfRecipe;
+  if (numberOfRecipes.value === 0) {
     empty.value = true;
   } else {
     empty.value = false;
   }
-  allRecipe.value = recipeStore.getPaginatedRecipe;
-  pages.value =
-    parseInt((recipeStore.getNumberOfRecipe ? recipeStore.getNumberOfRecipe : 0) / onePage.value) +
-    1;
-
   load.value = true;
   isLoading.value = false;
-  return load;
+  reload.value += 1;
 }
 
-// const allRecipe = computed(() => recipeStore.getRecipe);
-
 const show = ref(true);
-
 onMounted(() => {
   Loading();
 });
@@ -72,20 +84,21 @@ onMounted(() => {
           prepend-icon="mdi-magnify"
         ></v-text-field>
       </v-col>
+      <v-col cols="12" lg="3" sm="12">
+        <v-btn depressed color="success" class="btn" @click="Loading">Search</v-btn>
+      </v-col>
+      <v-col cols="12" lg="1" sm="0"></v-col>
       <v-col cols="12" lg="2" sm="12">
         <v-select
-          :items="onePages"
-          v-model="onePage"
+          :items="limits"
+          v-model="limit"
           filled
           label="On one page"
           prepend-icon="mdi-book-open-page-variant-outline"
         ></v-select>
       </v-col>
-      <v-col cols="12" lg="3" sm="12">
-        <v-btn depressed color="success" class="btn" @click="Loading">Search</v-btn>
-      </v-col>
 
-      <v-col cols="12" lg="4" sm="12">
+      <v-col cols="12" lg="3" sm="12">
         <v-pagination v-model="currentPage" :length="pages" circle @click="Loading"></v-pagination>
       </v-col>
     </v-row>
@@ -114,9 +127,8 @@ onMounted(() => {
   margin: auto;
   margin-top: 0.5rem;
 }
-.rows{
+.rows {
   display: flex;
   justify-content: center;
 }
-
 </style>

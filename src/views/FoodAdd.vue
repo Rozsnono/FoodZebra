@@ -19,7 +19,7 @@ const difficulty = ref(props.item ? props.item.difficulty : "");
 const rate = ref(props.item ? props.item.rate : 0);
 const image = ref(props.item ? props.item.pic : "");
 const ingredients = ref(props.item ? props.item.ingredients.join("\n") : "");
-const userID = ref(sessionStorage.getItem("currentUser")?.split(',')[0]);
+const userID = ref(sessionStorage.getItem("currentUser")?.split(",")[0]);
 
 const setImage = (img) => {
   image.value = img;
@@ -77,7 +77,7 @@ async function confirmSaveRecipe() {
 
 async function confirmEditRecipe() {
   if (resultConfirm.value) {
-    recipeStore.editRecipeById({
+    await recipeStore.editRecipeById({
       name: name.value,
       type: type.value,
       description: description.value,
@@ -90,7 +90,8 @@ async function confirmEditRecipe() {
       ingredients: ingredients.value.split("\n"),
       _id: props.item._id,
     });
-    let ok = await recipeStore.getCode;
+    const ok = recipeStore.getCode;
+
     if (ok != 200) {
       showError.value = true;
     } else {
@@ -112,12 +113,6 @@ function Tobase64(event) {
   reader.readAsDataURL(selected);
 }
 
-function ChoosePriceRate(value) {
-  setPrice(value);
-}
-function ChooseServingRate(value) {
-  setServing(value);
-}
 function ChooseDifficultyRate(value) {
   setDifficulty(value);
 }
@@ -179,32 +174,13 @@ function confirm() {
           shaped
         ></v-textarea>
       </v-col>
-      <v-col cols="12" sm="12" lg="6">
+      <v-col cols="12" sm="12" lg="4">
         <v-text-field
           v-model="energy"
           class="inputs"
           label="Energy"
           prepend-icon="mdi-lightning-bolt-circle"
         ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="12" lg="6">
-        <v-text-field
-          v-model="time"
-          class="inputs"
-          label="Time"
-          prepend-icon="mdi-clock-time-five"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="12" lg="4">
-        <rating title="Price" @rating="ChoosePriceRate" :rating="price" :justShow="true"></rating>
-      </v-col>
-      <v-col cols="12" sm="12" lg="4">
-        <rating
-          title="Serving"
-          @rating="ChooseServingRate"
-          :rating="serving"
-          :justShow="true"
-        ></rating>
       </v-col>
       <v-col cols="12" sm="12" lg="4">
         <rating
@@ -214,6 +190,15 @@ function confirm() {
           :justShow="true"
         ></rating>
       </v-col>
+      <v-col cols="12" sm="12" lg="4">
+        <v-text-field
+          v-model="time"
+          class="inputs"
+          label="Time"
+          prepend-icon="mdi-clock-time-five"
+        ></v-text-field>
+      </v-col>
+
       <v-spacer></v-spacer>
       <v-col cols="12" sm="12" lg="3"></v-col>
       <v-col cols="12" sm="12" lg="6">
@@ -248,7 +233,6 @@ function confirm() {
       okBtn="OK"
       :justAccept="true"
       message="Something went wrong!"
-      @close="confirm"
       color="danger"
     />
     <ConfirmDialog
