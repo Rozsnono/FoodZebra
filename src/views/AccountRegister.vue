@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, reactive } from "vue";
+  import { computed, reactive, ref } from "vue";
   import {
     VBtn,
     VCard,
@@ -25,16 +25,40 @@
 
   const errorMsg = computed(() => usersStore.getErrorMsg);
   const isErrorMsg = computed(() => usersStore.getErrorMsg != "");
+  const errorMsg2 = ref("");
+  const isError = ref(false);
 
-  interface IReactiveData {
-    email: string;
-    password: string;
+  const email = ref("");
+  const name = ref("");
+  const password = ref("");
+  const picture = ref("");
+
+  const setImage = (img) => {
+    picture.value = img;
+  };
+
+  function Tobase64(event) {
+    const selected = event.target?.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result?.toString().split(",")[1]);
+    };
+    reader.readAsDataURL(selected);
   }
 
-  const r = reactive<IReactiveData>({
-    email: "",
-    password: "",
-  });
+  function register() {
+    if (email.value && name.value && password.value && picture.value) {
+      usersStore.UserRegister({
+        email: email.value,
+        password: password.value,
+        name: name.value,
+        picture: picture.value,
+      });
+    } else {
+      errorMsg2.value = "Not enough data";
+      isError.value = true;
+    }
+  }
 </script>
 
 <template>
@@ -43,7 +67,7 @@
       <v-col md="4" sm="8" xs="12">
         <v-card class="elevation-12">
           <v-card-title v-if="!anyLoggedUser">
-            Login form
+            Register form
             <v-icon>mdi-login</v-icon>
           </v-card-title>
           <v-card-title v-else>
@@ -54,41 +78,45 @@
           <v-card-text>
             <v-form>
               <v-text-field
-                v-model="r.email"
+                v-model="email"
                 :disabled="anyLoggedUser"
-                :label="anyLoggedUser ? 'User logged in' : 'E-mail'"
+                :label="anyLoggedUser ? 'Email' : 'E-mail'"
                 name="login"
+                prepend-icon="mdi-account"
                 type="text"
               ></v-text-field>
               <v-text-field
                 v-if="!anyLoggedUser"
                 id="password"
-                v-model="r.password"
+                v-model="password"
                 :disabled="anyLoggedUser"
                 label="Password"
                 name="password"
+                prepend-icon="mdi-key"
                 type="password"
               ></v-text-field>
+              <v-text-field
+                v-model="name"
+                :disabled="anyLoggedUser"
+                :label="anyLoggedUser ? 'Username' : 'Username'"
+                name="login"
+                prepend-icon="mdi-account-details"
+                type="text"
+              ></v-text-field>
+              <v-file-input
+                accept="image/*"
+                label="User avatar (max. 50 Kb)"
+                prepend-icon="mdi-account-box"
+                truncate-length="15"
+                @change="Tobase64($event)"
+              ></v-file-input>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              v-if="!anyLoggedUser"
-              color="success"
-              @click="
-                usersStore.loginUser({
-                  email: r.email,
-                  password: r.password,
-                })
-              "
-            >
-              Login
-            </v-btn>
-            <v-btn v-if="!anyLoggedUser" color="info" to="/register">Register</v-btn>
-            <v-btn v-else class="mt-3" color="warning" @click="usersStore.logOut()">Logout</v-btn>
+            <v-btn color="success" @click="register()">Register</v-btn>
+            <v-btn color="warning" to="/account">Login</v-btn>
           </v-card-actions>
-          
         </v-card>
       </v-col>
     </v-row>
@@ -108,6 +136,15 @@
         <v-card-text>{{ errorMsg }}</v-card-text>
         <v-card-actions>
           <v-btn color="primary" text @click="usersStore.clearErrorMsg()">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="isError">
+      <v-card>
+        <v-card-title>Error</v-card-title>
+        <v-card-text>{{ errorMsg2 }}</v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="isError = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
