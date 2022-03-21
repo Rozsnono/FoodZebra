@@ -35,7 +35,7 @@ async function Loading() {
     <h1 class="title linear-wipe">Welcome to FoodZebra</h1>
     <h5 class="slogan">Where your favourite recipes'll find you</h5>
     <v-divider></v-divider>
-    <h5 class="rTitle">Newest recipes:</h5>
+    <h5 class="rTitle">Some famous recipes:</h5>
     <v-dialog v-model="isLoading" hide-overlay persistent>
       <v-card color="background">
         <v-card-text>

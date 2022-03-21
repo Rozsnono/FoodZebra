@@ -22,7 +22,7 @@ const usersStore = useUsersStore();
 
 const anyLoggedUser = computed(() => (usersStore.getLoggedUser ? true : false));
 const isLoading = computed(() => usersStore.getLoading);
-console.log(isLoading);
+
 const errorMsg = computed(() => usersStore.getErrorMsg);
 const isErrorMsg = computed(() => usersStore.getErrorMsg != "");
 

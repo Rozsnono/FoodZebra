@@ -57,7 +57,7 @@
   async function Loading() {
     await recipeStore.getRecipeById(router.params.id.toString());
     recipe.value = recipeStore.getOneRecipe;
-    console.log(recipe.value);
+
     load.value = true;
     rerender.value += 1;
     return load;
