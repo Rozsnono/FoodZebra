@@ -75,11 +75,15 @@ function Modify(i) {
   item.value = i;
   showConfirmEdit.value = true;
 }
+
+onMounted(() => {
+  Loading();
+});
 </script>
 
 <template>
   <div :key="rerender">
-    <v-container class="page" v-if="Loading()">
+    <v-container class="page">
       <v-row v-if="!showConfirmEdit" class="rows">
         <v-alert v-if="empty" color="green lighten-2" dark class="mb-5 mt-5">
           You don't have any recipes yet. Add some new one now...
