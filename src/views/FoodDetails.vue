@@ -1,16 +1,6 @@
 <script setup lang="ts">
-  import { computed, ref } from "vue";
-  import {
-    VBtn,
-    VCard,
-    VCardActions,
-    VCardTitle,
-    VDialog,
-    VRow,
-    VSpacer,
-    VTextarea,
-    VTextField,
-  } from "vuetify/components";
+  import { computed, ref, onMounted } from "vue";
+  import { VBtn, VRow } from "vuetify/components";
   import rating from "../components/Rating.vue";
   import { useRecipeStore } from "../store/recipeStore";
   import { useRoute } from "vue-router";
@@ -30,20 +20,25 @@
     },
   });
 
+  interface Recipe {
+    _id: string;
+    name: string;
+    type: string;
+    description: string;
+    energy: number;
+    time: number;
+    price: number;
+    serving: number;
+    difficulty: number;
+    rate: number;
+    pic: string;
+    ingredients: string[];
+  }
+
   const router = useRoute();
-  const emit = defineEmits(["close"]);
 
-  const show = computed({
-    get() {
-      return props.modelValue;
-    },
-    set(value: boolean) {},
-  });
+  const recipe = ref({} as Recipe);
 
-  const load = ref(false);
-  const recipe = ref({});
-
-  const showDetail = ref(false);
   const showConfirmRate = ref(false);
   const resultConfirm = ref(false);
 
@@ -58,35 +53,27 @@
     await recipeStore.getRecipeById(router.params.id.toString());
     recipe.value = recipeStore.getOneRecipe;
 
-    load.value = true;
     rerender.value += 1;
-    return load;
   }
 
   function picToBase64(code) {
     return "data:image/png;base64," + code;
   }
 
-  function difficult(dif: string): string {
+  function difficult(dif: number): string {
     switch (dif) {
       case 1:
         return "Very easy";
-        break;
       case 2:
         return "Easy";
-        break;
       case 3:
         return "Medium";
-        break;
       case 4:
         return "Hard";
-        break;
       case 5:
         return "Really hard";
-        break;
       default:
         return "Impossible";
-        break;
     }
   }
 
@@ -99,7 +86,7 @@
   }
 
   function recipeRateCounter(plusRate: number) {
-    return recipe.value == 0
+    return recipe.value.rate == 0
       ? plusRate
       : (recipe.value.rate == null ? 0 : recipe.value.rate + plusRate) / 2;
   }
@@ -117,15 +104,18 @@
         showConfirm.value = true;
         Loading();
       }
-      show.value = false;
     } else {
       showConfirmRate.value = false;
     }
   }
+
+  onMounted(() => {
+    Loading();
+  });
 </script>
 
 <template>
-  <v-container v-if="Loading()" class="popup">
+  <v-container class="popup">
     <ConfirmDialog
       v-if="showConfirmRate"
       v-model="showConfirmRate"
@@ -143,30 +133,30 @@
       v-if="showError"
       v-model="showError"
       v-model:result="resultConfirm"
+      color="danger"
+      :just-accept="true"
+      message="Something went wrong!"
+      ok-btn="OK"
       :retain-focus="false"
       title="Opss.."
-      okBtn="OK"
-      :justAccept="true"
-      message="Something went wrong!"
       @close="confirm"
-      color="danger"
     />
     <ConfirmDialog
       v-if="showConfirm"
       v-model="showConfirm"
       v-model:result="resultConfirm"
+      :just-accept="true"
+      message="You have rated this recipe!"
+      ok-btn="OK"
       :retain-focus="false"
       title="Successfull rating"
-      okBtn="OK"
-      :justAccept="true"
-      message="You have rated this recipe!"
       @close="confirm"
     />
     <v-row :key="rerender">
       <v-col cols="12" sm="12">
         <div class="imgDiv">
           <!-- <v-img alt="Food" class="img-in" :src="picToBase64(recipe.pic)"></v-img>  -->
-          <img :src="picToBase64(recipe.pic)" alt="Food" class="img-in" />
+          <img alt="Food" class="img-in" :src="picToBase64(recipe.pic)" />
         </div>
       </v-col>
       <v-col cols="12" sm="12">
@@ -175,7 +165,7 @@
         </div>
       </v-col>
       <div class="rating">
-        <rating :rating="recipe.rate" :onlyStar="false"></rating>
+        <rating only-star="false" :rating="recipe.rate"></rating>
 
         <v-btn color="yellow lighten-2" text @click="ShowRate()">Rating</v-btn>
       </div>
@@ -195,16 +185,16 @@
         <div class="in-text">{{ difficult(recipe.difficulty) }}</div>
       </v-col>
       <v-divider></v-divider>
-      <v-col cols="12" md="1">
+      <v-col cols="2" md="1" sm="1">
         <p class="type">{{ recipe.type }}</p>
       </v-col>
-      <v-col cols="12" md="5" sm="12">
+      <v-col cols="10" md="5" sm="5">
         <h2 class="i-title">Description</h2>
         <p class="description">
           {{ recipe.description }}
         </p>
       </v-col>
-      <v-col cols="12" sm="1"></v-col>
+      <v-col cols="12" md="1" sm="0"></v-col>
       <v-col cols="12" md="5" sm="12">
         <div class="ingredients">
           <h2 class="i-title">Ingredients</h2>

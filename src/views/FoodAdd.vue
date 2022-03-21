@@ -1,27 +1,58 @@
 <script setup lang="ts">
-  import { ref } from "@vue/reactivity";
+  import { ref, onMounted } from "vue";
   import { useRecipeStore } from "../store/recipeStore";
   import rating from "../components/Rating.vue";
   import ConfirmDialog from "../components/ConfirmDialog.vue";
 
-  const props = defineProps<{ item: object; isModify: boolean; title: boolean }>();
+  const props = defineProps<{ item: object; isModify: boolean; title: string }>();
 
   const emit = defineEmits(["close"]);
 
-  const recipe = ref(props.item);
+  interface Recipe {
+    _id: string;
+    name: string;
+    type: string;
+    description: string;
+    energy: number;
+    time: number;
+    price: number;
+    serving: number;
+    difficulty: number;
+    rate: number;
+    pic: string;
+    ingredients: string[];
+  }
 
-  const name = ref(recipe ? recipe.name : "");
-  const type = ref(recipe ? recipe.type : "");
-  const description = ref(recipe ? recipe.description : "");
-  const energy = ref(recipe ? recipe.energy : "");
-  const time = ref(recipe ? recipe.time : "");
-  const price = ref(recipe ? recipe.price : "");
-  const serving = ref(recipe ? recipe.serving : "");
-  const difficulty = ref(recipe ? recipe.difficulty : "");
-  const rate = ref(recipe ? recipe.rate : 0);
-  const image = ref(recipe ? recipe.pic : "");
-  const ingredients = ref(recipe ? recipe.ingredients.join("\n") : "");
+  let recipe: Recipe = props.item as Recipe;
+
+  const name = ref("");
+  const type = ref("");
+  const description = ref("");
+  const energy = ref(0);
+  const time = ref(0);
+  const price = ref(0);
+  const serving = ref(0);
+  const difficulty = ref(0);
+  const rate = ref(0);
+  const image = ref("");
+  const ingredients = ref("");
   const userID = ref(sessionStorage.getItem("currentUser")?.split(",")[0]);
+
+  function Editable() {
+    if (recipe) {
+      name.value = recipe.name;
+      type.value = recipe.type;
+      description.value = recipe.description;
+      energy.value = recipe.energy;
+      time.value = recipe.time;
+      price.value = recipe.price;
+      serving.value = recipe.serving;
+      difficulty.value = recipe.difficulty;
+      rate.value = recipe.rate;
+      image.value = recipe.pic;
+      ingredients.value = recipe.ingredients.join("\n");
+    }
+  }
 
   const setImage = (img) => {
     image.value = img;
@@ -111,6 +142,10 @@
   function confirm() {
     emit("close");
   }
+
+  onMounted(() => {
+    Editable();
+  });
 </script>
 
 <template>
@@ -129,7 +164,7 @@
         ></v-text-field>
       </v-col>
 
-      <v-col cols="12" sm="12" lg="6">
+      <v-col cols="12" lg="6" sm="12">
         <v-text-field
           v-model="type"
           class="inputs"
@@ -175,10 +210,10 @@
       </v-col>
       <v-col cols="12" lg="4" sm="12">
         <rating
+          :justShow="true"
+          :rating="difficulty"
           title="Difficulty"
           @rating="ChooseDifficultyRate"
-          :rating="difficulty"
-          :justShow="true"
         ></rating>
       </v-col>
       <v-col cols="12" lg="4" sm="12">
