@@ -21,4 +21,4 @@ A weboldal azért jött létre, hogy a főzés iránt érdeklődő emberek megtu
 
 ##Netlify
 
-<https://62385fa42035230008f160f0--foodzebra.netlify.app/>
+<https://foodzebra.netlify.app/>
